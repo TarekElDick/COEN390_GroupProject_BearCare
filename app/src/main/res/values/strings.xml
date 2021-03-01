@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">COEN390_GroupProject_BearCare</string>
+    <string name="app_name">BearCare</string>
+    <string name="sign_up_text_attribute">SIGN UP</string>
+    <string name="login_text_attribute">LOGIN</string>
 </resources>
