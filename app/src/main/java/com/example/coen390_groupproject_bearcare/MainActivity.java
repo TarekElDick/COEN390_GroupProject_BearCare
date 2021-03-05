@@ -27,13 +27,19 @@ public class MainActivity extends AppCompatActivity {
         setUpUI();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
     private void setUpUI() {
 
         // Connecting class objects to our layout widgets.
-        editTextLoginEmailAddress = findViewById(R.id.editTextTextEmailAddress_login);
-        editTextLoginPassword = findViewById(R.id.editTextTextPassword_login);
+        editTextLoginEmailAddress = findViewById(R.id.editTextEmailAddress_login);
+        editTextLoginPassword = findViewById(R.id.editTextPassword_login);
         buttonLogin = findViewById(R.id.button_login);
-        textViewCreateNewAccount = findViewById(R.id.textView_createNewAccount);
+        textViewCreateNewAccount = findViewById(R.id.textViewCreateNewAccount_login);
 
         //onClickListeners
         textViewCreateNewAccount.setOnClickListener(new View.OnClickListener() {
@@ -47,10 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
             public void goToSignUpActivity() {
                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+
                 startActivity(intent);
             }
         });
 
-
     }
+
+
+
 }
