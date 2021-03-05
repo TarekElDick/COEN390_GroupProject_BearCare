@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="19dp"
         android:text="@string/login_text_attribute"
-        app:layout_constraintBottom_toTopOf="@+id/textView_createNewAccount"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCreateNewAccount_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
@@ -35,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="360dp"
         android:text="EMAIL"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextEmailAddress_login"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextEmailAddress_login"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmailAddress_login"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -45,11 +45,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="PASSWORD"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword_login"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress_login" />
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword_login"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddress_login" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress_login"
+        android:id="@+id/editTextEmailAddress_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="46dp"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_email" />
 
     <EditText
-        android:id="@+id/editTextTextPassword_login"
+        android:id="@+id/editTextPassword_login"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="46dp"
@@ -88,13 +88,13 @@
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:text="Don't have an account?"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView_createNewAccount"
-        app:layout_constraintEnd_toStartOf="@+id/textView_createNewAccount"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewCreateNewAccount_login"
+        app:layout_constraintEnd_toStartOf="@+id/textViewCreateNewAccount_login"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView_createNewAccount"
+        android:id="@+id/textViewCreateNewAccount_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="57dp"
