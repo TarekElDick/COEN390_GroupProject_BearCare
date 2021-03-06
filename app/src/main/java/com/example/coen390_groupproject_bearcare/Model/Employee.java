@@ -3,13 +3,15 @@ package com.example.coen390_groupproject_bearcare.Model;
 public class Employee {
 
     private long id;
+    private long directorId;
     private String fullName;
     private String email;
     private String phoneNumber;
     private String password;
 
-    public Employee(long id, String fullName, String email, String phoneNumber, String password) {
+    public Employee(long id,long directorId, String fullName, String email, String phoneNumber, String password) {
         this.id = id;
+        this.directorId = directorId;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -20,6 +22,7 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
+                ", directorId=" + directorId +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -66,4 +69,8 @@ public class Employee {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public long getDirectorId() { return directorId;  }
+
+    public void setDirectorId(long directorId) { this.directorId = directorId; }
 }

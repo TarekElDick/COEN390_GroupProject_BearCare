@@ -9,12 +9,14 @@
     <ImageView
         android:id="@+id/imageViewPaws1_signup"
         android:layout_width="0dp"
-        android:layout_height="51dp"
+        android:layout_height="0dp"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="191dp"
         android:layout_marginRight="191dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toStartOf="@+id/imageViewPaws_signup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,10 +25,12 @@
     <ImageView
         android:id="@+id/imageViewPaws_signup"
         android:layout_width="0dp"
-        android:layout_height="37dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="51dp"
         android:layout_marginRight="51dp"
+        android:layout_marginBottom="46dp"
         android:rotation="69"
+        app:layout_constraintBottom_toTopOf="@+id/editTextFullName_signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewPaws1_signup"
         app:layout_constraintTop_toTopOf="parent"
@@ -50,25 +54,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="596dp"
         android:text="FULL NAME"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/editTextFullName_signup"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCreateAccount_signup" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPaws1_signup" />
 
     <EditText
         android:id="@+id/editTextFullName_signup"
         android:layout_width="0dp"
-        android:layout_height="49dp"
+        android:layout_height="0dp"
         android:layout_marginStart="34dp"
         android:layout_marginLeft="34dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
+        android:layout_marginBottom="547dp"
         android:ems="10"
         android:hint="John Smith"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPaws_signup" />
 
     <TextView
         android:id="@+id/textView7"
@@ -91,7 +98,6 @@
         android:hint="johnsmith@gmail.com"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -165,60 +171,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-    <CheckBox
-        android:id="@+id/checkboxEmployee_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I am a daycare employee"
+    <RadioGroup
+        android:id="@+id/radioGroup_signup"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword_signup" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewButtonGroup_signup">
 
-    <CheckBox
-        android:id="@+id/checkboxDirector_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I am a daycare director"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkboxEmployee_signup" />
+        <RadioButton
+            android:id="@+id/radioButtonParent_signup"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:text="Parent" />
+
+        <RadioButton
+            android:id="@+id/radioButtonEmployee_signup"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:text="Employee" />
+
+        <RadioButton
+            android:id="@+id/radioButtonDirector_signup"
+            android:layout_width="107dp"
+            android:layout_height="match_parent"
+            android:text="Director" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/buttonCreateAccount_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="24dp"
         android:text="CREATE ACCOUNT"
-        app:layout_constraintEnd_toEndOf="@+id/textViewLogin_signup"
-        app:layout_constraintTop_toBottomOf="@+id/checkboxDirector_signup" />
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_signup" />
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="8dp"
         android:text="Already have an account?"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewLogin_signup"
         app:layout_constraintEnd_toStartOf="@+id/textViewLogin_signup"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCreateAccount_signup" />
 
     <TextView
         android:id="@+id/textViewLogin_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="19dp"
-        android:layout_marginRight="19dp"
         android:clickable="true"
         android:text="Login"
         android:textColor="@color/purple_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView11"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreateAccount_signup" />
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/textViewButtonGroup_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Type"
+        app:layout_constraintStart_toStartOf="@+id/radioGroup_signup"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword_signup" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
