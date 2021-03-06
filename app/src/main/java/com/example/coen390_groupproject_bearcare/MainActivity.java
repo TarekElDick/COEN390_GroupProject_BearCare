@@ -123,6 +123,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // TODO change this temporary code
+        // use the login button to go directly to the child directory activity
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChildDirectoryActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
     }
 
 
