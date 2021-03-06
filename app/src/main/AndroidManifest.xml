@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
+        <activity android:name=".ChildDirectoryActivity"></activity>
         <activity
             android:name=".TemperatureActivity"
             android:parentActivityName=".MainActivity" />
