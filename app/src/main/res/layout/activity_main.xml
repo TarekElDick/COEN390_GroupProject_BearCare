@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView_paw2"
+        android:id="@+id/imageViewPawRight_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="308dp"
@@ -17,12 +17,12 @@
         android:rotation="78"
         app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView_paw1"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPawLeft_login"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/paws" />
 
     <ImageView
-        android:id="@+id/imageView_paw1"
+        android:id="@+id/imageViewPawLeft_login"
         android:layout_width="55dp"
         android:layout_height="48dp"
         android:layout_marginStart="100dp"
@@ -31,13 +31,13 @@
         android:layout_marginRight="97dp"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
-        app:layout_constraintEnd_toStartOf="@+id/imageView_paw2"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewPawRight_login"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo_login"
         app:srcCompat="@drawable/paws" />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/buttonLogin_login"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -48,28 +48,28 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword_login" />
 
     <ImageView
-        android:id="@+id/imageView_logo"
+        android:id="@+id/imageViewLogo_login"
         android:layout_width="193dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="9dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_paw1"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewPawLeft_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bearcarelogonobackground" />
 
     <TextView
-        android:id="@+id/textView_email"
+        android:id="@+id/textViewEmail_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:text="EMAIL"
         app:layout_constraintStart_toStartOf="@+id/editTextEmailAddress_login"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_paw1" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPawLeft_login" />
 
     <TextView
-        android:id="@+id/textView_password"
+        android:id="@+id/textViewPassword_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
@@ -92,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_paw2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPawRight_login" />
 
     <EditText
         android:id="@+id/editTextPassword_login"
@@ -105,13 +105,13 @@
         android:layout_marginBottom="24dp"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/button_login"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogin_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_password" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewPassword_login" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewMessage_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -136,11 +136,11 @@
         android:textColor="#4D00E9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+        app:layout_constraintStart_toEndOf="@+id/textViewMessage_login"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin_login" />
 
     <TextView
-        android:id="@+id/textView_bearcare"
+        android:id="@+id/textViewBearCare_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="33dp"
@@ -150,8 +150,18 @@
         android:textColor="@color/purple_700"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/imageView_paw1"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
+        app:layout_constraintStart_toStartOf="@+id/imageViewPawLeft_login"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo_login" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_login"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
