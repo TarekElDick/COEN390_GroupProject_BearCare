@@ -6,24 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/imageView_paw2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="308dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="44dp"
+        android:rotation="78"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView_paw1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/paws" />
+
+    <ImageView
+        android:id="@+id/imageView_paw1"
+        android:layout_width="55dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginEnd="97dp"
+        android:layout_marginRight="97dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_paw2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+        app:srcCompat="@drawable/paws" />
+
     <Button
         android:id="@+id/button_login"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/login_text_attribute"
         app:layout_constraintBottom_toTopOf="@+id/textViewCreateNewAccount_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword_login" />
 
     <ImageView
         android:id="@+id/imageView_logo"
         android:layout_width="193dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginBottom="221dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_login"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_paw1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,48 +63,49 @@
         android:id="@+id/textView_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="2dp"
         android:text="EMAIL"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddress_login"
         app:layout_constraintStart_toStartOf="@+id/editTextEmailAddress_login"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_paw1" />
 
     <TextView
         android:id="@+id/textView_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="1dp"
         android:text="PASSWORD"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPassword_login"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword_login"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddress_login" />
 
     <EditText
         android:id="@+id/editTextEmailAddress_login"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
         android:layout_marginStart="46dp"
         android:layout_marginLeft="46dp"
         android:layout_marginEnd="46dp"
         android:layout_marginRight="46dp"
-        android:layout_marginBottom="256dp"
+        android:layout_marginBottom="247dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_email" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_paw2" />
 
     <EditText
         android:id="@+id/editTextPassword_login"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_width="302dp"
+        android:layout_height="50dp"
         android:layout_marginStart="46dp"
         android:layout_marginLeft="46dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="46dp"
         android:layout_marginRight="46dp"
+        android:layout_marginBottom="24dp"
         android:ems="10"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/button_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_password" />
@@ -83,10 +114,10 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="Don't have an account?"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewCreateNewAccount_login"
         app:layout_constraintEnd_toStartOf="@+id/textViewCreateNewAccount_login"
@@ -97,7 +128,7 @@
         android:id="@+id/textViewCreateNewAccount_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="57dp"
+        android:layout_marginBottom="48dp"
         android:clickable="true"
         android:focusable="true"
         android:text="create a new account"
@@ -107,6 +138,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+    <TextView
+        android:id="@+id/textView_bearcare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="7dp"
+        android:text="BearCare"
+        android:textColor="@color/purple_700"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/imageView_paw1"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
