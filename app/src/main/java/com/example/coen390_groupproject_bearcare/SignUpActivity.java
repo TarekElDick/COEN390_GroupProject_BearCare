@@ -4,12 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.coen390_groupproject_bearcare.Model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -25,6 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioGroup radioGroupSignUp;
     private RadioButton radioButtonParent, radioButtonEmployee, radioButtonDirector;
 
+    private FirebaseAuth mAuth;
+
 
 
     @Override
@@ -35,6 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
         // SetUpUI function
         setUpUI();
 
+        //
+        mAuth = FirebaseAuth.getInstance();
 
 
     }
@@ -68,15 +79,121 @@ public class SignUpActivity extends AppCompatActivity {
                 String emailAddress = editTextSignUpEmailAddress.getText().toString().trim();
                 String phoneNumber  = editTextSignUpPhoneNumber.getText().toString().trim();
                 String password     = editTextSignUpPassword.getText().toString().trim();
-                String confirmPass  = editTextSignUpConfirmPassword.getText().toString().trim();
+                String confirmPassword  = editTextSignUpConfirmPassword.getText().toString().trim();
 
                 // TO-DO check they are correct.
-
                 // If correct then make a new user, and display progress bar.
 
+                String TAG = "debug1";
+                if (fullName.isEmpty()){
+                    editTextSignUpFullName.setError("Full name is required");
+                    editTextSignUpFullName.requestFocus();
+                    //motoreturn;
+                }
 
+                //case empty
+                else if (emailAddress.isEmpty()){
+                    editTextSignUpEmailAddress.setError("Email is required");
+                    editTextSignUpEmailAddress.requestFocus();
+                    //return;
+                }
+
+                //case email is not valid
+                else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
+                    editTextSignUpEmailAddress.setError("Please provide valid email");
+                    editTextSignUpEmailAddress.requestFocus();
+                    //return;
+                }
+
+                //case empty
+                else if (phoneNumber.isEmpty()){
+                    editTextSignUpPhoneNumber.setError("Phone number is required");
+                    editTextSignUpPhoneNumber.requestFocus();
+                    //return;
+                }
+                //case phone number is not valid
+                else if (!Patterns.PHONE.matcher(phoneNumber).matches()){
+                    editTextSignUpPhoneNumber.setError("Please provide valid phone number");
+                    editTextSignUpPhoneNumber.requestFocus();
+                    //return;
+                }
+
+                //case empty
+                else if (password.isEmpty()){
+                    editTextSignUpPassword.setError("Setting Password is required");
+                    editTextSignUpPassword.requestFocus();
+                    //return;
+                }
+
+                //case password less than 6 characters
+                else if(password.length() < 6){
+                    editTextSignUpPassword.setError("Password has to be more than 6 characters long");
+                    editTextSignUpPassword.requestFocus();
+                    //return;
+                }
+
+                //case empty
+                else if (confirmPassword.isEmpty()){
+                    editTextSignUpConfirmPassword.setError("Confirming Password is required");
+                    editTextSignUpConfirmPassword.requestFocus();
+                    //return;
+                }
+
+                //case passwords do not conform
+                else if (!(confirmPassword.equals(password))){
+                    Log.d(TAG, "confirm pass:" + confirmPassword);
+                    Log.d(TAG, "pass:" + password);
+                    editTextSignUpConfirmPassword.setError("Password did not match");
+                    //editTextSignUpPassword.requestFocus();
+                }
+                else {
+                    Log.d(TAG, "confirm pass out:" + confirmPassword);
+                    Log.d(TAG, "pass out:" + password);
+
+                    if(true) {
+                        Log.d("debug2", "force trial");
+                        mAuth.createUserWithEmailAndPassword(emailAddress, password)
+
+                                .addOnCompleteListener(task -> {
+
+                                    Log.d("debug2", "before first condition");
+
+                                    if (task.isSuccessful()) {
+                                        User user = new User(fullName, emailAddress, phoneNumber, radioButtonEmployee.isChecked());
+
+                                        Log.d("debug3", "after first condition");
+
+
+                                        FirebaseDatabase.getInstance().getReference("Users")
+                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                .setValue(user).addOnCompleteListener(task1 -> {
+
+                                            if (task1.isSuccessful()) {
+                                                Log.d("debug3", "user registered");
+                                                Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_LONG).show();
+
+                                                //route to login
+                                            } else {
+                                                Log.d("debug3", "try again");
+                                                Toast.makeText(SignUpActivity.this, "Failed to register, try again!", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
+
+                                    } else {
+                                        Log.d("debug2", "failed");
+                                        Toast.makeText(SignUpActivity.this, "Failed to register!", Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
+                        Log.d("debug2", "leaving force trial");
+                    }
+                    Log.d("debug", "WTF");
+                    return;
+                }
             }
         });
+
 
         textViewSignUpLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,4 +210,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 }
+
+
 
