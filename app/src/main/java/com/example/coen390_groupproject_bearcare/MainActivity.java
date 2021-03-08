@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.coen390_groupproject_bearcare.Bluetooth.BluetoothScanner;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextLoginEmailAddress;
     private EditText editTextLoginPassword;
     private Button buttonLogin;
+    private Button bttn;
     private TextView textViewMessage;
     private TextView textViewCreateNewAccount;
     private ProgressBar progressBarLogin;
@@ -79,7 +81,16 @@ public class MainActivity extends AppCompatActivity {
         textViewMessage           = findViewById(R.id.textViewMessage_login);
         textViewCreateNewAccount  = findViewById(R.id.textViewCreateNewAccount_login);
         progressBarLogin          = findViewById(R.id.progressBar_login);
+        bttn =                    findViewById(R.id.button);
 
+
+        bttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), BluetoothScanner.class);
+                startActivity(i);
+            }
+        });
         //onClickListeners
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override

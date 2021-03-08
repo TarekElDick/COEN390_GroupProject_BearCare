@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coen390_groupproject_bearcare">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_bearcare"
@@ -12,11 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
-        <activity android:name=".UserMainPageActivity"
-            android:label ="Dashboard"/>
-        <activity android:name=".ChildDirectoryActivity"
-            android:parentActivityName=".UserMainPageActivity" />
-        <activity android:name=".TemperatureActivity"/>
+        <activity android:name=".Bluetooth.BluetoothScanner"></activity>
+        <activity android:name=".UserMainPageActivity" />
+        <activity android:name=".ChildDirectoryActivity" />
+        <activity
+            android:name=".TemperatureActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
