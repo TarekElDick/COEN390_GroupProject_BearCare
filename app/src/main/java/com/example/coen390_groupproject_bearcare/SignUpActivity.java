@@ -1,5 +1,6 @@
 package com.example.coen390_groupproject_bearcare;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,31 +10,43 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.coen390_groupproject_bearcare.Model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
     //Our class objects
-    private EditText editTextSignUpFullName;
-    private EditText editTextSignUpEmailAddress;
-    private EditText editTextSignUpPhoneNumber;
-    private EditText editTextSignUpPassword;
-    private EditText editTextSignUpConfirmPassword;
+    private EditText editTextSignUpFullName, editTextSignUpEmailAddress,  editTextSignUpPhoneNumber,  editTextSignUpPassword,  editTextSignUpConfirmPassword;
     private Button buttonSignUpCreateAccount;
-    private TextView textViewSignUpLogin;
+    private TextView textViewClickableLogin, textViewMessage;
 
     private RadioGroup radioGroupSignUp;
     private RadioButton radioButtonParent, radioButtonEmployee, radioButtonDirector;
 
+    private ProgressBar progressBarSignUp;
+
+    // Firebase Shared Instance of a Authentication object
     private FirebaseAuth mAuth;
 
+    // Firebase Shared Instance of a Cloud FireStore object.
+    private FirebaseFirestore fStore;
+
+    // user ID
+    private String userID;
 
 
     @Override
@@ -44,9 +57,11 @@ public class SignUpActivity extends AppCompatActivity {
         // SetUpUI function
         setUpUI();
 
-        //
+        //// Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
+        // Initializing Cloud FireStore
+        fStore = FirebaseFirestore.getInstance();
 
     }
 
@@ -64,151 +79,128 @@ public class SignUpActivity extends AppCompatActivity {
         editTextSignUpPassword        = findViewById(R.id.editTextPassword_signup);
         editTextSignUpConfirmPassword = findViewById(R.id.editTextConfirmPassword_signup);
         buttonSignUpCreateAccount     = findViewById(R.id.buttonCreateAccount_signup);
-        textViewSignUpLogin           = findViewById(R.id.textViewLogin_signup);
+        textViewMessage               = findViewById(R.id.textViewaMessage_signup);
+        textViewClickableLogin        = findViewById(R.id.textViewClickableLogin_signup);
         radioGroupSignUp              = findViewById(R.id.radioGroup_signup);
         radioButtonParent             = findViewById(R.id.radioButtonParent_signup);
         radioButtonEmployee           = findViewById(R.id.radioButtonEmployee_signup);
         radioButtonDirector           = findViewById(R.id.radioButtonDirector_signup);
+        progressBarSignUp             = findViewById(R.id.progressBar_signup);
 
         buttonSignUpCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // Get the strings
+                // Get the strings.
                 String fullName     = editTextSignUpFullName.getText().toString().trim();
                 String emailAddress = editTextSignUpEmailAddress.getText().toString().trim();
                 String phoneNumber  = editTextSignUpPhoneNumber.getText().toString().trim();
                 String password     = editTextSignUpPassword.getText().toString().trim();
                 String confirmPassword  = editTextSignUpConfirmPassword.getText().toString().trim();
+                boolean isEmployee      = radioButtonEmployee.isChecked();
 
-                // TO-DO check they are correct.
-                // If correct then make a new user, and display progress bar.
-
-                String TAG = "debug1";
+                // Check inputs are correct.
                 if (fullName.isEmpty()){
                     editTextSignUpFullName.setError("Full name is required");
                     editTextSignUpFullName.requestFocus();
-                    //motoreturn;
-                }
-
-                //case empty
-                else if (emailAddress.isEmpty()){
+                } else if (emailAddress.isEmpty()){
                     editTextSignUpEmailAddress.setError("Email is required");
                     editTextSignUpEmailAddress.requestFocus();
-                    //return;
-                }
 
-                //case email is not valid
-                else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
                     editTextSignUpEmailAddress.setError("Please provide valid email");
                     editTextSignUpEmailAddress.requestFocus();
-                    //return;
-                }
 
-                //case empty
-                else if (phoneNumber.isEmpty()){
+                } else if (phoneNumber.isEmpty()){
                     editTextSignUpPhoneNumber.setError("Phone number is required");
                     editTextSignUpPhoneNumber.requestFocus();
-                    //return;
-                }
-                //case phone number is not valid
-                else if (!Patterns.PHONE.matcher(phoneNumber).matches()){
+
+                }else if (!Patterns.PHONE.matcher(phoneNumber).matches()){
                     editTextSignUpPhoneNumber.setError("Please provide valid phone number");
                     editTextSignUpPhoneNumber.requestFocus();
-                    //return;
-                }
 
-                //case empty
-                else if (password.isEmpty()){
+                }else if (password.isEmpty()){
                     editTextSignUpPassword.setError("Setting Password is required");
                     editTextSignUpPassword.requestFocus();
-                    //return;
-                }
 
-                //case password less than 6 characters
-                else if(password.length() < 6){
+                } else if(password.length() < 6){
                     editTextSignUpPassword.setError("Password has to be more than 6 characters long");
                     editTextSignUpPassword.requestFocus();
-                    //return;
-                }
 
-                //case empty
-                else if (confirmPassword.isEmpty()){
+                } else if (confirmPassword.isEmpty()){
                     editTextSignUpConfirmPassword.setError("Confirming Password is required");
                     editTextSignUpConfirmPassword.requestFocus();
-                    //return;
-                }
 
-                //case passwords do not conform
-                else if (!(confirmPassword.equals(password))){
-                    Log.d(TAG, "confirm pass:" + confirmPassword);
-                    Log.d(TAG, "pass:" + password);
+                } else if (!(confirmPassword.equals(password))){
                     editTextSignUpConfirmPassword.setError("Password did not match");
-                    //editTextSignUpPassword.requestFocus();
-                }
-                else {
-                    Log.d(TAG, "confirm pass out:" + confirmPassword);
-                    Log.d(TAG, "pass out:" + password);
+                    editTextSignUpConfirmPassword.requestFocus();
+                } else {
 
-                    if(true) {
-                        Log.d("debug2", "force trial");
-                        mAuth.createUserWithEmailAndPassword(emailAddress, password)
+                    // Display progressbar to let the user know something is happening
+                    textViewMessage.setVisibility(View.INVISIBLE);
+                    textViewClickableLogin.setVisibility(View.INVISIBLE);
+                    buttonSignUpCreateAccount.setVisibility(View.INVISIBLE);
+                    progressBarSignUp.setVisibility(View.VISIBLE);
 
-                                .addOnCompleteListener(task -> {
+                    // Create a User with email and password, and connect it to a onCompleteListener to know if it was successful.
+                    mAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(SignUpActivity.this, "User Created", Toast.LENGTH_LONG).show();
 
-                                    Log.d("debug2", "before first condition");
+                                // Adding a user to the database with their information.
+                                // 1) Get user ID, using the current instance of firebase authentication
+                                userID = mAuth.getCurrentUser().getUid();
 
-                                    if (task.isSuccessful()) {
-                                        User user = new User(fullName, emailAddress, phoneNumber, radioButtonEmployee.isChecked());
+                                // 2) Create the collection of Users for their information and documents are named after the userID. Using document reference which is a FireStore function.
+                                DocumentReference documentReference = fStore.collection("Users").document(userID);
 
-                                        Log.d("debug3", "after first condition");
+                                // 3) Map the data, using the hashMap. Creating a new map, since email is already saved within authentication we don't need to save it again. Its optional
+                                Map<String,Object> user = new HashMap<>();
+                                user.put("fullName", fullName);
+                                user.put("emailAddress", emailAddress);
+                                user.put("phoneNumber", phoneNumber);
+                                user.put("isEmployee", isEmployee);
 
-
-                                        FirebaseDatabase.getInstance().getReference("Users")
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .setValue(user).addOnCompleteListener(task1 -> {
-
-                                            if (task1.isSuccessful()) {
-                                                Log.d("debug3", "user registered");
-                                                Toast.makeText(SignUpActivity.this, "User registered successfully!", Toast.LENGTH_LONG).show();
-
-                                                //route to login
-                                            } else {
-                                                Log.d("debug3", "try again");
-                                                Toast.makeText(SignUpActivity.this, "Failed to register, try again!", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-
-
-                                    } else {
-                                        Log.d("debug2", "failed");
-                                        Toast.makeText(SignUpActivity.this, "Failed to register!", Toast.LENGTH_LONG).show();
-
+                                // 4) Insert into the Cloud Database, using the documentReference object and we will use a variable set. Also we will using a listener to check for success.
+                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(SignUpActivity.this, "User Profile added to database", Toast.LENGTH_LONG).show();
                                     }
                                 });
-                        Log.d("debug2", "leaving force trial");
-                    }
-                    Log.d("debug", "WTF");
-                    return;
+
+                                startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+                            }else{
+
+                                // Let user know that the registration failed. Bring all UI-components visible again.
+                                Toast.makeText(SignUpActivity.this, "Registration Failed", Toast.LENGTH_LONG).show();
+                                textViewMessage.setVisibility(View.VISIBLE);
+                                textViewClickableLogin.setVisibility(View.VISIBLE);
+                                buttonSignUpCreateAccount.setVisibility(View.VISIBLE);
+                                progressBarSignUp.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    });
                 }
             }
         });
 
 
-        textViewSignUpLogin.setOnClickListener(new View.OnClickListener() {
+        textViewClickableLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoLoginActivity();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
 
-            public void gotoLoginActivity() {
-                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
         });
 
+        // end of setUP activity
     }
 
+
+    // end of class
 }
 
 
