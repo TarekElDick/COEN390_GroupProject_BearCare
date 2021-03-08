@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // A function setUpUI to connect our class objects to our layout widgets, and onClickListeners
         setUpUI();
 
-        // Initialize Firebase Auth
+        // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(MainActivity.this, "User Created", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Signed in succesfully ", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
                         }else{
                             Toast.makeText(MainActivity.this, "No account associated with this email/password", Toast.LENGTH_LONG).show();
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                             buttonLogin.setVisibility(View.VISIBLE);
                             progressBarLogin.setVisibility(View.INVISIBLE);
                         }
+
                     }
                 });
 
@@ -123,16 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        // TODO change this temporary code
-        // use the login button to go directly to the child directory activity
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChildDirectoryActivity.class);
-
-                startActivity(intent);
-            }
-        });
 
     }
 
