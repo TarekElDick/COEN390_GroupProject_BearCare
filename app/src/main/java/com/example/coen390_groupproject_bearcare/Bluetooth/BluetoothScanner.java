@@ -18,9 +18,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.R;
+import com.google.android.gms.common.api.internal.IStatusCallback;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.logging.Handler;
 
 public class BluetoothScanner extends AppCompatActivity {
 
@@ -32,6 +34,8 @@ public class BluetoothScanner extends AppCompatActivity {
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
     private AdapterView.OnItemClickListener deviceClicked;
     private Button refreshDevices;
+    private static final String TAG =  "MY_DEBUG_TAG";
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,5 +93,11 @@ public class BluetoothScanner extends AppCompatActivity {
 
         deviceList.setAdapter(adapter);
     }
+
+
+
+
+
+
 
 }
