@@ -1,12 +1,10 @@
 package com.example.coen390_groupproject_bearcare.Bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-
-import com.example.coen390_groupproject_bearcare.R;
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -14,18 +12,20 @@ public class AcceptThread extends Thread {
     private final BluetoothServerSocket mmServerSocket;
     private final BluetoothAdapter bluetoothAdapter;
     private final String TAG;
+    private final BluetoothDevice bluetoothDevice;
 
-    public AcceptThread() {
+    public AcceptThread(BluetoothAdapter adapter, String macAddress) {
         // Use a temporary object that is later assigned to mmServerSocket
         // because mmServerSocket is final.
         BluetoothServerSocket tmp = null;
 
-        // TODO check that this this does not cause an error
-        // we may need to pass our bluetoothAdapter as parameter for AcceptThread
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.bluetoothAdapter = adapter;
 
-        UUID myUUID = UUID.randomUUID();
+        bluetoothDevice = bluetoothAdapter.getRemoteDevice(macAddress);
+        UUID myUUID = bluetoothDevice.getUuids()[0].getUuid();
         TAG = "AcceptThread";
+
+        Log.i(TAG, myUUID.toString());
 
         try {
             // MY_UUID is the app's UUID string, also used by the client code.
@@ -42,7 +42,7 @@ public class AcceptThread extends Thread {
         // Keep listening until exception occurs or a socket is returned.
         while (true) {
             try {
-                socket = mmServerSocket.accept();
+                socket = mmServerSocket.accept(5000); // around 5 second timeout
             } catch (IOException e) {
                 Log.e(TAG, "Socket's accept() method failed", e);
                 break;
@@ -52,7 +52,7 @@ public class AcceptThread extends Thread {
                 // A connection was accepted. Perform work associated with
                 // the connection in a separate thread.
                 Log.i(TAG, "BT connection was accepted");
-                // TODO uncomment the below line. do something useful with socket
+                // TODO uncomment the below line or do something useful with socket
                 //manageMyConnectedSocket(socket);
 
                 try {
@@ -63,6 +63,8 @@ public class AcceptThread extends Thread {
 
                 break;
             }
+
+
         }
     }
 

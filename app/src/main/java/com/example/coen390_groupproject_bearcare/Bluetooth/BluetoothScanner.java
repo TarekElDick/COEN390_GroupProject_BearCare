@@ -105,6 +105,10 @@ public class BluetoothScanner extends AppCompatActivity {
             String macAddress = macList.get((int)id);
             Log.i(TAG, "MAC address clicked: " + macAddress);
 
+            AcceptThread acceptThread = new AcceptThread(bluetoothAdapter, macAddress);
+
+            acceptThread.run();
+
         }
     };
 
