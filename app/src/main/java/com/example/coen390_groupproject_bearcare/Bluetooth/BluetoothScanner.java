@@ -1,26 +1,22 @@
 package com.example.coen390_groupproject_bearcare.Bluetooth;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.R;
-import com.google.android.gms.common.api.internal.IStatusCallback;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Handler;
@@ -32,10 +28,11 @@ public class BluetoothScanner extends AppCompatActivity {
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
     private ListView deviceList;
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
-    private Button refreshDevices;
+    private Button sendButton;
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
     private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
+    MyBluetoothService myBluetoothService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +40,18 @@ public class BluetoothScanner extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth_scanner);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
+        sendButton = findViewById(R.id.sendButton);
+        myBluetoothService = new MyBluetoothService();
 
         deviceList.setOnItemClickListener(messageClickedHandler);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Sending 'r'...");
+                double temperatureReading = myBluetoothService.getReading();
+            }
+        });
 
         if(bluetoothAdapter == null)
         {
@@ -60,8 +67,8 @@ public class BluetoothScanner extends AppCompatActivity {
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE); // this constant is used to request to turn on BS services
             startActivityForResult(turnOn, 0);
             Toast.makeText(getApplicationContext(), "Please turn on Bluetooth.",Toast.LENGTH_LONG).show();
-
-        } else {
+        }
+        else {
             Toast.makeText(getApplicationContext(), "Bluetooth services are enabled.", Toast.LENGTH_LONG).show();
         }
     }
@@ -100,15 +107,18 @@ public class BluetoothScanner extends AppCompatActivity {
     // define what happens when we click an item in the list
     private final AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
-            // TODO here we should try acceptThread or something that connects BT
 
             String macAddress = macList.get((int)id);
             Log.i(TAG, "MAC address clicked: " + macAddress);
 
-            AcceptThread acceptThread = new AcceptThread(bluetoothAdapter, macAddress);
-
-            acceptThread.run();
-
+            try {
+                // todo we probably want to send which address we clicked
+                // try closing first to avoid error when we are already connected
+                //myBluetoothService.close();
+                myBluetoothService.connectBluetoothDevice();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     };
 

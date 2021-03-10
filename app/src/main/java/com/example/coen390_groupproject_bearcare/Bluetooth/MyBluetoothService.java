@@ -1,101 +1,83 @@
 package com.example.coen390_groupproject_bearcare.Bluetooth;
 
+
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.icu.util.Output;
-import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler;
 import android.util.Log;
-
+import android.widget.Toast;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import java.util.Set;
+import java.util.UUID;
 
 public class MyBluetoothService {
-    private static final String TAG = "BEAR_CARE_DEBUG_TAG";
-    private Handler handler;            // get information from Bluetooth (BT) service
+    private final String TAG = "MyBluetoothService";
+    private BluetoothSocket btSocket;
 
-    public interface MessageConstants{
-        public static final int MESSAGE_READ = 0;
-        public static final int MESSAGE_WRITE = 1;
-        public static final int MESSAGE_TOAST = 2;
+    @SuppressLint("HardwareIds")
+    public void connectBluetoothDevice() throws IOException
+    {
 
-        // THESE ARE GOING TO BE USED FOR GETTING/SENDING DATA TO THE ESP32
-    }
+        BluetoothAdapter myBluetooth;
+        String address;
+        String name = "a";
+        UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    private class ConnectedThread extends Thread{
-        private final BluetoothSocket BTSocket;
-        private final InputStream BTInStream;
-        private final OutputStream BTOutStream;
-        private byte [] BTBuffer;
-
-        public ConnectedThread (BluetoothSocket socket){        // constructor
-            BTSocket = socket;
-            InputStream tmpStreamIn = null;
-            OutputStream tmpStreamOut =  null;
-
-            try{                                              // try to assign avoids crashes when unable to do so
-                tmpStreamIn = socket.getInputStream();
-            }catch(IOException e){
-                Log.e(TAG, "Error occurred when creating input stream.");
+        myBluetooth = BluetoothAdapter.getDefaultAdapter();
+        address = myBluetooth.getAddress();
+        Set<BluetoothDevice> pairedDevices = myBluetooth.getBondedDevices();
+        if (pairedDevices.size()>0)
+        {
+            for(BluetoothDevice bt : pairedDevices)
+            {
+                address=bt.getAddress();
+                name = bt.getName();
+                //Toast.makeText(getApplicationContext(),"Connected", Toast.LENGTH_SHORT).show();
             }
-            try{
-                tmpStreamOut = socket.getOutputStream();
-            }catch(IOException e){
-                Log.e(TAG,"Error occurred when creating output stream.");
-            }
-            BTInStream = tmpStreamIn;                       // if successful initialize two objects
-            BTOutStream = tmpStreamOut;
-
         }
 
-        public void run(){
-            BTBuffer =  new byte[1024];             // set the buffer to a KiloByte wide
-            int returnedBytesSize;                  // number of bytes returned from the read function
+        myBluetooth = BluetoothAdapter.getDefaultAdapter(); //get the mobile bluetooth device
+        BluetoothDevice device = myBluetooth.getRemoteDevice(address); //connects to the device's address and checks if it's available
+        btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID); //create a RFCOMM (SPP) connection
 
-            while(true){
-                try{
-                    returnedBytesSize = BTInStream.read(BTBuffer);      // read the buffer
-                    Message readMessage = handler.obtainMessage(MessageConstants.MESSAGE_READ, returnedBytesSize, -1,BTBuffer);
-                    readMessage.sendToTarget();
-                }catch(IOException e){
-                    Log.d(TAG, "Input stream was disconnected.",e);
-                    break;
+        btSocket.connect();
+        Log.i(TAG, "Connected! BT Name: " + name + "\nBT Address: " + address + "\nSocket: " + btSocket.toString());
+        //btSocket.getOutputStream().write('r');
+    }
+
+    public void close() {
+        try {
+            btSocket.close();
+        } catch (IOException e) {
+            Log.e("Error in close(): ", e.getMessage());
+        }
+    }
+
+    public double getReading() {
+        double temperatureReading = 0.0;
+
+        try {
+            if (btSocket!=null)
+            {
+                btSocket.getOutputStream().write('r');
+
+                String inputString = "";
+
+                // read in 5 bytes, which is the length of our temperature string from the microcontroller
+                for (int i = 0; i < 5; i++) {
+                    int inputCharacter = (btSocket.getInputStream().read());
+                    Log.i(TAG, Integer.toString(inputCharacter));
+                    inputString += Character.toString((char)inputCharacter);
                 }
-            }
 
+                Log.i(TAG, inputString);
+                temperatureReading = Double.parseDouble(inputString);
+            }
+        } catch (Exception e) {
+            Log.e("Error in getReading(): ", e.getMessage());
         }
 
-        // use this in temp activity to trigger the esp32
-
-        public void write(byte [] bytes){
-            try {
-
-                BTOutStream.write(bytes);
-                Message writtenMessage = handler.obtainMessage(MessageConstants.MESSAGE_WRITE,-1,-1,bytes);
-                writtenMessage.sendToTarget();
-            }catch(IOException e){
-                // send failure message to activity
-
-                Log.e(TAG,"Error occurred when sending data.",e);
-                Message writeErrorMsg = handler.obtainMessage(MessageConstants.MESSAGE_TOAST);
-                Bundle bundle = new Bundle();
-                bundle.putString("toast", "Couldn't send data to the other device");
-                writeErrorMsg.setData(bundle);
-                handler.sendMessage(writeErrorMsg);
-
-            }
-        }
-
-        public void cancel(){
-            try {
-                BTSocket.close();
-            }catch(IOException e){
-                Log.e(TAG,"Could not close connect socket.",e);
-            }
-        }
-
+        return temperatureReading;
     }
-
 }
