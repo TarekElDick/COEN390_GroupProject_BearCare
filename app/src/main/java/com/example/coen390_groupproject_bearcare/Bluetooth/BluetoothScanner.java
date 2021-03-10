@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.R;
@@ -26,16 +27,16 @@ import java.util.logging.Handler;
 
 public class BluetoothScanner extends AppCompatActivity {
 
-
     private BluetoothAdapter bluetoothAdapter;      // bluetooth adapter object
     private Set<BluetoothDevice> pairedDevices;          // paired devices
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
     private ListView deviceList;
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
-    private AdapterView.OnItemClickListener deviceClicked;
     private Button refreshDevices;
-    private static final String TAG =  "MY_DEBUG_TAG";
+    private static final String TAG =  "BluetoothScanner";
     private Handler handler;
+    private AdapterView.OnItemClickListener deviceClicked;
+    private TextView tempTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class BluetoothScanner extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth_scanner);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
+        tempTextView = findViewById(R.id.tempTextView);
 
         if(bluetoothAdapter == null)
         {
@@ -94,10 +96,15 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList.setAdapter(adapter);
     }
 
+    // define what happens when we click an item in the list
+    private AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView parent, View v, int position, long id) {
+            // TODO here we should try acceptThread or something that connects BT
 
+            tempTextView.setText(Long.toString(id));
+            Log.i(TAG, Long.toString(id));
 
-
-
-
+        }
+    };
 
 }
