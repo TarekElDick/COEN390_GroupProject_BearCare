@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class MyBluetoothService {
     private final String TAG = "MyBluetoothService";
-    private BluetoothSocket btSocket;
+    private static BluetoothSocket btSocket;
 
     @SuppressLint("HardwareIds")
     public void connectBluetoothDevice() throws IOException
@@ -46,7 +46,7 @@ public class MyBluetoothService {
         //btSocket.getOutputStream().write('r');
     }
 
-    public void close() {
+    public static void close() {
         try {
             btSocket.close();
         } catch (IOException e) {
@@ -80,4 +80,6 @@ public class MyBluetoothService {
 
         return temperatureReading;
     }
+
+
 }

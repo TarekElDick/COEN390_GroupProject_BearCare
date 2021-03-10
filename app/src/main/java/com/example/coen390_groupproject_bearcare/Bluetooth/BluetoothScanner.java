@@ -122,4 +122,5 @@ public class BluetoothScanner extends AppCompatActivity {
         }
     };
 
+
 }
