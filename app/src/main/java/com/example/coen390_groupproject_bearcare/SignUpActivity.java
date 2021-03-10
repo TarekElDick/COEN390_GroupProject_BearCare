@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -21,16 +22,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
 
     //Our class objects
-    private EditText editTextSignUpFullName, editTextSignUpEmailAddress,  editTextSignUpPhoneNumber,  editTextSignUpPassword,  editTextSignUpConfirmPassword;
+    private EditText editTextSignUpFirstName, editTextSignUpLastName, editTextSignUpEmailAddress,  editTextSignUpPhoneNumber,  editTextSignUpPassword,  editTextSignUpConfirmPassword;
     private Button buttonSignUpCreateAccount;
     private TextView textViewClickableLogin, textViewMessage;
 
@@ -48,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
     // user ID
     private String userID;
 
+    String TAG = "debug_signup";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
         // SetUpUI function
         setUpUI();
 
-        //// Initializing Firebase Authentication.
+        // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
         // Initializing Cloud FireStore
@@ -73,7 +79,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void setUpUI() {
 
-        editTextSignUpFullName        = findViewById(R.id.editTextFullName_signup);
+        editTextSignUpFirstName        = findViewById(R.id.editTextFirstName_signup);
+        editTextSignUpLastName        = findViewById(R.id.editTextLastName_signup);
         editTextSignUpEmailAddress    = findViewById(R.id.editTextEmailAddress_signup);
         editTextSignUpPhoneNumber     = findViewById(R.id.editTextPhone_signup);
         editTextSignUpPassword        = findViewById(R.id.editTextPassword_signup);
@@ -92,17 +99,24 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Get the strings.
-                String fullName     = editTextSignUpFullName.getText().toString().trim();
+                String firstName    = editTextSignUpFirstName.getText().toString().trim();
+                String lastName     = editTextSignUpLastName.getText().toString().trim();
                 String emailAddress = editTextSignUpEmailAddress.getText().toString().trim();
                 String phoneNumber  = editTextSignUpPhoneNumber.getText().toString().trim();
                 String password     = editTextSignUpPassword.getText().toString().trim();
                 String confirmPassword  = editTextSignUpConfirmPassword.getText().toString().trim();
                 boolean isEmployee      = radioButtonEmployee.isChecked();
+                // only used for during user check. \|/
+                boolean isParent        = radioButtonParent.isChecked();
 
                 // Check inputs are correct.
-                if (fullName.isEmpty()){
-                    editTextSignUpFullName.setError("Full name is required");
-                    editTextSignUpFullName.requestFocus();
+                if (firstName.isEmpty()){
+                    editTextSignUpFirstName.setError("Full name is required");
+                    editTextSignUpFirstName.requestFocus();
+                } else if (lastName.isEmpty()){
+                    editTextSignUpLastName.setError("Last name is required");
+                    editTextSignUpLastName.requestFocus();
+
                 } else if (emailAddress.isEmpty()){
                     editTextSignUpEmailAddress.setError("Email is required");
                     editTextSignUpEmailAddress.requestFocus();
@@ -131,9 +145,12 @@ public class SignUpActivity extends AppCompatActivity {
                     editTextSignUpConfirmPassword.setError("Confirming Password is required");
                     editTextSignUpConfirmPassword.requestFocus();
 
-                } else if (!(confirmPassword.equals(password))){
+                } else if (!(confirmPassword.equals(password))) {
                     editTextSignUpConfirmPassword.setError("Password did not match");
                     editTextSignUpConfirmPassword.requestFocus();
+                } else if (!(isParent || isEmployee)){
+                    radioButtonEmployee.setError("Please provide account type");
+                    radioButtonEmployee.requestFocus();
                 } else {
 
                     // Display progressbar to let the user know something is happening
@@ -147,18 +164,40 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(SignUpActivity.this, "User Created", Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "User created with email and password.");
+
+                                // Update the users profile.
+                                // 1) Create a user object
+                                FirebaseUser user1 = mAuth.getCurrentUser();
+
+                                // 2) do a user profile change request, we can also set a PhotoUrl from here
+                                UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(firstName + " " + lastName)
+                                        .build();
+
+                                // 3) set the update request and see if its successful , we can also update the users phone number so we don't have to go though FireStore
+                                user1.updateProfile(profileUpdate)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Log.d(TAG, "User Profile Updated.");
+                                        }
+                                    }
+                                });
 
                                 // Adding a user to the database with their information.
-                                // 1) Get user ID, using the current instance of firebase authentication
-                                userID = mAuth.getCurrentUser().getUid();
+                                // 1) Get user ID, using the current instance of firebase authentication unique to firebase project.Do NOT use this value to
+                                // authenticate with your backend server, if you have one. Use FirebaseUser.getIdToken() instead. But I (Tarek) don't know how to implement it this works for now.
+                                userID = Objects.requireNonNull(user1.getUid());
 
                                 // 2) Create the collection of Users for their information and documents are named after the userID. Using document reference which is a FireStore function.
                                 DocumentReference documentReference = fStore.collection("Users").document(userID);
 
                                 // 3) Map the data, using the hashMap. Creating a new map, since email is already saved within authentication we don't need to save it again. Its optional
                                 Map<String,Object> user = new HashMap<>();
-                                user.put("fullName", fullName);
+                                user.put("first name", firstName);
+                                user.put("last name", lastName);
                                 user.put("emailAddress", emailAddress);
                                 user.put("phoneNumber", phoneNumber);
                                 user.put("isEmployee", isEmployee);
@@ -167,15 +206,17 @@ public class SignUpActivity extends AppCompatActivity {
                                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(SignUpActivity.this, "User Profile added to database", Toast.LENGTH_LONG).show();
+                                        Log.d(TAG, "User Profile added to database");
+
+                                        startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
                                     }
                                 });
 
-                                startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
                             }else{
 
                                 // Let user know that the registration failed. Bring all UI-components visible again.
                                 Toast.makeText(SignUpActivity.this, "Registration Failed", Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "Registration Failed");
                                 textViewMessage.setVisibility(View.VISIBLE);
                                 textViewClickableLogin.setVisibility(View.VISIBLE);
                                 buttonSignUpCreateAccount.setVisibility(View.VISIBLE);

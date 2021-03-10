@@ -84,10 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if(TextUtils.isEmpty(email)){
                     editTextLoginEmailAddress.setError("Email is Required");
+                    editTextLoginEmailAddress.requestFocus();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
                     editTextLoginPassword.setError("Password is Required");
+                    editTextLoginPassword.requestFocus();
                     return;
                 }
 
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
+        // end of setUpUI function
     }
 
 
