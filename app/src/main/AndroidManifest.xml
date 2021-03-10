@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
-        <activity android:name=".UserMainPageActivity"/>
+        <activity android:name=".UserMainPageActivity"
+            android:label ="Dashboard"/>
+        <activity android:name=".ChildDirectoryActivity"
+            android:parentActivityName=".UserMainPageActivity" />
+        <activity android:name=".TemperatureActivity"/>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
