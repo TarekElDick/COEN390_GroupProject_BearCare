@@ -35,8 +35,7 @@ public class BluetoothScanner extends AppCompatActivity {
     private Button refreshDevices;
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
-    private AdapterView.OnItemClickListener deviceClicked;
-    private TextView tempTextView;
+    private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,8 @@ public class BluetoothScanner extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth_scanner);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
-        tempTextView = findViewById(R.id.tempTextView);
+
+        deviceList.setOnItemClickListener(messageClickedHandler);
 
         if(bluetoothAdapter == null)
         {
@@ -52,8 +52,6 @@ public class BluetoothScanner extends AppCompatActivity {
         }
         checkBluetoothOn(null);
         list(null);
-
-
     }
 
 
@@ -80,29 +78,32 @@ public class BluetoothScanner extends AppCompatActivity {
         pairedDevices = bluetoothAdapter.getBondedDevices();
 
         ArrayList list = new ArrayList();
+        macList = new ArrayList<>();
 
         for(BluetoothDevice devices : pairedDevices) {
 
             String deviceName = devices.getName();          // get the name store it in a string
             String devicesAddress = devices.getAddress(); // get the MAC address store it in a string
+            macList.add(devicesAddress);    // store this for later when we click an element in the devices list
+
             String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;     // concatenate the two strings
             list.add(nameAddress);
 
         }
         Toast.makeText(getApplicationContext(), "Showing Paired Devices",Toast.LENGTH_SHORT).show();
 
-        final ArrayAdapter adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
 
         deviceList.setAdapter(adapter);
     }
 
     // define what happens when we click an item in the list
-    private AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
             // TODO here we should try acceptThread or something that connects BT
 
-            tempTextView.setText(Long.toString(id));
-            Log.i(TAG, Long.toString(id));
+            String macAddress = macList.get((int)id);
+            Log.i(TAG, "MAC address clicked: " + macAddress);
 
         }
     };
