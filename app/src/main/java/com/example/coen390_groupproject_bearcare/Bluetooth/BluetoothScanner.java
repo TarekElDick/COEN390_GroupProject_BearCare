@@ -114,7 +114,6 @@ public class BluetoothScanner extends AppCompatActivity {
             try {
                 // todo we probably want to send which address we clicked
                 // try closing first to avoid error when we are already connected
-                //myBluetoothService.close();
                 myBluetoothService.connectBluetoothDevice();
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
