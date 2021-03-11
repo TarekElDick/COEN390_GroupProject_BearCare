@@ -18,6 +18,8 @@ public class MyBluetoothService {
     @SuppressLint("HardwareIds")
     public void connectBluetoothDevice() throws IOException
     {
+        if (btSocket!=null)
+            close();
 
         BluetoothAdapter myBluetooth;
         String address;
@@ -43,7 +45,6 @@ public class MyBluetoothService {
 
         btSocket.connect();
         Log.i(TAG, "Connected! BT Name: " + name + "\nBT Address: " + address + "\nSocket: " + btSocket.toString());
-        //btSocket.getOutputStream().write('r');
     }
 
     public static void close() {
@@ -64,12 +65,14 @@ public class MyBluetoothService {
 
                 String inputString = "";
 
-                // read in 5 bytes, which is the length of our temperature string from the microcontroller
-                for (int i = 0; i < 5; i++) {
+                // read in 7 bytes, which is always the length of our temperature string from the microcontroller
+                for (int i = 0; i < 7; i++) {
                     int inputCharacter = (btSocket.getInputStream().read());
                     Log.i(TAG, Integer.toString(inputCharacter));
                     inputString += Character.toString((char)inputCharacter);
                 }
+
+                //.btSocket.getInputStream().;
 
                 Log.i(TAG, inputString);
                 temperatureReading = Double.parseDouble(inputString);
