@@ -30,10 +30,13 @@
 
     <TextView
         android:id="@+id/textView_TempDisplay"
-        android:layout_width="124dp"
-        android:layout_height="74dp"
+        android:layout_width="171dp"
+        android:layout_height="79dp"
         android:layout_marginBottom="72dp"
-        android:text="temps go here"
+        android:gravity="center"
+        android:text='Click "Record Temperature"'
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toTopOf="@+id/buttonTakeTemp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -64,13 +67,15 @@
     <TextView
         android:id="@+id/textView_RecordTemp"
         android:layout_width="316dp"
-        android:layout_height="52dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="522dp"
         android:capitalize="none"
         android:text="Record Temperature"
         android:textColor="@color/purple_700"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonConfigureSensor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -90,5 +95,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.601"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonConfigureSensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
+        android:layout_marginBottom="19dp"
+        android:text="Configure Sensor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

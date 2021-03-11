@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), BluetoothScanner.class);
+                Intent i = new Intent(getApplicationContext(), TemperatureActivity.class);
                 startActivity(i);
             }
         });
