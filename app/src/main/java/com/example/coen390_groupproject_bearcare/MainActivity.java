@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -34,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Firebase Shared Instance of a Authentication object
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
-
+    String TAG = "debug_login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
+        user = mAuth.getCurrentUser();
 
 
     }
@@ -56,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         //Check if user is already logged in or not, if they are a returning user
-        if(mAuth.getCurrentUser() != null){
+        if(mAuth.getCurrentUser() != null ){
 
+            Log.d(TAG, " User is not null");
             // send them to their activity
             Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
@@ -104,16 +109,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(MainActivity.this, "Signed in succesfully ", Toast.LENGTH_LONG).show();
+
+                            Log.d(TAG, " User signed in successfully");
+                            Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
+                            //redirect to user profile
                             startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+
                         }else{
+                            Log.d(TAG, " User didn't signed in successfully");
                             Toast.makeText(MainActivity.this, "No account associated with this email/password", Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);
                             progressBarLogin.setVisibility(View.INVISIBLE);
                         }
-
                     }
                 });
 
@@ -124,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Log.d(TAG, " User is going to create an account");
                 startActivity(new Intent(getApplicationContext(),SignUpActivity.class ));
 
             }

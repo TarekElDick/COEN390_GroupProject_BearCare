@@ -14,14 +14,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.R;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class InsertChildDialog extends DialogFragment {
 
@@ -34,9 +44,15 @@ public class InsertChildDialog extends DialogFragment {
     // Firebase Shared Instance of a Authentication object
     private FirebaseAuth mAuth;
 
+
     // Firebase Shared Instance of a Cloud FireStore object.
     private FirebaseFirestore fStore;
 
+    //
+    private FirebaseUser fUser;
+
+    //
+    private String parentId;
 
     String TAG = "debug_insertChildDialog";
     @Nullable
@@ -48,6 +64,9 @@ public class InsertChildDialog extends DialogFragment {
 
         // Initializing Cloud FireStore
         fStore = FirebaseFirestore.getInstance();
+
+        //
+        fUser = mAuth.getCurrentUser();
 
         // Inflater , Inflates the xml kinda like the engine, we pass the fragment and the container
         // Because by itself the fragment doesn't run , we need an inflater
@@ -71,7 +90,7 @@ public class InsertChildDialog extends DialogFragment {
         int monthMaxLength = 2;
         InputFilter[] MonthFilterArray = new InputFilter[1];
         MonthFilterArray[0] = new InputFilter.LengthFilter(monthMaxLength);
-        childBirthdayDayEditText.setFilters(MonthFilterArray);
+        childBirthdayMonthEditText.setFilters(MonthFilterArray);
 
         childBirthdayYearEditText  = view.findViewById(R.id.editTextChildBirthdayYear_addAChildFragment);
 
@@ -85,9 +104,6 @@ public class InsertChildDialog extends DialogFragment {
         parentLastNameEditText     = view.findViewById(R.id.editTextParentLastName_addChildFragment);
         saveButtonChild            = view.findViewById(R.id.buttonSave_addChildFragment);
         cancelButtonChild          = view.findViewById(R.id.buttonCancel_addChildFragment);
-
-
-
 
         // onClickListener for our buttons
         cancelButtonChild.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +119,7 @@ public class InsertChildDialog extends DialogFragment {
         saveButtonChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 // We want to get the user inputs and check if acceptable.
                 String childFirstName = childFirstNameEditText.getText().toString().trim();
@@ -165,25 +182,58 @@ public class InsertChildDialog extends DialogFragment {
                 }
                 Log.d(TAG, "User inputs are accepted ready to be add a child");
 
-                // If accepted than save the new child in the database with parent ID and employee ID.
-                // Adding child to the database.
-                // First we will need the employee and parent userID.
+                // Add Child to the database before that
+                // Look for child's parents and get the parentUID.
+                // -> if parent doesn't exits then don't allow for child to be saved.
+                // For now a child can only have one parent but we must implement a way for additional parent to add.
+                // Get employeeID which is less complicated than getting the parents.
 
-                // Employee ID is easy we just need to use the authentication instance
-                FirebaseUser userEmployee = mAuth.getCurrentUser();
-                String employeeID = userEmployee.getUid();
-                String[] parentID = {null};
-                // The parents is gonna be a bit more complicated basically we have to check the
-                // database and look for the parents UID from their names we go from the insertChildDialog.
-                
+                // 1) get the parentsUID, also implement the user custom object
+                fStore.collection("Users")
+                        .whereEqualTo("firstName", parentFirstName)
+                        .whereEqualTo("lastName", parentLastName)
+                        .limit(1)
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                parentId = document.getId();
 
-                // Now add a child to database with the information
+                                // Get the employeeId
+                                String employeeId = fUser.getUid();
 
+                                // Create the new child and birthday date using our custom classes.
+                                Date date = new Date(Integer.parseInt(childBirthdayDay),Integer.parseInt(childBirthdayMonth),Integer.parseInt(childBirthdayYear) );
+                                Child child = new Child( parentId, employeeId,childFirstName , childLastName, date );
 
-
-
-                // dismiss the dialog
-                //getDialog().dismiss();
+                                // 2) Create the collection of Children for their information
+                                // and documents ID are autogenerated with the use of .add(child)
+                                // 3) Map the date using custom Child class that fireStore converts the objects into supported data types.
+                                fStore.collection("Children").add(child).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        getDialog().dismiss();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                        if (parentId == null){
+                            Log.d(TAG, "Parent's Child could not be found");
+                            parentFirstNameEditText.setError("Parent not found: Case is sensitive");
+                            parentFirstNameEditText.requestFocus();
+                        }
+                    }
+                });
             // end of onclick
             }
         });

@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.coen390_groupproject_bearcare.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -49,9 +50,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Firebase Shared Instance of a Cloud FireStore object.
     private FirebaseFirestore fStore;
+    private FirebaseUser fUser;
 
-    // user ID
-    private String userID;
 
     String TAG = "debug_signup";
 
@@ -66,8 +66,11 @@ public class SignUpActivity extends AppCompatActivity {
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
+
+
         // Initializing Cloud FireStore
         fStore = FirebaseFirestore.getInstance();
+
 
     }
 
@@ -166,49 +169,44 @@ public class SignUpActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 Log.d(TAG, "User created with email and password.");
 
-                                // Update the users profile.
-                                // 1) Create a user object
-                                FirebaseUser user1 = mAuth.getCurrentUser();
+                                // 1) Create a user object , must be called here cause we have to wait for encapsulating function to work!!!
+                                fUser = mAuth.getCurrentUser();
 
+                                // Update the users profile for easy access of attributes.
                                 // 2) do a user profile change request, we can also set a PhotoUrl from here
                                 UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(firstName + " " + lastName)
                                         .build();
 
-                                // 3) set the update request and see if its successful , we can also update the users phone number so we don't have to go though FireStore
-                                user1.updateProfile(profileUpdate)
+                                // 3) Set the update request and see if its successful , we can also update the users phone number so we don't have to go though FireStore
+                                fUser.updateProfile(profileUpdate)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
-                                            Log.d(TAG, "User Profile Updated.");
+                                            Log.d(TAG, "User Profile Display Name Updated.");
+                                            startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
                                         }
                                     }
                                 });
 
                                 // Adding a user to the database with their information.
-                                // 1) Get user ID, using the current instance of firebase authentication unique to firebase project.Do NOT use this value to
-                                // authenticate with your backend server, if you have one. Use FirebaseUser.getIdToken() instead. But I (Tarek) don't know how to implement it this works for now.
-                                userID = Objects.requireNonNull(user1.getUid());
+                                // 1) Get user ID, using the current instance of firebase authentication unique to firebase project. Do NOT use this value to
+                                // authenticate with your backend server, if you have one. Use FirebaseUser.getIdToken() <- to authenticate backend to make sure user account is deleted or disable.
+                                // 1 NOTE : fUser.getUid is enough after step 4.
+
+                                // Create a new User using our defined custom class.
+                                User user = new User(firstName, lastName,  emailAddress,  phoneNumber,  isEmployee);
 
                                 // 2) Create the collection of Users for their information and documents are named after the userID. Using document reference which is a FireStore function.
-                                DocumentReference documentReference = fStore.collection("Users").document(userID);
-
-                                // 3) Map the data, using the hashMap. Creating a new map, since email is already saved within authentication we don't need to save it again. Its optional
-                                Map<String,Object> user = new HashMap<>();
-                                user.put("first name", firstName);
-                                user.put("last name", lastName);
-                                user.put("emailAddress", emailAddress);
-                                user.put("phoneNumber", phoneNumber);
-                                user.put("isEmployee", isEmployee);
-
-                                // 4) Insert into the Cloud Database, using the documentReference object and we will use a variable set. Also we will using a listener to check for success.
-                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                // 3) Map the date using custom User class that fireStore converts the objects into supported data types.
+                                // 4) Also we will using a listener to check for success.
+                                fStore.collection("Users").document(fUser.getUid())
+                                        .set(user)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "User Profile added to database");
-
-                                        startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+                                        Log.d(TAG, "User Profile added to fireStore");
                                     }
                                 });
 
