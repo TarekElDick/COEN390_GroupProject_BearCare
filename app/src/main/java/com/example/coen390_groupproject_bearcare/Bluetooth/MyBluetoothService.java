@@ -16,28 +16,15 @@ public class MyBluetoothService {
     private static BluetoothSocket btSocket;
 
     @SuppressLint("HardwareIds")
-    public void connectBluetoothDevice() throws IOException
+    public void connectBluetoothDevice(String macAddress) throws IOException
     {
         if (btSocket!=null)
             close();
 
         BluetoothAdapter myBluetooth;
-        String address;
+        String address = macAddress;
         String name = "a";
         UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-        myBluetooth = BluetoothAdapter.getDefaultAdapter();
-        address = myBluetooth.getAddress();
-        Set<BluetoothDevice> pairedDevices = myBluetooth.getBondedDevices();
-        if (pairedDevices.size()>0)
-        {
-            for(BluetoothDevice bt : pairedDevices)
-            {
-                address=bt.getAddress();
-                name = bt.getName();
-                //Toast.makeText(getApplicationContext(),"Connected", Toast.LENGTH_SHORT).show();
-            }
-        }
 
         myBluetooth = BluetoothAdapter.getDefaultAdapter(); //get the mobile bluetooth device
         BluetoothDevice device = myBluetooth.getRemoteDevice(address); //connects to the device's address and checks if it's available
@@ -51,7 +38,7 @@ public class MyBluetoothService {
         try {
             btSocket.close();
         } catch (IOException e) {
-            Log.e("Error in close(): ", e.getMessage());
+            Log.e("close() error: ", "Could not close the connect socket", e);
         }
     }
 
