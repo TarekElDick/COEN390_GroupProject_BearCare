@@ -8,6 +8,7 @@ public class Date {
     private int month;
     private int year;
 
+    public Date(){}
     public Date(int day, int month, int year) {
 
         if( day <= 31 && day >= 1) {

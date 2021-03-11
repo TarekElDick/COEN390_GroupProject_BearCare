@@ -48,11 +48,6 @@ public class ChildDirectoryActivity extends AppCompatActivity {
 
         setUpUI();
 
-        // TODO replace this code where we fill the list of children
-        // these should actually come from our DB of children
-        children.add(new Child(0,0,0, "Ella Fitzgerald", new Date(1, 1, 2015)));
-        children.add(new Child(0,0,0, "Nina Simone", new Date(1, 1, 2016)));
-        children.add(new Child(0,0,0, "Charles Mingus", new Date(1, 1, 2015)));
 
 
 
@@ -61,14 +56,6 @@ public class ChildDirectoryActivity extends AppCompatActivity {
 
 
     public void setUpUI(){
-
-        // all recycler view setup
-        recyclerView = findViewById(R.id. recyclerView_childList);
-        recyclerView.setHasFixedSize(true);     // we don't expect the app to change the size of the cards
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new ChildRecyclerViewAdapter(children, this);
-        recyclerView.setAdapter(adapter);
 
         // Connections
         addChildButton = findViewById(R.id.floatingActionButtonAddChild_childDirectory);

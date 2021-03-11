@@ -42,11 +42,6 @@ public class UserMainPageActivity extends AppCompatActivity {
         // Initializing the user
         user = mAuth.getCurrentUser();
 
-
-
-
-
-
         // end of onCreate()
     }
 
@@ -61,16 +56,18 @@ public class UserMainPageActivity extends AppCompatActivity {
             Log.d(TAG, "User is signed in");
             displayName.setText(user.getDisplayName());
 
-            // TO_D0 get the users information from fireStore
-
-
+            // TO_D0 get the users information from fireStore and check if they are an employee or not as well.
             // 1) get children of users if parent
             // 2) get temperature history.
+
 
         } else {
             Log.d(TAG, "User is signed out");
             startActivity(new Intent(getApplicationContext(),MainActivity.class ));
         }
+
+        // parents cant see the child directory.
+
     }
 
     public void setUpUI() {
@@ -117,7 +114,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
-                FirebaseAuth.getInstance().signOut();
+                mAuth.signOut();
                 startActivity(new Intent(getApplicationContext(),MainActivity.class ));
 
                 return true;

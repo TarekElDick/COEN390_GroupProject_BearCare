@@ -45,12 +45,12 @@
         android:textColor="@color/purple_700"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView_childList"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewChildList_childDirectory"
         app:layout_constraintEnd_toEndOf="@+id/imageView_paw2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_childList"
+        android:id="@+id/recyclerViewChildList_childDirectory"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="3dp"
