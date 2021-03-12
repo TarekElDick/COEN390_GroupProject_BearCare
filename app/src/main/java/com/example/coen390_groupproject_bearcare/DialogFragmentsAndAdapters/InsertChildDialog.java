@@ -1,6 +1,5 @@
-package com.example.coen390_groupproject_bearcare.fragments;
+package com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -17,7 +16,6 @@ import androidx.fragment.app.DialogFragment;
 import com.example.coen390_groupproject_bearcare.Model.Child;
 import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.R;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,13 +23,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class InsertChildDialog extends DialogFragment {
 
@@ -200,7 +194,7 @@ public class InsertChildDialog extends DialogFragment {
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 parentId = document.getId();
-
+                                Log.d(TAG, "Parent's Child found");
                                 // Get the employeeId
                                 String employeeId = fUser.getUid();
 

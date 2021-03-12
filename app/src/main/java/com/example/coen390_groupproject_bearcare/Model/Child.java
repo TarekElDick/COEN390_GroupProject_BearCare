@@ -60,4 +60,6 @@ public class Child {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    public String getFullName(){ return firstName + " " + lastName ; }
 }

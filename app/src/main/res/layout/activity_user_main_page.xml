@@ -41,17 +41,17 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/animal_vector_lion" />
+        app:srcCompat="@drawable/animal_vector_cow" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonFillDailyQuestionnaire_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Fill Daily Questionaire"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewChildren_dashboard" />
 
     <TextView
         android:id="@+id/textView4"
@@ -62,7 +62,7 @@
         android:layout_marginTop="16dp"
         android:text="Last received:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonFillDailyQuestionnaire_dashboard" />
 
     <TextView
         android:id="@+id/textView5"
@@ -76,13 +76,9 @@
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="361dp"
-        android:layout_height="244dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:id="@+id/recyclerViewChildren_dashboard"
+        android:layout_width="393dp"
+        android:layout_height="241dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
