@@ -14,12 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
+        <activity android:name=".ChildProfileActivity"
+            android:parentActivityName=".ChildDirectoryActivity"/>
+        <activity
+            android:name=".UserMainPageActivity"
+            android:label="Dashboard" />
+        <activity
+            android:name=".ChildDirectoryActivity"
+            android:parentActivityName=".UserMainPageActivity" />
+        <activity android:name=".TemperatureActivity" />
         <activity android:name=".Bluetooth.BluetoothScanner"></activity>
         <activity android:name=".UserMainPageActivity" />
         <activity android:name=".ChildDirectoryActivity" />
-        <activity
-            android:name=".TemperatureActivity"
-            android:parentActivityName=".MainActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
