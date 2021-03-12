@@ -37,6 +37,7 @@ public class MyBluetoothService {
     public static void close() {
         try {
             btSocket.close();
+            Log.i("MyBluetoothService", "Disconnected");
         } catch (IOException e) {
             Log.e("close() error: ", "Could not close the connect socket", e);
         }

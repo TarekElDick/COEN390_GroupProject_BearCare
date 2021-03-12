@@ -28,7 +28,6 @@ public class BluetoothScanner extends AppCompatActivity {
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
     private ListView deviceList;
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
-    private Button sendButton;
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
     private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
@@ -40,18 +39,9 @@ public class BluetoothScanner extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth_scanner);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
-        sendButton = findViewById(R.id.sendButton);
         myBluetoothService = new MyBluetoothService();
 
         deviceList.setOnItemClickListener(messageClickedHandler);
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Sending 'r'...");
-                double temperatureReading = myBluetoothService.getReading();
-            }
-        });
 
         if(bluetoothAdapter == null)
         {
