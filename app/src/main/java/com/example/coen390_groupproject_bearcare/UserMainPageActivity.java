@@ -2,6 +2,9 @@ package com.example.coen390_groupproject_bearcare;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,32 +18,58 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
+import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class UserMainPageActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-
+    private FirebaseFirestore fStore;
+    private CollectionReference childrenRef;
+    private CollectionReference tempRef;
+    private ChildAdapter childAdapter;
+    // Firestore Recycler List
+    private RecyclerView firestoreChildrenRecyclerView;
     private TextView displayName, accessChildDirectory;
-
-
+    private Button buttonFillQuestionnaire;
+    private boolean isEmployee;
+    private String userId;
     String TAG = "debug_dashboard";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main_page);
-
-
-        // SetUpUI function
-        setUpUI();
 
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
         // Initializing the user
         user = mAuth.getCurrentUser();
+
+        fStore = FirebaseFirestore.getInstance();
+
+        childrenRef = fStore.collection("Children");
+
+        userId = user.getUid();
+
+        // SetUpUI function
+        setUpUI();
+
 
         // end of onCreate()
     }
@@ -50,6 +79,9 @@ public class UserMainPageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        Log.d(TAG, "adapter is starting");
+        childAdapter.startListening();
 
         if (user != null){
             // user is signed in
@@ -66,8 +98,14 @@ public class UserMainPageActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),MainActivity.class ));
         }
 
-        // parents cant see the child directory.
+    }
 
+    // TODO ADAPTER STOPS ABRUPTLY, DON'T LET IT STOP <BUG>
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "adapter is stopping");
+        childAdapter.stopListening();
     }
 
     public void setUpUI() {
@@ -75,6 +113,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         // Connections
         displayName = findViewById(R.id.textViewUserName_dashboard);
         accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_dashboard);
+        buttonFillQuestionnaire = findViewById(R.id.buttonFillDailyQuestionnaire_dashboard);
 
         // onClickListeners
         accessChildDirectory.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +121,99 @@ public class UserMainPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "User accessing child directory");
                 startActivity(new Intent(getApplicationContext(),ChildDirectoryActivity.class ));
+            }
+        });
+
+        buttonFillQuestionnaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO fill daily questionnaire activity , we can always get the user id we dont have to pass anything with the intent.
+            }
+        });
+
+        // RecyclerView for children setup
+        Log.d(TAG, "Recycler View is initializing and Child Query is starting");
+        Log.d(TAG, "User id is: " + userId);
+
+        // check if user is employee or not
+        DocumentReference docRef = fStore.collection("Users").document(userId);
+
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+
+                isEmployee = user.isEmployee();
+                Log.d(TAG, "User is employee: " + isEmployee);
+
+                // TODO this takes to long time to be invoked , set everything to invisible when the activity starts.
+                if(isEmployee){
+                    accessChildDirectory.setVisibility(View.VISIBLE);
+                    buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
+                    // TODO set last received and time to invisible
+
+                    Log.d(TAG, "Making sure if employee " + isEmployee);
+                    Log.d(TAG, "Query for employee is starting");
+                }else{
+                    accessChildDirectory.setVisibility(View.INVISIBLE);
+                    buttonFillQuestionnaire.setVisibility(View.VISIBLE);
+                    // TODO disable sensor icon
+                }
+            }
+        });
+
+        // TODO Create a logical or queries , use the document online to figure it out,
+        // TODO the next line always get false , because it takes long to check if the user is employee
+        // TODO 1) either send it Boolean isEmployee with an intent from sign up and login, or make logical OR queries.
+
+        // Query if user is employee
+        Query childQuery= childrenRef.whereEqualTo("employeeId", userId)
+                .orderBy("firstName", Query.Direction.ASCENDING);
+
+        // Query if user is parent
+//        Query childQueryParent = childrenRef.whereEqualTo("parentId", userId)
+//                .orderBy("firstName", Query.Direction.ASCENDING);
+
+
+        // Recycler Options. To get out query into the adapter.
+        FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
+                .setQuery(childQuery, Child.class)
+                .build();
+
+        childAdapter = new ChildAdapter(options);
+
+        // Connecting our class object of recycler view to the layout recycler view
+        firestoreChildrenRecyclerView   = findViewById(R.id.recyclerViewChildren_dashboard);
+
+        // Connect out class object recycler view to the adapter
+        firestoreChildrenRecyclerView.setHasFixedSize(true);
+        firestoreChildrenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        firestoreChildrenRecyclerView.setAdapter(childAdapter);
+
+        // ItemTouchHelper to implement delete functionality
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.d(TAG, "Child Item is being deleted");
+                childAdapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(firestoreChildrenRecyclerView);
+
+        //On click fot the item , not the buttons!
+        childAdapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                // Now we can create an intent and send
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                Log.d(TAG, "Child ID of item clicked is: " + childId);
+
+                //TODO intent to go to child profile activity with the childID.
             }
         });
 
@@ -104,7 +236,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menuItem_settings:
 
-                // TO-DO settings activity for language and preferences.
+                // TODO settings activity for language and preferences.
 
                 return true;
 
