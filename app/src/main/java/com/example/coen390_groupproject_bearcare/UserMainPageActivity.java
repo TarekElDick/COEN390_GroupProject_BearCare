@@ -22,9 +22,7 @@ import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.Chil
 import com.example.coen390_groupproject_bearcare.Model.Child;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -39,16 +37,13 @@ public class UserMainPageActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore fStore;
     private CollectionReference childrenRef;
-    private CollectionReference tempRef;
     private ChildAdapter childAdapter;
-    // Firestore Recycler List
     private RecyclerView firestoreChildrenRecyclerView;
     private TextView displayName, accessChildDirectory;
     private Button buttonFillQuestionnaire;
     private boolean isEmployee;
     private String userId;
     String TAG = "debug_dashboard";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +69,6 @@ public class UserMainPageActivity extends AppCompatActivity {
         // end of onCreate()
     }
 
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -100,7 +93,6 @@ public class UserMainPageActivity extends AppCompatActivity {
 
     }
 
-    // TODO ADAPTER STOPS ABRUPTLY, DON'T LET IT STOP <BUG>
     @Override
     protected void onStop() {
         super.onStop();
@@ -127,7 +119,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         buttonFillQuestionnaire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO fill daily questionnaire activity , we can always get the user id we dont have to pass anything with the intent.
+                // TODO fill daily questionnaire activity , we can always get the user id we don't have to pass anything with the intent.
             }
         });
 
@@ -150,6 +142,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                 if(isEmployee){
                     accessChildDirectory.setVisibility(View.VISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
+
                     // TODO set last received and time to invisible
 
                     Log.d(TAG, "Making sure if employee " + isEmployee);
@@ -157,7 +150,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                 }else{
                     accessChildDirectory.setVisibility(View.INVISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.VISIBLE);
-                    // TODO disable sensor icon
+                    // TODO disable sensor icon,
                 }
             }
         });
@@ -221,7 +214,6 @@ public class UserMainPageActivity extends AppCompatActivity {
             }
         });
 
-
         //end of setUpUI function
     }
 
@@ -241,7 +233,6 @@ public class UserMainPageActivity extends AppCompatActivity {
             case R.id.menuItem_settings:
 
                 // TODO settings activity for language and preferences.
-
                 return true;
 
             case R.id.menuItem_logout:
@@ -258,8 +249,6 @@ public class UserMainPageActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     // end of activity
 }

@@ -3,10 +3,8 @@ package com.example.coen390_groupproject_bearcare;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,17 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.coen390_groupproject_bearcare.Bluetooth.BluetoothScanner;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextLoginEmailAddress;
     private EditText editTextLoginPassword;
     private Button buttonLogin;
-    private Button bttn;
     private TextView textViewMessage;
     private TextView textViewCreateNewAccount;
     private ProgressBar progressBarLogin;
@@ -91,16 +84,7 @@ public class MainActivity extends AppCompatActivity {
         textViewMessage           = findViewById(R.id.textViewMessage_login);
         textViewCreateNewAccount  = findViewById(R.id.textViewCreateNewAccount_login);
         progressBarLogin          = findViewById(R.id.progressBar_login);
-        bttn =                    findViewById(R.id.button);
 
-
-        bttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TemperatureActivity.class);
-                startActivity(i);
-            }
-        });
         //onClickListeners
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-
             }
         });
 
