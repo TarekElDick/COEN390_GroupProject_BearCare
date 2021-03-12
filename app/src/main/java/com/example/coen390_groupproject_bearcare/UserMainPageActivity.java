@@ -214,6 +214,10 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
 
                 //TODO intent to go to child profile activity with the childID.
+                Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
+                intent.putExtra("childId", childId);
+                startActivity(intent);
+
             }
         });
 

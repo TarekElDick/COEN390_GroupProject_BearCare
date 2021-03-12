@@ -23,9 +23,7 @@
             android:name=".ChildDirectoryActivity"
             android:parentActivityName=".UserMainPageActivity" />
         <activity android:name=".TemperatureActivity" />
-        <activity android:name=".Bluetooth.BluetoothScanner"></activity>
-        <activity android:name=".UserMainPageActivity" />
-        <activity android:name=".ChildDirectoryActivity" />
+        <activity android:name=".Bluetooth.BluetoothScanner"/>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
