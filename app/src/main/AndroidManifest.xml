@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coen390_groupproject_bearcare">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -20,6 +23,9 @@
             android:name=".ChildDirectoryActivity"
             android:parentActivityName=".UserMainPageActivity" />
         <activity android:name=".TemperatureActivity" />
+        <activity android:name=".Bluetooth.BluetoothScanner"></activity>
+        <activity android:name=".UserMainPageActivity" />
+        <activity android:name=".ChildDirectoryActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
