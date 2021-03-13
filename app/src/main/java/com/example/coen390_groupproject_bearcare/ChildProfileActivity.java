@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,17 +13,22 @@ public class ChildProfileActivity extends AppCompatActivity {
     private Button buttonTakeTemp;
 
     private String childId;
+    private String childName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child_profile);
 
-        // Back Buttton takes you back to child directory
+        // Back Button takes you back to child directory
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = new Intent();
+        Intent intent = getIntent();
         childId = intent.getStringExtra("childId");
+        childName = intent.getStringExtra("childName");
+
+        Log.d("TEST", "Child ID of item clicked is: " + childId);
+        Log.d("TEST", "Child Name of item clicked is: " + childName);
 
         setUpUI();
 
@@ -40,6 +46,9 @@ public class ChildProfileActivity extends AppCompatActivity {
                 // Go to takeTempActivity
                 Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
                 intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d("TAG", "Child ID of item clicked is: " + childId);
+                Log.d("TAG", "Child Name of item clicked is: " + childName);
                 startActivity(intent);
 
             }
