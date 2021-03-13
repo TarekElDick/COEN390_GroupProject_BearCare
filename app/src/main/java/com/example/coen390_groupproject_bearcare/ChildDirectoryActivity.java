@@ -111,7 +111,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 .setQuery(query, Child.class)
                 .build();
 
-        Log.d(TAG, "Adapter is initializing with out child directory options");
+        Log.d(TAG, "Adapter is initializing with outchild directory options");
         adapter = new ChildAdapter(options);
 
         // Connecting our class object of recycler view to the layout recycler view
@@ -143,9 +143,25 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 // Now we can create an intent and send
                 // Get the document ID.
                 String childId = documentSnapshot.getId();
+
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String name = lastName + ", " + firstName;
+
+
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
+                Log.d(TAG, "Child Name of item clicked is: " + name);
+
+                //TODO intent to go to child profile activity with the childID.
+
                 Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
                 intent.putExtra("childId", childId);
+                intent.putExtra("childName", name);
+
+                Log.d("so", "Child ID of item clicked is: " + childId);
+                Log.d("so", "Child Name of item clicked is: " + name);
+
                 startActivity(intent);
             }
         });
