@@ -10,14 +10,13 @@
         android:id="@+id/textViewUserName_dashboard"
         android:layout_width="142dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:text="displayname"
         android:textColor="@color/black"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewParentsCorner_dashboard" />
 
     <TextView
         android:id="@+id/textView3"
@@ -41,7 +40,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/animal_vector_cow" />
+        app:srcCompat="@drawable/animal_vector_bat" />
 
     <Button
         android:id="@+id/buttonFillDailyQuestionnaire_dashboard"
@@ -54,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewChildren_dashboard" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textViewLastReceived_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="109dp"
@@ -65,15 +64,15 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonFillDailyQuestionnaire_dashboard" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewTimestamp_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="yesterday"
         android:textColor="@color/purple_700"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintStart_toEndOf="@+id/textViewLastReceived_dashboard"
+        app:layout_constraintTop_toTopOf="@+id/textViewLastReceived_dashboard" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChildren_dashboard"
@@ -90,7 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
-        android:text="Tempurature History "
+        android:text="Notifcations"
         android:textColor="@color/purple_700"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,12 +108,27 @@
         android:id="@+id/textViewAccessChildDirectory_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         android:text="Access Child Directory"
         android:textColor="@color/purple_700"
         android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="@+id/textViewUserName_dashboard"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/textViewUserName_dashboard" />
+
+    <TextView
+        android:id="@+id/textViewParentsCorner_dashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="16dp"
+        android:text="Parents' Corner"
+        android:textColor="@color/purple_700"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

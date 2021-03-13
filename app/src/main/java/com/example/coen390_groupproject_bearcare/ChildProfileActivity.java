@@ -23,7 +23,6 @@ public class ChildProfileActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         childId = intent.getStringExtra("childId");
-
         setUpUI();
 
     }

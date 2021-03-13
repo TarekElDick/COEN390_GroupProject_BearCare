@@ -174,7 +174,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
                                             Log.d(TAG, "User Profile Display Name Updated.");
-                                            startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                         }
                                     }
                                 });
@@ -214,21 +214,13 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-
         textViewClickableLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
-
         });
-
         // end of setUP activity
     }
-
-
     // end of class
 }
-
-
-
