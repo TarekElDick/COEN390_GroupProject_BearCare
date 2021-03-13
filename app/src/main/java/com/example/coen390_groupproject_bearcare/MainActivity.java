@@ -15,11 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
+import com.example.coen390_groupproject_bearcare.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     // Firebase Shared Instance of a Authentication object
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private FirebaseFirestore fStore;
 
     String TAG = "debug_login";
     @Override
@@ -48,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
-        user = mAuth.getCurrentUser();
-
+        // Initializing firestore
+        fStore = FirebaseFirestore.getInstance();
 
     }
 
@@ -62,8 +68,24 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, " User is not null");
             // send them to their activity
-            Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+            user = mAuth.getCurrentUser();
+            String userId = user.getUid();
+            DocumentReference docRef = fStore.collection("Users").document(userId);
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User user = documentSnapshot.toObject(User.class);
+
+                    boolean isEmployee = user.isEmployee();
+                    Log.d(TAG, "User is employee: " + isEmployee);
+
+                    Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
+                    intent.putExtra("isEmployeeD", isEmployee);
+                    Log.d(TAG, "isEmployee is being sent to next activity");
+                    Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                }
+            });
         }
 
     }
@@ -118,8 +140,24 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, " User signed in successfully");
                             Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
                             //redirect to user profile
-                            startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
+                            // check if user is employee or not
+                            user = mAuth.getCurrentUser();
+                            String userId = user.getUid();
+                            DocumentReference docRef = fStore.collection("Users").document(userId);
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User user = documentSnapshot.toObject(User.class);
 
+                                    boolean isEmployee = user.isEmployee();
+                                    Log.d(TAG, "User is employee: " + isEmployee);
+
+                                    Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
+                                    intent.putExtra("isEmployeeD", isEmployee);
+                                    Log.d(TAG, "isEmployee is being sent to next activity");
+                                    startActivity(intent);
+                                }
+                            });
                         }else{
                             Log.d(TAG, " User didn't signed in successfully");
                             Toast.makeText(MainActivity.this, "No account associated with this email/password", Toast.LENGTH_LONG).show();
@@ -132,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
         textViewCreateNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
         // end of setUpUI function
     }
 

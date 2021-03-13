@@ -33,12 +33,6 @@ public class ChildDirectoryActivity extends AppCompatActivity{
     // Our floating action button class object
     protected FloatingActionButton addChildButton;
 
-    // Firestore Recycler List
-    private RecyclerView firestoreChildrenDirectoryRecyclerView;
-
-    // FireStore Reference
-    private FirebaseFirestore fStore;
-
     // Reference to the collection
     private CollectionReference childrenRef;
 
@@ -46,9 +40,6 @@ public class ChildDirectoryActivity extends AppCompatActivity{
     private ChildAdapter adapter;
 
     String TAG = "debug_childDirectory";
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +52,8 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialization
-        fStore = FirebaseFirestore.getInstance();
+        // FireStore Reference
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
         childrenRef = fStore.collection("Children");
 
         setUpUI();
@@ -110,8 +102,9 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         // RecyclerView Set Up
         Log.d(TAG, "Recycler View is initializing and Query is starting");
 
-        // Query
-        Query query = childrenRef.orderBy("lastName", Query.Direction.ASCENDING);
+        // Queries
+        Query query = childrenRef.orderBy("lastName",  Query.Direction.ASCENDING);
+
 
         // Recycler Options. To get out query into the adapter.
         FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
@@ -122,7 +115,8 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         adapter = new ChildAdapter(options);
 
         // Connecting our class object of recycler view to the layout recycler view
-        firestoreChildrenDirectoryRecyclerView   = findViewById(R.id.recyclerViewChildList_childDirectory);
+        // Firestore Recycler List
+        RecyclerView firestoreChildrenDirectoryRecyclerView = findViewById(R.id.recyclerViewChildList_childDirectory);
 
         // Connect out class object recycler view to the adapter
         firestoreChildrenDirectoryRecyclerView.setHasFixedSize(true);
