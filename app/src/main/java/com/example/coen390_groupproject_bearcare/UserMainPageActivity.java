@@ -206,9 +206,22 @@ public class UserMainPageActivity extends AppCompatActivity {
                 String childId = documentSnapshot.getId();
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
 
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String name = firstName + " " + lastName;
+
+
+                Log.d(TAG, "Child ID of item clicked is: " + childId);
+                Log.d(TAG, "Child Name of item clicked is: " + name);
+
+                //TODO intent to go to child profile activity with the childID.
+
                 Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
                 intent.putExtra("childId", childId);
+                intent.putExtra("childName", name);
                 startActivity(intent);
+
 
             }
         });

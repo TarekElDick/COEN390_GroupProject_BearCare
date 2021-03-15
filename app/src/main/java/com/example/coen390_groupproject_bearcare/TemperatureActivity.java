@@ -35,7 +35,7 @@ public class TemperatureActivity extends AppCompatActivity {
     private String childName;
     private String childId;
     private String tempTimeStamp;
-    private FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +54,15 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TAG = "TemperatureActivity";
 
-
-        myBluetoothService = new MyBluetoothService();
-
-        try {
-            // todo replace this hard-coded mac address
-            myBluetoothService.connectBluetoothDevice("24:6F:28:1A:D3:26");
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
-        }
+//
+//        myBluetoothService = new MyBluetoothService();
+//
+//        try {
+//            // todo replace this hard-coded mac address
+//            myBluetoothService.connectBluetoothDevice("24:6F:28:1A:D3:26");
+//        } catch (IOException e) {
+//            Log.e(TAG, e.toString());
+//        }
 
 
         // on click listener for take temp button
@@ -93,7 +93,7 @@ public class TemperatureActivity extends AppCompatActivity {
                             }
                         });
 
-                textViewTempDisplay.setText(Double.toString(tempReading) + " °C");
+                textViewTempDisplay.setText(tempReading + " °C");
             }
         });
 

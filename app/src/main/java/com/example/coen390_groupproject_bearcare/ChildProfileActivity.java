@@ -7,14 +7,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class ChildProfileActivity extends AppCompatActivity {
 
+    private TextView textViewChildName;
     private Button buttonTakeTemp;
 
     private String childId;
     private String childName;
 
+    String TAG = "debug_childprofile";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +30,8 @@ public class ChildProfileActivity extends AppCompatActivity {
         childId = intent.getStringExtra("childId");
         childName = intent.getStringExtra("childName");
 
-        Log.d("TEST", "Child ID of item clicked is: " + childId);
-        Log.d("TEST", "Child Name of item clicked is: " + childName);
+        Log.d(TAG, "Child ID of item clicked is: " + childId);
+        Log.d(TAG, "Child Name of item clicked is: " + childName);
 
         setUpUI();
 
@@ -38,6 +41,7 @@ public class ChildProfileActivity extends AppCompatActivity {
 
         // Connections
         buttonTakeTemp = findViewById(R.id.buttonTakeTemp_childProfileActivity);
+        textViewChildName = findViewById(R.id.textViewChildName_childProfile);
 
         buttonTakeTemp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +51,14 @@ public class ChildProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
                 intent.putExtra("childId", childId);
                 intent.putExtra("childName", childName);
-                Log.d("TAG", "Child ID of item clicked is: " + childId);
-                Log.d("TAG", "Child Name of item clicked is: " + childName);
+                Log.d(TAG, "Child ID of item clicked is: " + childId);
+                Log.d(TAG, "Child Name of item clicked is: " + childName);
                 startActivity(intent);
 
             }
         });
+
+        textViewChildName.setText(childName);
 
     }
 }

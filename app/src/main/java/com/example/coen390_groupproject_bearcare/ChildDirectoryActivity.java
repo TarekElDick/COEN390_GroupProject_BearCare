@@ -147,7 +147,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 //get child name
                 String firstName = documentSnapshot.getString("firstName");
                 String lastName = documentSnapshot.getString("lastName");
-                String name = lastName + ", " + firstName;
+                String name = firstName + " " + lastName;
 
 
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
