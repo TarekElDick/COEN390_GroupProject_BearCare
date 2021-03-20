@@ -1,10 +1,22 @@
 package com.example.coen390_groupproject_bearcare.Bluetooth;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.R;
@@ -25,13 +38,22 @@ public class BluetoothScanner extends AppCompatActivity {
 
     private BluetoothAdapter bluetoothAdapter;      // bluetooth adapter object
     private Set<BluetoothDevice> pairedDevices;          // paired devices
+    ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<>();       // array list to hold discovered devices
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
+    private int REQUEST_ENABLE_LOCATION = 1;        // REQUEST LOCATION VALUE
     private ListView deviceList;
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
     private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
+    private ArrayList<String> foundDevices = new ArrayList<>(); // testing delete if it doesnt work
+    private ArrayList<String> pairedList = new ArrayList<>();         // this is going to be used to hold all paired devices
     MyBluetoothService myBluetoothService;
+    private Button discoverButton;                                    // used for discovering BearCare hardware
+
+
+    private  static final String TAG1 = "Bluetooth Scanner";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +62,87 @@ public class BluetoothScanner extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
         myBluetoothService = new MyBluetoothService();
+        discoverButton = findViewById(R.id.button_Discover);
+        TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
 
         deviceList.setOnItemClickListener(messageClickedHandler);
+
+        IntentFilter pairFilter =  new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);     // this filter needs to be used when pairing to a device
+        registerReceiver(pairReceiver,pairFilter);
 
         if(bluetoothAdapter == null)
         {
             Toast.makeText(this,"This device does not support Bluetooth.",Toast.LENGTH_SHORT).show();
         }
         checkBluetoothOn(null);
+
         list(null);
+
+
+        discoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                bluetoothAdapter.startDiscovery();
+                Log.d(TAG, String.valueOf(bluetoothAdapter.startDiscovery()));
+                IntentFilter intentFilter = new IntentFilter((BluetoothDevice.ACTION_FOUND));           // this filter needs to be created for using the discovery function
+                registerReceiver(btReceiver,intentFilter);                                              // register the receiver
+                checkLocationPermission(null);
+                titleText.setText("Discovered Bluetooth Devices");
+            }
+        });
     }
 
+    BroadcastReceiver btReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothDevice.ACTION_FOUND.equals(action))
+            {
+                BluetoothDevice localDeviceObject =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                discoveredDevices.add(localDeviceObject);
+                Log.d(TAG1,"OnReceive: " + localDeviceObject.getName() + ":" + localDeviceObject.getAddress());
+
+                listDiscovered(discoveredDevices);
+            }
+        }
+    };
+
+
+    BroadcastReceiver pairReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))
+            {   // will use 3 if statements now
+                BluetoothDevice localBluetoothObject = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDED)      // 1: device is already paired
+                {
+                    Log.d(TAG1, "onReceive: BOND_BONDED");
+
+                }
+                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDING)     // 2: create a pair
+                {
+                    Log.d(TAG1, "onReceive: BOND_PAIRING");
+
+                }
+                if (localBluetoothObject.getBondState() == BluetoothDevice.BOND_NONE)      // 3: pair is broken
+                {
+                    Log.d(TAG1, "onReceive: BOND_BROKEN");
+
+                }
+
+            }
+        }
+    };
+
+
+    public void onPause() {
+
+        super.onPause();
+        unregisterReceiver(btReceiver);
+       // unregisterReceiver(pairReceiver);
+    }
 
     public void checkBluetoothOn(View v){           // check if bluetooth is on
         if (!bluetoothAdapter.isEnabled()) {        // its not enabled
@@ -64,17 +156,78 @@ public class BluetoothScanner extends AppCompatActivity {
     }
 
 
+    public void checkLocationPermission(View v){            // check if location services are on and request permission for access
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            Toast.makeText(this,"You have granted BearCare permission to access your location.", Toast.LENGTH_SHORT).show();
+        }else{
+            requestLocationPermission();
+        }
+
+
+    }
+
+    public void requestLocationPermission()         // this function will be used to request permission from the user to access location
+    {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Needed")
+                    .setMessage("To discover BearCare Sensors, location service permission must be granted")
+                    .setPositiveButton("Grant Permission", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton("Deny Permission", new DialogInterface.OnClickListener() {       // if the user does not want to give permission dismiss
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ENABLE_LOCATION);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == REQUEST_ENABLE_LOCATION)
+        {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+            } else
+            {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     public  void visible(View v){
         Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         startActivityForResult(getVisible, 0);
     }
-
+    public void listDiscovered(ArrayList<BluetoothDevice> x)        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
+    {
+        for (BluetoothDevice devices: x)
+        {
+            String deviceName = devices.getName();
+            String devicesAddress =  devices.getAddress();
+            String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;
+            if (nameAddress.contains("BearCare"))
+                foundDevices.add(nameAddress);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,foundDevices);
+        deviceList.setAdapter(adapter);
+    }
 
     public void list(View v){       // get the paired devices names and MAC address
         pairedDevices = bluetoothAdapter.getBondedDevices();
 
-        ArrayList list = new ArrayList();
         macList = new ArrayList<>();
 
         for(BluetoothDevice devices : pairedDevices) {
@@ -84,32 +237,40 @@ public class BluetoothScanner extends AppCompatActivity {
             macList.add(devicesAddress);    // store this for later when we click an element in the devices list
 
             String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;     // concatenate the two strings
-            list.add(nameAddress);
+            if (nameAddress.contains("BearCare"))
+                pairedList.add(nameAddress);
 
         }
         Toast.makeText(getApplicationContext(), "Showing Paired Devices",Toast.LENGTH_SHORT).show();
 
-        final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1,pairedList);
 
         deviceList.setAdapter(adapter);
     }
 
     // define what happens when we click an item in the list
     private final AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
+
         public void onItemClick(AdapterView parent, View v, int position, long id) {
 
+            BluetoothDevice bdDevice;                   // use this local object to pair to the selected BT device
+            bluetoothAdapter.cancelDiscovery();         // cancel discovery every time an attempt to make a connection is made
             String macAddress = macList.get((int)id);
             Log.i(TAG, "MAC address clicked: " + macAddress);
-
-            try {
-                // todo we probably want to send which address we clicked
-                // try closing first to avoid error when we are already connected
-                myBluetoothService.connectBluetoothDevice(macAddress);
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {            // this checks if the phone has the correct api to use the method below
+                Log.d(TAG1, "onItemClick: Trying to pair with: " + macAddress);
+               bdDevice= discoveredDevices.get(position);
+               bdDevice.createBond();
             }
+
+//            try {
+//                // todo we probably want to send which address we clicked
+//                // try closing first to avoid error when we are already connected
+//                myBluetoothService.connectBluetoothDevice(macAddress);
+//            } catch (IOException e) {
+//                Log.e(TAG, e.getMessage());
+//            }
         }
     };
-
 
 }

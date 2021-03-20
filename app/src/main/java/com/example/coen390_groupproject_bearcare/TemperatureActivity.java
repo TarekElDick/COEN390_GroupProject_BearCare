@@ -54,15 +54,17 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TAG = "TemperatureActivity";
 
-//
-//        myBluetoothService = new MyBluetoothService();
-//
-//        try {
-//            // todo replace this hard-coded mac address
-//            myBluetoothService.connectBluetoothDevice("24:6F:28:1A:D3:26");
-//        } catch (IOException e) {
-//            Log.e(TAG, e.toString());
-//        }
+
+        myBluetoothService = new MyBluetoothService();
+
+        try {
+            // todo replace this hard-coded mac address
+            myBluetoothService.connectBluetoothDevice("24:6F:28:1A:D3:26");
+            // Ryan's ESP32 MAC ADDRESS AC:67:B2:36:13:BA
+
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
 
 
         // on click listener for take temp button

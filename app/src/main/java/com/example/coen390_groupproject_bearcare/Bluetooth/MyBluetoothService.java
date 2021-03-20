@@ -14,6 +14,7 @@ import java.util.UUID;
 public class MyBluetoothService {
     private final String TAG = "MyBluetoothService";
     private static BluetoothSocket btSocket;
+    private static BluetoothAdapter BtAdapter;      // bluetooth adapter object
 
     @SuppressLint("HardwareIds")
     public void connectBluetoothDevice(String macAddress) throws IOException

@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore fStore;
 
+
     String TAG = "debug_login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() {                // this will be used to close the bluetooth socket when the app is destroyed
         super.onDestroy();
         MyBluetoothService mine = new MyBluetoothService();
         MyBluetoothService.close();
