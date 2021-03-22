@@ -20,10 +20,13 @@ import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
 import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -32,6 +35,7 @@ public class UserMainPageActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private FirebaseFirestore fStore;
     private CollectionReference childrenRef;
     private ChildAdapter childAdapter;
     private TextView displayName, questionnaireLastReceived, questionnaireTimestamp, parentsCorner;
@@ -55,7 +59,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         // Initializing firestore
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        fStore = FirebaseFirestore.getInstance();
 
         // Initializing the reference to the children database
         childrenRef = fStore.collection("Children");
@@ -124,35 +128,48 @@ public class UserMainPageActivity extends AppCompatActivity {
             }
         });
 
-        // RecyclerView for children setup
-        Log.d(TAG, "Recycler View is initializing and Child Query is starting");
-        Log.d(TAG, "User id is: " + userId);
-
-        if(isEmployee){
-            accessChildDirectory.setVisibility(View.VISIBLE);
-            buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
-            // TODO set last received and time to invisible
-            questionnaireTimestamp.setVisibility(View.INVISIBLE);
-            questionnaireLastReceived.setVisibility(View.INVISIBLE);
-            parentsCorner.setVisibility(View.INVISIBLE);
-        }else{
-            accessChildDirectory.setVisibility(View.INVISIBLE);
-            // TODO disable sensor icon, on the item probably within adapter?
-        }
-
         runRecyclerView();
+        // The following code is to double check if the user is an employee or not.
+        String userId = user.getUid();
+        // fix fStore reference
+        DocumentReference docRef = fStore.collection("Users").document(userId);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+
+                isEmployee = user.isEmployee();
+                runRecyclerView();
+                // RecyclerView for children setup
+
+                Log.d(TAG, "User id is: " + userId);
+
+                if(isEmployee){
+                    accessChildDirectory.setVisibility(View.VISIBLE);
+                    buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
+                    questionnaireTimestamp.setVisibility(View.INVISIBLE);
+                    questionnaireLastReceived.setVisibility(View.INVISIBLE);
+                    parentsCorner.setVisibility(View.INVISIBLE);
+                }else{
+                    accessChildDirectory.setVisibility(View.INVISIBLE);
+                    // TODO disable sensor icon, on the item probably within adapter?
+                }
+            }
+        });
 
         //end of setUpUI function
     }
 
     public void runRecyclerView() {
 
+        Log.d(TAG, "Recycler View is initializing");
         Log.d(TAG, "Making sure if employee in runRecyclerView " + isEmployee);
-        Log.d(TAG, "Query for employee is starting");
 
+        Query childQuery;
         if(isEmployee) {
+            Log.d(TAG, "Query for employee is starting");
             // Query if user is employee
-            Query childQuery = childrenRef.whereEqualTo("employeeId", userId)
+            childQuery = childrenRef.whereEqualTo("employeeId", userId)
                     .orderBy("firstName", Query.Direction.ASCENDING);
 
             // Recycler Options. To get out query into the adapter.
@@ -162,9 +179,9 @@ public class UserMainPageActivity extends AppCompatActivity {
 
             childAdapter = new ChildAdapter(options);
         } else {
-
+            Log.d(TAG, "Query for parent is starting");
             // Query if user is parent
-            Query childQuery = childrenRef.whereEqualTo("parentId", userId)
+            childQuery = childrenRef.whereEqualTo("parentId", userId)
                     .orderBy("firstName", Query.Direction.ASCENDING);
             // Recycler Options. To get out query into the adapter.
             FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
@@ -172,6 +189,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                     .build();
             childAdapter = new ChildAdapter(options);
         }
+        onStart();
 
         // Connecting our class object of recycler view to the layout recycler view
         RecyclerView firestoreChildrenRecyclerView = findViewById(R.id.recyclerViewChildren_dashboard);
@@ -209,19 +227,36 @@ public class UserMainPageActivity extends AppCompatActivity {
                 //get child name
                 String firstName = documentSnapshot.getString("firstName");
                 String lastName = documentSnapshot.getString("lastName");
+                String parentId = documentSnapshot.getString("parentId");
                 String name = firstName + " " + lastName;
 
 
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
                 Log.d(TAG, "Child Name of item clicked is: " + name);
 
-                //TODO intent to go to child profile activity with the childID.
 
                 Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
                 intent.putExtra("childId", childId);
                 intent.putExtra("childName", name);
+                intent.putExtra("parentId", parentId);
                 startActivity(intent);
-
+            }
+            @Override
+            public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
+                // Code for when take temp button is clicked
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String childName = firstName + " " + lastName;
+                // Go to takeTempActivity
+                Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "Child ID of button clicked is: " + childId);
+                Log.d(TAG, "Child Name of button clicked is: " + childName);
+                startActivity(intent);
 
             }
         });

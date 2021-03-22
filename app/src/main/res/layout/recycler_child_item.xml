@@ -53,11 +53,11 @@
         android:layout_marginBottom="13dp"
         android:background="@drawable/ic_medical"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTakeTemp_recyclerItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/buttonTakeTemp_recyclerItem"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
@@ -76,7 +76,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button7"
+        app:layout_constraintStart_toEndOf="@+id/buttonTakeTemp_recyclerItem"
         app:layout_constraintTop_toTopOf="parent" />
 
 

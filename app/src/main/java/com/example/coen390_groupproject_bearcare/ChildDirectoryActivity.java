@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
 import com.example.coen390_groupproject_bearcare.Model.Child;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.InsertChildDialog;
+import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class ChildDirectoryActivity extends AppCompatActivity{
 
@@ -49,7 +52,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         // Because we are not adding our own toolbar it is sufficient enough to
         // get the support of our own actionBar, and set the UP button enabled.
         // Connections done in the manifest file.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Initialization
         // FireStore Reference
@@ -106,12 +109,12 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         Query query = childrenRef.orderBy("lastName",  Query.Direction.ASCENDING);
 
 
-        // Recycler Options. To get out query into the adapter.
+        // Recycler Options. To get our query into the adapter.
         FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
                 .setQuery(query, Child.class)
                 .build();
 
-        Log.d(TAG, "Adapter is initializing with outchild directory options");
+        Log.d(TAG, "Adapter is initializing with out child directory options");
         adapter = new ChildAdapter(options);
 
         // Connecting our class object of recycler view to the layout recycler view
@@ -147,24 +150,42 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 //get child name
                 String firstName = documentSnapshot.getString("firstName");
                 String lastName = documentSnapshot.getString("lastName");
+                String parentId = documentSnapshot.getString("parentId");
+                
+
                 String name = firstName + " " + lastName;
 
-
-                Log.d(TAG, "Child ID of item clicked is: " + childId);
-                Log.d(TAG, "Child Name of item clicked is: " + name);
-
-                //TODO intent to go to child profile activity with the childID.
+                Log.d(TAG, "Child ID of item being clicked is: " + childId);
+                Log.d(TAG, "Child Name of item being clicked is: " + name);
 
                 Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
                 intent.putExtra("childId", childId);
                 intent.putExtra("childName", name);
-
-                Log.d("so", "Child ID of item clicked is: " + childId);
-                Log.d("so", "Child Name of item clicked is: " + name);
+                intent.putExtra("parentId", parentId);
 
                 startActivity(intent);
             }
+
+            @Override
+            public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
+                // Code for when take temp button is clicked
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String childName = firstName + " " + lastName;
+                // Go to takeTempActivity
+                Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "Child ID of button clicked is: " + childId);
+                Log.d(TAG, "Child Name of button clicked is: " + childName);
+                startActivity(intent);
+
+            }
         });
+
 
 
         // end of setUpUI
