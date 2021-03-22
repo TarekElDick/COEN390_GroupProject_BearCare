@@ -270,13 +270,14 @@ public class BluetoothScanner extends AppCompatActivity {
 
     public void listDiscovered()        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
     {
+
         for (BluetoothDevice devices: discoveredDevices)
         {
-            String deviceName = devices.getName();
-            String devicesAddress =  devices.getAddress();
-            String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;
+            String nameAddress = devices.getName() + "\n" + "Device Address: " + devices.getAddress();
             foundDevices.add(nameAddress);
+            Log.d(TAG, "listDiscovered: " + nameAddress);
         }
+
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,foundDevices);
         deviceList.setAdapter(adapter);
     }
