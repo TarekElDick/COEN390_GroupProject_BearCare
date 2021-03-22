@@ -16,8 +16,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +43,7 @@ public class BluetoothScanner extends AppCompatActivity {
     ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<>();       // array list to hold discovered devices
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
     private int REQUEST_ENABLE_LOCATION = 1;        // REQUEST LOCATION VALUE
+    private boolean locationStatus;                 // this boolean will be used to determine if location services are turned on
     private ListView deviceList;
     private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
     private static final String TAG =  "BluetoothScanner";
@@ -50,6 +53,7 @@ public class BluetoothScanner extends AppCompatActivity {
     private ArrayList<String> pairedList = new ArrayList<>();         // this is going to be used to hold all paired devices
     MyBluetoothService myBluetoothService;
     private Button discoverButton;                                    // used for discovering BearCare hardware
+
 
 
     private  static final String TAG1 = "Bluetooth Scanner";
@@ -64,11 +68,19 @@ public class BluetoothScanner extends AppCompatActivity {
         myBluetoothService = new MyBluetoothService();
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
-
         deviceList.setOnItemClickListener(messageClickedHandler);
+
 
         IntentFilter pairFilter =  new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);     // this filter needs to be used when pairing to a device
         registerReceiver(pairReceiver,pairFilter);
+
+        IntentFilter intentFilter = new IntentFilter((BluetoothDevice.ACTION_FOUND));           // this filter needs to be created for using the discovery function
+        registerReceiver(btReceiver,intentFilter);                                               // register the receiver
+
+        IntentFilter discoveryDoneFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(btDiscoveryDone,discoveryDoneFilter);
+
+
 
         if(bluetoothAdapter == null)
         {
@@ -79,40 +91,60 @@ public class BluetoothScanner extends AppCompatActivity {
         list(null);
 
 
+
         discoverButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)                       // needed for the checking of location status minimum API must be maintained for use
             @Override
             public void onClick(View v) {
 
                 bluetoothAdapter.startDiscovery();
-                Log.d(TAG, String.valueOf(bluetoothAdapter.startDiscovery()));
-                IntentFilter intentFilter = new IntentFilter((BluetoothDevice.ACTION_FOUND));           // this filter needs to be created for using the discovery function
-                registerReceiver(btReceiver,intentFilter);                                              // register the receiver
+
                 checkLocationPermission(null);
+                checkLocationStatus();
                 titleText.setText("Discovered Bluetooth Devices");
+
+
             }
         });
     }
 
-    BroadcastReceiver btReceiver = new BroadcastReceiver() {
-        @Override
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(btReceiver);
+        unregisterReceiver(pairReceiver);
+        unregisterReceiver(btDiscoveryDone);
+    }
+
+
+    private final   BroadcastReceiver btDiscoveryDone = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+                listDiscovered();
+            }
+        }
+    };
+
+    private final BroadcastReceiver btReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(BluetoothDevice.ACTION_FOUND.equals(action))
             {
-                BluetoothDevice localDeviceObject =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                discoveredDevices.add(localDeviceObject);
-                Log.d(TAG1,"OnReceive: " + localDeviceObject.getName() + ":" + localDeviceObject.getAddress());
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.d(TAG, "onReceive: " + device.getName() + ": Device Address " + device.getAddress());
+                discoveredDevices.add(device);
 
-                listDiscovered(discoveredDevices);
             }
         }
+
     };
 
 
     BroadcastReceiver pairReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
+        public void onReceive(Context context, Intent intent) {             // this used to pair objects from the discovered list
+            final String action = intent.getAction();
             if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))
             {   // will use 3 if statements now
                 BluetoothDevice localBluetoothObject = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
@@ -135,14 +167,6 @@ public class BluetoothScanner extends AppCompatActivity {
             }
         }
     };
-
-
-    public void onPause() {
-
-        super.onPause();
-        unregisterReceiver(btReceiver);
-       // unregisterReceiver(pairReceiver);
-    }
 
     public void checkBluetoothOn(View v){           // check if bluetooth is on
         if (!bluetoothAdapter.isEnabled()) {        // its not enabled
@@ -193,8 +217,44 @@ public class BluetoothScanner extends AppCompatActivity {
 
     }
 
+
+    public void buildAlertMessageLocation(boolean locationService)         // this is going to be used to turn location services on
+    {
+        if(locationService == true)                                        // if the boolean is true do nothing
+            return;                                                        // return
+        else{
+            new AlertDialog.Builder(this)                         // creates a new alert dialog
+                    .setTitle("Enable Location Services")
+                    .setMessage("To discover BearCare Sensors, location services must be turned on")
+                    .setPositiveButton("Turn on Location Services", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent enableLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(enableLocation);
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)           // this is required to use location services
+    public void checkLocationStatus() {                 // does the initial check to see if location services are enabled
+        Context context = getApplicationContext();      // local context
+        LocationManager x = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);   // location manager object x declared
+        locationStatus = x.isLocationEnabled();                                                     // returns true or false depending on if location services are enabled
+        buildAlertMessageLocation(locationStatus);                                                  // call the function buildAlertMessageLocation with the  boolean locationStatus
+    }
+
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {       // this is the result of the requestLocationPermission function
         if(requestCode == REQUEST_ENABLE_LOCATION)
         {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -207,19 +267,15 @@ public class BluetoothScanner extends AppCompatActivity {
         }
     }
 
-    public  void visible(View v){
-        Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        startActivityForResult(getVisible, 0);
-    }
-    public void listDiscovered(ArrayList<BluetoothDevice> x)        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
+
+    public void listDiscovered()        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
     {
-        for (BluetoothDevice devices: x)
+        for (BluetoothDevice devices: discoveredDevices)
         {
             String deviceName = devices.getName();
             String devicesAddress =  devices.getAddress();
             String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;
-            if (nameAddress.contains("BearCare"))
-                foundDevices.add(nameAddress);
+            foundDevices.add(nameAddress);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,foundDevices);
         deviceList.setAdapter(adapter);
