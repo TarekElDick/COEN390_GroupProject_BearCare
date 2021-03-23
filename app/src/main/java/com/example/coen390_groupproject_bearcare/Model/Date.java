@@ -32,11 +32,9 @@ public class Date {
 
     @Override
     public String toString() {
-        return "Date{" +
-                "day=" + day +
-                ", month=" + month +
-                ", year=" + year +
-                '}';
+        return "Day=" + day +
+                ", Month=" + month +
+                ", Year=" + year;
     }
 
     public int getDay() {

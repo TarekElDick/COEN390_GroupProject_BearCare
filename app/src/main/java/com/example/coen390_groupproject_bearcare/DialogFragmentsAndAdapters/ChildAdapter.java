@@ -1,8 +1,10 @@
 package com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,12 +52,14 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
         // Our View Objects
         private final TextView child_name;
+        private final Button takeTemp;
 
         // Child View Holder Constructor, where we connect layout objects to view objects
         public ChildHolder(@NonNull View itemView) {
             super(itemView);
 
             child_name = itemView.findViewById(R.id.textViewChildName_recyclerItem);
+            takeTemp = itemView.findViewById(R.id.buttonTakeTemp_recyclerItem);
 
             // OnclickListener for ChildHolder
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +71,24 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
                     if(position != RecyclerView.NO_POSITION && listener!=null){
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
-
                 }
             });
 
+            // OnClickListener for the button itself
+            takeTemp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    // can implement intent here but for re-usability we will put it in the class it called from.
+                    if(position != RecyclerView.NO_POSITION && listener!=null){
+                        listener.onTakeTempButtonClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
 
             // end of constructor
         }
-
 
         // end of Child View Holder
     }
@@ -84,6 +98,11 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
         // If you want to send anything else from adapter to activity we have to change the arguments here.
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
+
+        // Adding  method for our buttons
+
+        // Take temp button
+        void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
