@@ -12,27 +12,27 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MyBluetoothService {
-    private final String TAG = "MyBluetoothService";
+    private static final String TAG = "MyBluetoothService";
     private static BluetoothSocket btSocket;
     private static BluetoothAdapter BtAdapter;      // bluetooth adapter object
+    public static String macAddress; // todo make this private
 
     @SuppressLint("HardwareIds")
-    public void connectBluetoothDevice(String macAddress) throws IOException
+    public static void connectBluetoothDevice() throws IOException
     {
         if (btSocket!=null)
             close();
 
         BluetoothAdapter myBluetooth;
-        String address = macAddress;
         String name = "a";
         UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
         myBluetooth = BluetoothAdapter.getDefaultAdapter(); //get the mobile bluetooth device
-        BluetoothDevice device = myBluetooth.getRemoteDevice(address); //connects to the device's address and checks if it's available
+        BluetoothDevice device = myBluetooth.getRemoteDevice(macAddress); //connects to the device's address and checks if it's available
         btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID); //create a RFCOMM (SPP) connection
 
         btSocket.connect();
-        Log.i(TAG, "Connected! BT Name: " + name + "\nBT Address: " + address + "\nSocket: " + btSocket.toString());
+        Log.i(TAG, "Connected! BT Name: " + name + "\nBT Address: " + macAddress + "\nSocket: " + btSocket.toString());
     }
 
     public static void close() {

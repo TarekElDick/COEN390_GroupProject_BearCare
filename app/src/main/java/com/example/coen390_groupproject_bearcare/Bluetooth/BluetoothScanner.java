@@ -49,7 +49,6 @@ public class BluetoothScanner extends AppCompatActivity {
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
     private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
-    private ArrayList<String> foundDevices = new ArrayList<>(); // testing delete if it doesnt work
     private ArrayList<String> pairedList = new ArrayList<>();         // this is going to be used to hold all paired devices
     MyBluetoothService myBluetoothService;
     private Button discoverButton;                                    // used for discovering BearCare hardware
@@ -96,14 +95,14 @@ public class BluetoothScanner extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.P)                       // needed for the checking of location status minimum API must be maintained for use
             @Override
             public void onClick(View v) {
-
-                bluetoothAdapter.startDiscovery();
-
                 checkLocationPermission(null);
                 checkLocationStatus();
+
                 titleText.setText("Discovered Bluetooth Devices");
 
+                discoveredDevices.clear(); // clear the list, otherwise we will have device doubles in the listview
 
+                bluetoothAdapter.startDiscovery();
             }
         });
     }
@@ -133,7 +132,13 @@ public class BluetoothScanner extends AppCompatActivity {
             {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Log.d(TAG, "onReceive: " + device.getName() + ": Device Address " + device.getAddress());
-                discoveredDevices.add(device);
+
+                if (device.getName() != null)
+                {
+                    if (device.getName().equals("BearCare Temperature Sensor")) {
+                        discoveredDevices.add(device);
+                    }
+                }
 
             }
         }
@@ -270,6 +275,7 @@ public class BluetoothScanner extends AppCompatActivity {
 
     public void listDiscovered()        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
     {
+        ArrayList<String> foundDevices = new ArrayList<>();       // testing delete if it doesnt work
 
         for (BluetoothDevice devices: discoveredDevices)
         {
@@ -278,7 +284,7 @@ public class BluetoothScanner extends AppCompatActivity {
             Log.d(TAG, "listDiscovered: " + nameAddress);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,foundDevices);
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, foundDevices);
         deviceList.setAdapter(adapter);
     }
 

@@ -59,7 +59,8 @@ public class TemperatureActivity extends AppCompatActivity {
 
         try {
             // todo replace this hard-coded mac address
-            myBluetoothService.connectBluetoothDevice("24:6F:28:1A:D3:26");
+            MyBluetoothService.macAddress = "24:6F:28:1A:D3:26";
+            MyBluetoothService.connectBluetoothDevice();
             // Ryan's ESP32 MAC ADDRESS AC:67:B2:36:13:BA
 
         } catch (IOException e) {
