@@ -114,7 +114,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 .setQuery(query, Child.class)
                 .build();
 
-        Log.d(TAG, "Adapter is initializing with out child directory options");
+        Log.d(TAG, "Adapter is initializing with our child directory options");
         adapter = new ChildAdapter(options);
 
         // Connecting our class object of recycler view to the layout recycler view
@@ -126,6 +126,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         firestoreChildrenDirectoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreChildrenDirectoryRecyclerView.setAdapter(adapter);
 
+        // TODO implement only employee can delete from here.
         // ItemTouchHelper to implement delete functionality
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -166,6 +167,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 startActivity(intent);
             }
 
+            //TODO implement is employee here
             @Override
             public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
                 // Code for when take temp button is clicked
@@ -182,12 +184,8 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 Log.d(TAG, "Child ID of button clicked is: " + childId);
                 Log.d(TAG, "Child Name of button clicked is: " + childName);
                 startActivity(intent);
-
             }
         });
-
-
-
         // end of setUpUI
     }
 
