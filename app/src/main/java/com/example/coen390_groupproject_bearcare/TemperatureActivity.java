@@ -30,7 +30,6 @@ public class TemperatureActivity extends AppCompatActivity {
     private TextView textViewTitleRecordTemp, textViewConfirm,textViewTempDisplay;
     private Button takeTemp, configureSensorsButton;
     private FloatingActionButton confirmButton;
-    private MyBluetoothService myBluetoothService;
     private String TAG;
     private String childName;
     private String childId;
@@ -54,14 +53,9 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TAG = "TemperatureActivity";
 
-
-        myBluetoothService = new MyBluetoothService();
-
         try {
             // todo replace this hard-coded mac address
-            MyBluetoothService.macAddress = "24:6F:28:1A:D3:26";
-            MyBluetoothService.connectBluetoothDevice();
-            // Ryan's ESP32 MAC ADDRESS AC:67:B2:36:13:BA
+            MyBluetoothService.connectAutomatically();
 
         } catch (IOException e) {
             Log.e(TAG, e.toString());
@@ -74,9 +68,7 @@ public class TemperatureActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //TODO test with bluetooth
-                double tempReading = myBluetoothService.getReading();
-
-                //double tempReading = 20.3;
+                double tempReading = MyBluetoothService.getReading();
 
                 Calendar calendar = Calendar.getInstance();
                 tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());

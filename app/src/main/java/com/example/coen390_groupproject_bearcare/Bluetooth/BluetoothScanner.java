@@ -39,7 +39,6 @@ import java.util.logging.Handler;
 public class BluetoothScanner extends AppCompatActivity {
 
     private BluetoothAdapter bluetoothAdapter;      // bluetooth adapter object
-    private Set<BluetoothDevice> pairedDevices;          // paired devices
     ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<>();       // array list to hold discovered devices
     private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
     private int REQUEST_ENABLE_LOCATION = 1;        // REQUEST LOCATION VALUE
@@ -49,8 +48,6 @@ public class BluetoothScanner extends AppCompatActivity {
     private static final String TAG =  "BluetoothScanner";
     private Handler handler;
     private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
-    private ArrayList<String> pairedList = new ArrayList<>();         // this is going to be used to hold all paired devices
-    MyBluetoothService myBluetoothService;
     private Button discoverButton;                                    // used for discovering BearCare hardware
 
 
@@ -64,11 +61,11 @@ public class BluetoothScanner extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth_scanner);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         deviceList = findViewById(R.id.device_list);
-        myBluetoothService = new MyBluetoothService();
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
         deviceList.setOnItemClickListener(messageClickedHandler);
 
+        macList = new ArrayList<>();    // this list holds the mac addresses of the paired or discovered bearcare devices, depending on context
 
         IntentFilter pairFilter =  new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);     // this filter needs to be used when pairing to a device
         registerReceiver(pairReceiver,pairFilter);
@@ -288,10 +285,10 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList.setAdapter(adapter);
     }
 
-    public void list(View v){       // get the paired devices names and MAC address
-        pairedDevices = bluetoothAdapter.getBondedDevices();
+    public void list(View v){       // get the paired devices and list them on screen
+        Set<BluetoothDevice> pairedDevices = MyBluetoothService.getAllPairedDevices();
 
-        macList = new ArrayList<>();
+        ArrayList<String> pairedDevicesStrings = new ArrayList<>();         // this is going to be used to hold all paired devices
 
         for(BluetoothDevice devices : pairedDevices) {
 
@@ -301,12 +298,10 @@ public class BluetoothScanner extends AppCompatActivity {
 
             String nameAddress = deviceName + "\n" + "Device Address: " + devicesAddress;     // concatenate the two strings
             if (nameAddress.contains("BearCare"))
-                pairedList.add(nameAddress);
-
+                pairedDevicesStrings.add(nameAddress);
         }
-        Toast.makeText(getApplicationContext(), "Showing Paired Devices",Toast.LENGTH_SHORT).show();
 
-        final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1,pairedList);
+        final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1,pairedDevicesStrings);
 
         deviceList.setAdapter(adapter);
     }
