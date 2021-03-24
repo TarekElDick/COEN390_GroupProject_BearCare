@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
+        user = mAuth.getCurrentUser();
         // Initializing firestore
         fStore = FirebaseFirestore.getInstance();
 
@@ -63,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        Log.d(TAG, " User is null check:");
         //Check if user is already logged in or not, if they are a returning user
-        if(mAuth.getCurrentUser() != null ){
+        if(user != null ){
 
             Log.d(TAG, " User is not null");
             // send them to their activity
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     User user = documentSnapshot.toObject(User.class);
 
                     boolean isEmployee = user.isEmployee();
+
                     Log.d(TAG, "User is employee: " + isEmployee);
 
                     Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
@@ -86,8 +90,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        }else {
+            Log.d(TAG, " User is null");
         }
 
+        // end of onStart
     }
 
     @Override
@@ -125,12 +132,14 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+
                 // Display progressbar to let the user know something is happening
                 textViewMessage.setVisibility(View.INVISIBLE);
                 textViewCreateNewAccount.setVisibility(View.INVISIBLE);
                 buttonLogin.setVisibility(View.INVISIBLE);
                 progressBarLogin.setVisibility(View.VISIBLE);
 
+                Log.d(TAG, "User is attempting to log in ");
                 // onCompleteListener to check if the user account was already created before.
                 mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -159,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         }else{
-                            Log.d(TAG, " User didn't signed in successfully");
-                            Toast.makeText(MainActivity.this, "No account associated with this email/password", Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "User didn't signed in successfully");
+                            Toast.makeText(MainActivity.this, "No account associated with this email and password", Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);
@@ -174,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.d(TAG, " User is going to create an account");
+                Log.d(TAG, "User is going to create an account");
                 startActivity(new Intent(getApplicationContext(),SignUpActivity.class ));
 
             }

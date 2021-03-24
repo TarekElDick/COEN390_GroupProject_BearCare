@@ -38,7 +38,7 @@ public class UserMainPageActivity extends AppCompatActivity {
     private FirebaseFirestore fStore;
     private CollectionReference childrenRef;
     private ChildAdapter childAdapter;
-    private TextView displayName, questionnaireLastReceived, questionnaireTimestamp, parentsCorner;
+    private TextView displayName, questionnaireLastReceived, questionnaireTimestamp, corner;
     private boolean isEmployee;
     private String userId;
     String TAG = "debug_dashboard";
@@ -105,13 +105,18 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         // Connections
 
-        parentsCorner = findViewById(R.id.textViewParentsCorner_dashboard);
+        corner = findViewById(R.id.textViewParentsCorner_dashboard);
         displayName = findViewById(R.id.textViewUserName_dashboard);
         TextView accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_dashboard);
         Button buttonFillQuestionnaire = findViewById(R.id.buttonFillDailyQuestionnaire_dashboard);
         questionnaireLastReceived = findViewById(R.id.textViewLastReceived_dashboard);
         questionnaireTimestamp = findViewById(R.id.textViewTimestamp_dashboard);
 
+        // initially make everything invisible
+        accessChildDirectory.setVisibility(View.INVISIBLE);
+        buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
+        questionnaireTimestamp.setVisibility(View.INVISIBLE);
+        questionnaireLastReceived.setVisibility(View.INVISIBLE);
         // onClickListeners
         accessChildDirectory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,13 +150,19 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Log.d(TAG, "User id is: " + userId);
 
                 if(isEmployee){
+                    String cornerText = "Employee Corner";
+                    corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.VISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
                     questionnaireTimestamp.setVisibility(View.INVISIBLE);
                     questionnaireLastReceived.setVisibility(View.INVISIBLE);
-                    parentsCorner.setVisibility(View.INVISIBLE);
                 }else{
+                    String cornerText = "Parent Corner";
+                    corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.INVISIBLE);
+                    buttonFillQuestionnaire.setVisibility(View.VISIBLE);
+                    questionnaireTimestamp.setVisibility(View.VISIBLE);
+                    questionnaireLastReceived.setVisibility(View.VISIBLE);
                     // TODO disable sensor icon, on the item probably within adapter?
                 }
             }
@@ -199,7 +210,6 @@ public class UserMainPageActivity extends AppCompatActivity {
         firestoreChildrenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreChildrenRecyclerView.setAdapter(childAdapter);
 
-        // TODO don't let parents delete
         // ItemTouchHelper to implement delete functionality
         if(isEmployee) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -243,21 +253,25 @@ public class UserMainPageActivity extends AppCompatActivity {
             }
             @Override
             public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
-                // Code for when take temp button is clicked
-                // Get the document ID.
-                String childId = documentSnapshot.getId();
-                //get child name
-                String firstName = documentSnapshot.getString("firstName");
-                String lastName = documentSnapshot.getString("lastName");
-                String childName = firstName + " " + lastName;
-                // Go to takeTempActivity
-                Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
-                intent.putExtra("childId", childId);
-                intent.putExtra("childName", childName);
-                Log.d(TAG, "Child ID of button clicked is: " + childId);
-                Log.d(TAG, "Child Name of button clicked is: " + childName);
-                startActivity(intent);
-
+                if(isEmployee) {
+                    // Code for when take temp button is clicked
+                    // Get the document ID.
+                    String childId = documentSnapshot.getId();
+                    //get child name
+                    String firstName = documentSnapshot.getString("firstName");
+                    String lastName = documentSnapshot.getString("lastName");
+                    String childName = firstName + " " + lastName;
+                    // Go to takeTempActivity
+                    Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
+                    intent.putExtra("childId", childId);
+                    intent.putExtra("childName", childName);
+                    Log.d(TAG, "Child ID of button clicked is: " + childId);
+                    Log.d(TAG, "Child Name of button clicked is: " + childName);
+                    startActivity(intent);
+                } else{
+                    Log.d(TAG, "Not Employee");
+                    Toast.makeText(UserMainPageActivity.this, "Only employees can take temperature", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
