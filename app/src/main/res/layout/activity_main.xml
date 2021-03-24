@@ -72,6 +72,7 @@
         android:id="@+id/textViewPassword_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="1dp"
         android:text="PASSWORD"
         app:layout_constraintBottom_toTopOf="@+id/editTextPassword_login"
@@ -80,7 +81,7 @@
 
     <EditText
         android:id="@+id/editTextEmailAddress_login"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="46dp"
         android:layout_marginLeft="46dp"
@@ -96,7 +97,7 @@
 
     <EditText
         android:id="@+id/editTextPassword_login"
-        android:layout_width="302dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="46dp"
         android:layout_marginLeft="46dp"

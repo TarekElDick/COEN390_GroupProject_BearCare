@@ -1,13 +1,16 @@
 package com.example.coen390_groupproject_bearcare;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -181,7 +184,7 @@ public class UserMainPageActivity extends AppCompatActivity {
             Log.d(TAG, "Query for employee is starting");
             // Query if user is employee
             childQuery = childrenRef.whereEqualTo("employeeId", userId)
-                    .orderBy("firstName", Query.Direction.ASCENDING);
+                    .orderBy("lastName", Query.Direction.ASCENDING);
 
             // Recycler Options. To get out query into the adapter.
             FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
@@ -193,7 +196,7 @@ public class UserMainPageActivity extends AppCompatActivity {
             Log.d(TAG, "Query for parent is starting");
             // Query if user is parent
             childQuery = childrenRef.whereEqualTo("parentId", userId)
-                    .orderBy("firstName", Query.Direction.ASCENDING);
+                    .orderBy("lastName", Query.Direction.ASCENDING);
             // Recycler Options. To get out query into the adapter.
             FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
                     .setQuery(childQuery, Child.class)
@@ -210,7 +213,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         firestoreChildrenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreChildrenRecyclerView.setAdapter(childAdapter);
 
-        // ItemTouchHelper to implement delete functionality
+        // ItemTouchHelper to implement delete functionality, only employee's can delete.
         if(isEmployee) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 @Override
@@ -220,12 +223,36 @@ public class UserMainPageActivity extends AppCompatActivity {
 
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    Log.d(TAG, "Child Item is being deleted");
-                    childAdapter.deleteItem(viewHolder.getAdapterPosition());
+                    // Here is where we implement swipe to delete
+                    Log.d(TAG, "Child Item is being swiped");
+
+                    new AlertDialog.Builder(viewHolder.itemView.getContext())
+                            .setMessage("Are you sure you want to delete this child?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User wants to delete the item
+                                    Log.d(TAG, "Child item is deleted");
+                                    childAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                    runRecyclerView();
+                                }
+                                })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User canceled the delete item
+                                    Log.d(TAG, "Child item is not deleted");
+                                    // Refresh the adapter to prevent the item from UI.
+                                    childAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                }
+                            })
+                            .create()
+                            .show();
                 }
             }).attachToRecyclerView(firestoreChildrenRecyclerView);
         }
-        //On click fot the item , not the buttons!
+
+        //On click for the item itself
         childAdapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
@@ -251,6 +278,8 @@ public class UserMainPageActivity extends AppCompatActivity {
                 intent.putExtra("parentId", parentId);
                 startActivity(intent);
             }
+
+            // OnClick for the take temperature button
             @Override
             public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
                 if(isEmployee) {

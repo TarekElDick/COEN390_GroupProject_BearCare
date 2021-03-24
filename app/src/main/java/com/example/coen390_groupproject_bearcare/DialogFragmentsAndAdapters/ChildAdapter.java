@@ -1,6 +1,5 @@
 package com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,7 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
         public ChildHolder(@NonNull View itemView) {
             super(itemView);
 
-            child_name = itemView.findViewById(R.id.textViewChildName_recyclerItem);
+            child_name = itemView.findViewById(R.id.textViewChildName_recyclerChildItem);
             takeTemp = itemView.findViewById(R.id.buttonTakeTemp_recyclerItem);
 
             // OnclickListener for ChildHolder
