@@ -1,12 +1,14 @@
 package com.example.coen390_groupproject_bearcare;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -126,7 +128,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
         firestoreChildrenDirectoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreChildrenDirectoryRecyclerView.setAdapter(adapter);
 
-        // TODO implement only employee can delete from here.
+
         // ItemTouchHelper to implement delete functionality
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
@@ -136,8 +138,30 @@ public class ChildDirectoryActivity extends AppCompatActivity{
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Log.d(TAG, "Child Item is being deleted");
-                adapter.deleteItem(viewHolder.getAdapterPosition());
+                // Here is where we implement swipe to delete
+                Log.d(TAG, "Child Item is being swiped");
+
+                new AlertDialog.Builder(viewHolder.itemView.getContext())
+                        .setMessage("Are you sure you want to delete this child?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User wants to delete the item
+                                Log.d(TAG, "Child item is deleted");
+                                adapter.deleteItem(viewHolder.getAdapterPosition());
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User canceled the delete item
+                                Log.d(TAG, "Child item is not deleted");
+                                // Refresh the adapter to prevent the item from UI.
+                                adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            }
+                        })
+                        .create()
+                        .show();
             }
         }).attachToRecyclerView(firestoreChildrenDirectoryRecyclerView);
 
@@ -167,7 +191,6 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 startActivity(intent);
             }
 
-            //TODO implement is employee here
             @Override
             public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
                 // Code for when take temp button is clicked

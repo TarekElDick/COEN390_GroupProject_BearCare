@@ -46,11 +46,11 @@
         android:id="@+id/buttonFillDailyQuestionnaire_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="285dp"
         android:text="Fill Daily Questionaire"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewChildren_dashboard" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewChildren_dashboard" />
 
     <TextView
         android:id="@+id/textViewLastReceived_dashboard"
@@ -76,8 +76,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChildren_dashboard"
-        android:layout_width="393dp"
-        android:layout_height="241dp"
+        android:layout_width="392dp"
+        android:layout_height="406dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
