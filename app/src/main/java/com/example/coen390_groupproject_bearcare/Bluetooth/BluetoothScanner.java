@@ -196,8 +196,8 @@ public class BluetoothScanner extends AppCompatActivity {
         {
             if(REQUEST_CODE_CHECK_SETTINGS == requestCode){
                 Log.d(TAG, "onActivityResult: REACHED REQUEST CODE 2");
-                Toast.makeText(this,"Location Enabled Begin Scanning for Bluetooth Devices.",Toast.LENGTH_SHORT).show();
                 bluetoothAdapter.startDiscovery();
+                Toast.makeText(this,"Location Enabled Begin Scanning for Bluetooth Devices.",Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "onActivityResult: REACH REQUEST CODE 2 CANCELLED");
                 Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
