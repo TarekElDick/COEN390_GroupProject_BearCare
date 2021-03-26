@@ -24,7 +24,7 @@ An additional feauture: <br />
 
 ## Languages 
 
-Java, 
+Java, Arduino
 
 ## Techniques
 
