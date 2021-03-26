@@ -61,7 +61,6 @@ public class TemperatureActivity extends AppCompatActivity {
             Log.e(TAG, e.toString());
         }
 
-
         // on click listener for take temp button
         takeTemp.setOnClickListener(new View.OnClickListener() {
             @Override

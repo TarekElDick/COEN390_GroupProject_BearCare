@@ -1,6 +1,7 @@
 package com.example.coen390_groupproject_bearcare.Bluetooth;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -38,17 +39,16 @@ import java.util.logging.Handler;
 
 public class BluetoothScanner extends AppCompatActivity {
 
-    private BluetoothAdapter bluetoothAdapter;      // bluetooth adapter object
+    private BluetoothAdapter bluetoothAdapter;                              // bluetooth adapter object
     ArrayList<BluetoothDevice> discoveredDevices = new ArrayList<>();       // array list to hold discovered devices
-    private int REQUEST_ENABLE_BLUETOOTH = 1;       // REQUEST BLUETOOTH VALUE
-    private int REQUEST_ENABLE_LOCATION = 1;        // REQUEST LOCATION VALUE
-    private boolean locationStatus;                 // this boolean will be used to determine if location services are turned on
+    private int REQUEST_ENABLE_LOCATION = 1;                           // REQUEST LOCATION VALUE
+    private int REQUEST_CODE_CHECK_SETTINGS = 2;
+    private boolean locationStatus;                                    // this boolean will be used to determine if location services are turned on
     private ListView deviceList;
-    private String EXTRA_ADDRESS = "Device_Address";    // device address to be shared between activities
     private static final String TAG =  "BluetoothScanner";
-    private Handler handler;
-    private ArrayList<String> macList;  // list of all mac addresses, in the order they are presented on screen
+    private ArrayList<String> macList;                                // list of all mac addresses, in the order they are presented on screen
     private Button discoverButton;                                    // used for discovering BearCare hardware
+    boolean bluetoothOn;                                              // to fix the issue where the paired list isn't showing up if bluetooth is enabled on entering activity
 
 
 
@@ -84,9 +84,8 @@ public class BluetoothScanner extends AppCompatActivity {
         }
         checkBluetoothOn(null);
 
-        list(null);
-
-
+        if(bluetoothOn == true)
+            list(null);
 
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.P)                       // needed for the checking of location status minimum API must be maintained for use
@@ -141,8 +140,7 @@ public class BluetoothScanner extends AppCompatActivity {
         }
 
     };
-
-
+    
     BroadcastReceiver pairReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {             // this used to pair objects from the discovered list
@@ -172,15 +170,40 @@ public class BluetoothScanner extends AppCompatActivity {
 
     public void checkBluetoothOn(View v){           // check if bluetooth is on
         if (!bluetoothAdapter.isEnabled()) {        // its not enabled
+            bluetoothOn = false;                    // bt is not on set to false
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE); // this constant is used to request to turn on BS services
-            startActivityForResult(turnOn, 0);
+            startActivityForResult(turnOn, 1);
             Toast.makeText(getApplicationContext(), "Please turn on Bluetooth.",Toast.LENGTH_LONG).show();
         }
         else {
             Toast.makeText(getApplicationContext(), "Bluetooth services are enabled.", Toast.LENGTH_LONG).show();
+            bluetoothOn = true;                 // set the boolean to true - bluetooth is enabled
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {           // this is called when StartActivityForResult is done - calls the list function so its not empty on activity
+                                                                                                        // entry
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Bluetooth enabled", Toast.LENGTH_LONG).show();
+                list(null);
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+            }
+        }
+        else if(requestCode ==2)
+        {
+            if(REQUEST_CODE_CHECK_SETTINGS == requestCode){
+                Log.d(TAG, "onActivityResult: REACHED REQUEST CODE 2");
+                Toast.makeText(this,"Location Enabled Begin Scanning for Bluetooth Devices.",Toast.LENGTH_SHORT).show();
+                bluetoothAdapter.startDiscovery();
+            } else {
+                Log.d(TAG, "onActivityResult: REACH REQUEST CODE 2 CANCELLED");
+                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     public void checkLocationPermission(View v){            // check if location services are on and request permission for access
         if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -189,8 +212,6 @@ public class BluetoothScanner extends AppCompatActivity {
         }else{
             requestLocationPermission();
         }
-
-
     }
 
     public void requestLocationPermission()         // this function will be used to request permission from the user to access location
@@ -219,7 +240,6 @@ public class BluetoothScanner extends AppCompatActivity {
 
     }
 
-
     public void buildAlertMessageLocation(boolean locationService)         // this is going to be used to turn location services on
     {
         if(locationService == true)                                        // if the boolean is true do nothing
@@ -232,8 +252,7 @@ public class BluetoothScanner extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent enableLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            startActivity(enableLocation);
-
+                            startActivityForResult(enableLocation, 2);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -268,7 +287,6 @@ public class BluetoothScanner extends AppCompatActivity {
             }
         }
     }
-
 
     public void listDiscovered()        // making a separate list function for discovered devices as a test for now please review for efficiency 03/20/21 RH
     {
@@ -321,13 +339,6 @@ public class BluetoothScanner extends AppCompatActivity {
                bdDevice.createBond();
             }
 
-//            try {
-//                // todo we probably want to send which address we clicked
-//                // try closing first to avoid error when we are already connected
-//                myBluetoothService.connectBluetoothDevice(macAddress);
-//            } catch (IOException e) {
-//                Log.e(TAG, e.getMessage());
-//            }
         }
     };
 
