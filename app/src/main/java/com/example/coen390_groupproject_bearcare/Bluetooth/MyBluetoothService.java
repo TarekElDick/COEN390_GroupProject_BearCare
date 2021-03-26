@@ -6,15 +6,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class MyBluetoothService {
     private static final String TAG = "MyBluetoothService";
@@ -89,7 +83,6 @@ public class MyBluetoothService {
 
     // automatically connect to the first BearCare device we see
     public static void connectAutomatically() throws IOException {
-        //macAddress = "00:00:00:00:00:00";
         Set<BluetoothDevice> pairedDevices = getAllPairedDevices();
 
         for(BluetoothDevice devices : pairedDevices) {
@@ -107,5 +100,9 @@ public class MyBluetoothService {
         if (macAddress != null)
             connectBluetoothDevice();
 
+    }
+
+    public static String getMacAddress() {
+        return macAddress;
     }
 }

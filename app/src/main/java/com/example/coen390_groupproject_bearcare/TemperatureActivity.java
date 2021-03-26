@@ -54,9 +54,9 @@ public class TemperatureActivity extends AppCompatActivity {
         TAG = "TemperatureActivity";
 
         try {
-            // todo replace this hard-coded mac address
-            MyBluetoothService.connectAutomatically();
-
+            if (MyBluetoothService.getMacAddress() == null) {
+                MyBluetoothService.connectAutomatically();
+            }
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }
@@ -67,7 +67,6 @@ public class TemperatureActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO test with bluetooth
                 double tempReading = MyBluetoothService.getReading();
 
                 Calendar calendar = Calendar.getInstance();
@@ -104,6 +103,6 @@ public class TemperatureActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        MyBluetoothService.close();
+        //MyBluetoothService.close();
     }
 }
