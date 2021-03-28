@@ -13,7 +13,6 @@ import java.util.UUID;
 public class MyBluetoothService {
     private static final String TAG = "MyBluetoothService";
     private static BluetoothSocket btSocket;
-    //private static BluetoothAdapter BtAdapter;      // bluetooth adapter object
     private static String macAddress; // mac address is stored across all activities
 
     // connect to the mac address stored as a static variable in this class
@@ -32,6 +31,11 @@ public class MyBluetoothService {
 
         btSocket.connect();
         Log.i(TAG, "Connected! BT Name: " + name + "\nBT Address: " + macAddress + "\nSocket: " + btSocket.toString());
+    }
+
+    public static void connectBluetoothDevice(String inputMacAddress) throws IOException {      //
+        MyBluetoothService.macAddress = inputMacAddress;
+        connectBluetoothDevice();
     }
 
     public static void close() {
