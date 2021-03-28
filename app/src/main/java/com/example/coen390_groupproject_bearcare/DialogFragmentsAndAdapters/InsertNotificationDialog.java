@@ -78,7 +78,6 @@ public class InsertNotificationDialog extends DialogFragment {
         buttonCancel        = view.findViewById(R.id.buttonCancel__insertNotification);
         progressBar         = view.findViewById(R.id.progressBar_insertNotification);
 
-        // TODO 3) Apply filters for inputs, might be necessary so that user cant pick old date value, or/and set childName.
         // 3) Set up dialog view and inputs filters
         // 3.1) Get the values from the activity.
         childId = this.getArguments().getString("childId");

@@ -75,6 +75,5 @@ public class NotificationHelper extends ContextWrapper {
                 .setSmallIcon(R.drawable.bearcarelogonobackground)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(description));
-
     }
 }
