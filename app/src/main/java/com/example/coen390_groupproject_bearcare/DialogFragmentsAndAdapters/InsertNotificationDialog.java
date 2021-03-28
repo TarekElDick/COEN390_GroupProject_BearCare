@@ -236,7 +236,7 @@ public class InsertNotificationDialog extends DialogFragment {
 
                 // 5.1.2) Store values globally to be used for database.
                 notificationDay = day;
-                notificationMonth = formattedMonth;
+                notificationMonth = month;
                 notificationYear = year;
             }
         };
@@ -290,7 +290,6 @@ public class InsertNotificationDialog extends DialogFragment {
         Log.d(TAG, "Initializing alarm");
         AlarmManager alarmManager = (AlarmManager) Objects.requireNonNull(getActivity()).getSystemService(Context.ALARM_SERVICE);
         Intent intent =  new Intent(getActivity(), AlertReceiver.class);
-        intent.putExtra("childName", childName);
         intent.putExtra("notificationTitle",notificationTitle );
         intent.putExtra("notificationDescription", notificationDescription);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 1, intent, 0);
