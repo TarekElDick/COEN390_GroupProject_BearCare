@@ -22,7 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
+import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.NotificationAdapter;
 import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.Notification;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +42,7 @@ public class UserMainPageActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseFirestore fStore;
     private CollectionReference childrenRef;
+    private NotificationAdapter notificationAdapter;
     private ChildAdapter childAdapter;
     private TextView displayName, questionnaireLastReceived, questionnaireTimestamp, corner;
     private boolean isEmployee;
@@ -83,6 +86,7 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         Log.d(TAG, "adapter is starting");
         childAdapter.startListening();
+        notificationAdapter.startListening();
 
         if (user != null){
             // user is signed in
@@ -102,12 +106,12 @@ public class UserMainPageActivity extends AppCompatActivity {
         super.onStop();
         Log.d(TAG, "adapter is stopping");
         childAdapter.stopListening();
+        notificationAdapter.stopListening();
     }
 
     public void setUpUI() {
 
         // Connections
-
         corner = findViewById(R.id.textViewParentsCorner_dashboard);
         displayName = findViewById(R.id.textViewUserName_dashboard);
         TextView accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_dashboard);
@@ -179,6 +183,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         Log.d(TAG, "Recycler View is initializing");
         Log.d(TAG, "Making sure if employee in runRecyclerView " + isEmployee);
 
+        Query notificationQuery;
         Query childQuery;
         if(isEmployee) {
             Log.d(TAG, "Query for employee is starting");
@@ -186,32 +191,55 @@ public class UserMainPageActivity extends AppCompatActivity {
             childQuery = childrenRef.whereEqualTo("employeeId", userId)
                     .orderBy("lastName", Query.Direction.ASCENDING);
 
+            notificationQuery = fStore.collection("Notifications")
+                    .whereEqualTo("employeeId", userId);
+
             // Recycler Options. To get out query into the adapter.
-            FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
+            FirestoreRecyclerOptions<Child> options1 = new FirestoreRecyclerOptions.Builder<Child>()
                     .setQuery(childQuery, Child.class)
                     .build();
 
-            childAdapter = new ChildAdapter(options);
+            FirestoreRecyclerOptions<Notification> options2 = new FirestoreRecyclerOptions.Builder<Notification>()
+                    .setQuery(notificationQuery, Notification.class)
+                    .build();
+
+            childAdapter = new ChildAdapter(options1);
+            notificationAdapter = new NotificationAdapter(options2);
         } else {
             Log.d(TAG, "Query for parent is starting");
             // Query if user is parent
             childQuery = childrenRef.whereEqualTo("parentId", userId)
                     .orderBy("lastName", Query.Direction.ASCENDING);
+            notificationQuery = fStore.collection("Notifications")
+                    .whereEqualTo("parentId", userId);
+
             // Recycler Options. To get out query into the adapter.
-            FirestoreRecyclerOptions<Child> options = new FirestoreRecyclerOptions.Builder<Child>()
+            FirestoreRecyclerOptions<Child> options1 = new FirestoreRecyclerOptions.Builder<Child>()
                     .setQuery(childQuery, Child.class)
                     .build();
-            childAdapter = new ChildAdapter(options);
+
+            FirestoreRecyclerOptions<Notification> options2 = new FirestoreRecyclerOptions.Builder<Notification>()
+                    .setQuery(notificationQuery, Notification.class)
+                    .build();
+
+            childAdapter = new ChildAdapter(options1);
+            notificationAdapter = new NotificationAdapter(options2);
         }
         onStart();
 
         // Connecting our class object of recycler view to the layout recycler view
         RecyclerView firestoreChildrenRecyclerView = findViewById(R.id.recyclerViewChildren_dashboard);
+        RecyclerView firestoreNotificationRecyclerView = findViewById(R.id.recyclerViewNotification_dashboard);
 
-        // Connect out class object recycler view to the adapter
+
+        // Connect our class object recycler view to the adapter
         firestoreChildrenRecyclerView.setHasFixedSize(true);
         firestoreChildrenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreChildrenRecyclerView.setAdapter(childAdapter);
+
+        firestoreNotificationRecyclerView.setHasFixedSize(true);
+        firestoreNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        firestoreNotificationRecyclerView.setAdapter(notificationAdapter);
 
         // ItemTouchHelper to implement delete functionality, only employee's can delete.
         if(isEmployee) {
@@ -256,26 +284,25 @@ public class UserMainPageActivity extends AppCompatActivity {
         childAdapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                // Now we can create an intent and send
-                // Get the document ID.
+
+                //Translate data into our class custom object
+                Child child = documentSnapshot.toObject(Child.class);
+
+                // Get the child's info to send.
                 String childId = documentSnapshot.getId();
-                Log.d(TAG, "Child ID of item clicked is: " + childId);
 
-                //get child name
-                String firstName = documentSnapshot.getString("firstName");
-                String lastName = documentSnapshot.getString("lastName");
-                String parentId = documentSnapshot.getString("parentId");
+                //Get child info
+                String firstName = child.getFirstName();
+                String lastName = child.getLastName();
+                String parentId = child.getParentId();
                 String name = firstName + " " + lastName;
-
-
-                Log.d(TAG, "Child ID of item clicked is: " + childId);
-                Log.d(TAG, "Child Name of item clicked is: " + name);
-
+                String birthday = child.getBirthday().toString();
 
                 Intent intent = new Intent(getApplicationContext(), ChildProfileActivity.class);
                 intent.putExtra("childId", childId);
                 intent.putExtra("childName", name);
                 intent.putExtra("parentId", parentId);
+                intent.putExtra("birthday", birthday);
                 startActivity(intent);
             }
 

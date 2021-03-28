@@ -29,7 +29,7 @@
         android:textColor="@color/purple_700"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewNotification_dashboard" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
+        android:id="@+id/recyclerViewNotification_dashboard"
         android:layout_width="388dp"
         android:layout_height="136dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,7 +126,7 @@
         android:layout_marginStart="38dp"
         android:layout_marginLeft="38dp"
         android:layout_marginTop="16dp"
-        android:textColor="@color/purple_700"
+        android:textColor="@color/purple_200"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="parent" />
