@@ -1,9 +1,15 @@
 package com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +25,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.coen390_groupproject_bearcare.AlertReceiver;
 import com.example.coen390_groupproject_bearcare.Model.Child;
 import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.Model.Notification;
@@ -33,16 +41,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class InsertNotificationDialog extends DialogFragment {
 
     // Private class objects.
-    private TextView textViewchildName, textViewDate, textViewTime;
+    private TextView textViewChildName, textViewDate, textViewTime;
     private EditText editTextTitle, editTextDescription;
     private Button buttonSave, buttonCancel;
     private ProgressBar progressBar;
 
-    private String childName, childId;
+    private String childName, childId, notificationTitle, notificationDescription;
     private int mDay, mMonth, mYear, mHour, mMinute,  notificationDay,  notificationMonth, notificationYear,  notificationHour,  notificationMinute;
 
     // Date and Time Picker dialog objects.
@@ -50,7 +59,6 @@ public class InsertNotificationDialog extends DialogFragment {
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
     String TAG = "debug_insertNotifications";
-
 
     // OnCreateView for our dialog.
     @Nullable
@@ -61,7 +69,7 @@ public class InsertNotificationDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_insert_notification, container);
 
         // 2) Connect our class objects to our fragment layout objects.
-        textViewchildName   = view.findViewById(R.id.textViewChildName_insertNotification);
+        textViewChildName   = view.findViewById(R.id.textViewChildName_insertNotification);
         editTextTitle       = view.findViewById(R.id.editTextTitle_insertNotification);
         editTextDescription = view.findViewById(R.id.editTextDescription_insertNotification);
         textViewDate        = view.findViewById(R.id.textViewDate_insertNotification);
@@ -78,7 +86,7 @@ public class InsertNotificationDialog extends DialogFragment {
         Log.d(TAG, "ChildID: "+ childId+" ChildName: "+childName);
 
         // 3.2) Show the child's names
-        textViewchildName.setText(childName);
+        textViewChildName.setText(childName);
 
         // 4) OnClick Listeners for the buttons, and Date/Time textViews.
         buttonCancel.setOnClickListener(new View.OnClickListener() {
@@ -144,8 +152,8 @@ public class InsertNotificationDialog extends DialogFragment {
                 Log.d(TAG, "Save button clicked");
                 // 4.3 Implement save button functionality
                 // 4.3.1) Get user inputs and check acceptability
-                String notificationTitle = editTextTitle.getText().toString().trim();
-                String notificationDescription = editTextDescription.getText().toString().trim();
+                notificationTitle = editTextTitle.getText().toString().trim();
+                notificationDescription = editTextDescription.getText().toString().trim();
 
                 if(notificationTitle.isEmpty()){
                     editTextTitle.setError("Please specify a title");
@@ -161,6 +169,7 @@ public class InsertNotificationDialog extends DialogFragment {
                     // 4.3.2.1) Document Reference
                     DocumentReference childRef = FirebaseFirestore.getInstance().collection("Children").document(childId);
                     childRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             Log.d(TAG, "Getting child information");
@@ -187,11 +196,28 @@ public class InsertNotificationDialog extends DialogFragment {
                                     getDialog().dismiss();
                                 }
                             });
+
+                            // 4.4) Implement alarm Manager and notifications.
+                            // 4.4.1) Create a calender instance
+                            Calendar c = Calendar.getInstance();
+
+                            // 4.4.2) Set our requested time
+                            c.set(Calendar.DAY_OF_MONTH, notificationDay);
+                            c.set(Calendar.MONTH, notificationMonth);
+                            c.set(Calendar.YEAR, notificationYear );
+                            c.set(Calendar.HOUR_OF_DAY, notificationHour);
+                            c.set(Calendar.MINUTE, notificationMinute);
+                            c.set(Calendar.SECOND, 0);
+
+                            // Step 6 for initializing our alarm
+                            startAlarm(c);
+
                         }
                     });
                 }
             }
         });
+
 
         // 5) Initialize our Set Listeners
         // 5.1) Initializing mDateSetListener.
@@ -256,5 +282,19 @@ public class InsertNotificationDialog extends DialogFragment {
         };
 
         return view;
+    }
+
+    // 6) Initializing our alarm
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void startAlarm(Calendar c){
+        Log.d(TAG, "Initializing alarm");
+        AlarmManager alarmManager = (AlarmManager) Objects.requireNonNull(getActivity()).getSystemService(Context.ALARM_SERVICE);
+        Intent intent =  new Intent(getActivity(), AlertReceiver.class);
+        intent.putExtra("notificationTitle",notificationTitle );
+        intent.putExtra("notificationDescription", notificationDescription);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 1, intent, 0);
+
+        // Initialize our alarm
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),pendingIntent);
     }
 }
