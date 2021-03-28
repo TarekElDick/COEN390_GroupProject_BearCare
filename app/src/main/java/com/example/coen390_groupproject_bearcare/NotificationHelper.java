@@ -58,21 +58,17 @@ public class NotificationHelper extends ContextWrapper {
         return mManager;
     }
 
-    public NotificationCompat.Builder getChannel1Notification(String childName, String title, String description){
+    public NotificationCompat.Builder getChannel1Notification(String title, String message){
         return new NotificationCompat.Builder(getApplicationContext(), channel1ID)
-                .setContentTitle(childName)
-                .setContentText(title)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(description))
+                .setContentTitle(title)
+                .setContentText(message)
                 .setSmallIcon(R.drawable.bearcarelogonobackground);
     }
 
-    public NotificationCompat.Builder getChannel2Notification(String childName ,String title, String description){
+    public NotificationCompat.Builder getChannel2Notification(String title, String message){
         return new NotificationCompat.Builder(getApplicationContext(), channel2ID)
-                .setSmallIcon(R.drawable.bearcarelogonobackground)
-                .setContentTitle(childName)
-                .setContentText(title)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(description));
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.bearcarelogonobackground);
     }
 }
