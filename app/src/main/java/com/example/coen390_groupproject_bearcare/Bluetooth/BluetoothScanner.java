@@ -359,7 +359,7 @@ public class BluetoothScanner extends AppCompatActivity {
     };
 
 public void pairOrConnect(int position) throws IOException {
-    BluetoothDevice bdDevice,bdDevice1;                                                             // create local bluetooth device
+    BluetoothDevice bdDevice;                                                                       // create local bluetooth device
     if(discoveredDevices.size() > 0)
         bdDevice = discoveredDevices.get(position);                                                 // set it equal to the device selected from the list
     else
@@ -375,10 +375,12 @@ public void pairOrConnect(int position) throws IOException {
     }
     else if(bdDevice.getBondState() == BluetoothDevice.BOND_BONDED)                                 // 2. The device is paired connect
     {
-        Toast.makeText(getApplicationContext(),"Attempting to connect with: " + bdDevice.getName(),Toast.LENGTH_SHORT).show();
+        if(bdDevice.getAddress().equals(MyBluetoothService.getMacAddress()))
+            return;
+        Toast.makeText(getApplicationContext(), "Attempting to connect with: " + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
-            MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
-        }catch(IOException e){
+            MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                   // connect to device using overloaded connect function
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
