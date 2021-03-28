@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat;
 
 public class AlertReceiver extends BroadcastReceiver {
 
-    private String title, description;
+    private String childName, title, description;
 
 
 
@@ -18,9 +18,11 @@ public class AlertReceiver extends BroadcastReceiver {
         // Show our notification.
         NotificationHelper notificationHelper = new NotificationHelper(context);
 
+        childName = intent.getStringExtra("childName");
         title = intent.getStringExtra("notificationTitle");
         description = intent.getStringExtra("notificationDescription");
-        NotificationCompat.Builder nb = notificationHelper.getChannel2Notification(title, description);
+
+        NotificationCompat.Builder nb = notificationHelper.getChannel2Notification(childName,title, description);
         notificationHelper.getManager().notify(2, nb.build());
 
     }
