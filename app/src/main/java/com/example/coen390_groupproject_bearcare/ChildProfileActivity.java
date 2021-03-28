@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.InsertChildDialog;
+import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.InsertNotificationDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -19,12 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ChildProfileActivity extends AppCompatActivity {
 
-    private TextView textViewChildName, textViewParentName, textViewRelation, textViewParentPhoneNumber;
-    private Button buttonTakeTemp;
+    private TextView textViewChildName, textViewParentName, textViewRelation, textViewParentPhoneNumber, textViewChildBirthday;
+    private Button buttonTakeTemp, buttonAddNotification;
 
-    private String childId;
-    private String childName;
-    private String parentId;
+    private String childId, childName,  parentId, birthday;
 
     private FirebaseFirestore fStore;
 
@@ -45,10 +45,12 @@ public class ChildProfileActivity extends AppCompatActivity {
         childId = intent.getStringExtra("childId");
         childName = intent.getStringExtra("childName");
         parentId = intent.getStringExtra("parentId");
+        birthday = intent.getStringExtra("birthday");
 
         Log.d(TAG, "Child ID of item clicked is: " + childId);
         Log.d(TAG, "Child Name of item clicked is: " + childName);
         Log.d(TAG, "Parent ID of item clicked is: " + parentId);
+        Log.d(TAG, "Birthday of child item clicked is: " + birthday);
 
         setUpUI();
 
@@ -61,7 +63,8 @@ public class ChildProfileActivity extends AppCompatActivity {
         textViewChildName = findViewById(R.id.textViewChildName_childProfile);
         textViewParentName = findViewById(R.id.textViewParentName_childProfile);
         textViewParentPhoneNumber = findViewById(R.id.textViewParentPhoneNumber_childProfile);
-
+        buttonAddNotification = findViewById(R.id.buttonAddANotification_childProfile);
+        textViewChildBirthday  = findViewById(R.id.textViewChildBirthday_childProfile);
 
         buttonTakeTemp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +77,30 @@ public class ChildProfileActivity extends AppCompatActivity {
                 Log.d(TAG, "Child ID of item clicked is: " + childId);
                 Log.d(TAG, "Child Name of item clicked is: " + childName);
                 startActivity(intent);
+
+            }
+        });
+
+        buttonAddNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(TAG, "User accessing insertNotificationDialog");
+
+                // Now we want to open a dialog fragment, requires two things
+                // The layout which defines what we will see
+                // and A class for it that expands from dialogFragment.
+                InsertNotificationDialog dialog = new InsertNotificationDialog();
+
+
+                // Use a bundle to send data to the fragment
+                Bundle notificationBundle = new Bundle();
+                notificationBundle.putString("childId", childId);
+                notificationBundle.putString("childName", childName);
+                dialog.setArguments(notificationBundle);
+
+                // Now we want to show the fragment
+                dialog.show(getSupportFragmentManager(),"Create Notification");
 
             }
         });
@@ -106,7 +133,7 @@ public class ChildProfileActivity extends AppCompatActivity {
             }
         });
 
-
+        textViewChildBirthday.setText(birthday);
         textViewChildName.setText(childName);
 
         // end of setup.
