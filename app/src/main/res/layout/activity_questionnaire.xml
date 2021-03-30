@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".QuestionnaireActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableLayout
+            android:id="@+id/simpleTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="0"> <!-- stretch the second column of the layout-->
+
+            <!-- first row of the table layout-->
+
+            <TableRow
+
+                android:id="@+id/row00"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:id="@+id/questionnaireTextView00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F4BCD4"
+                    android:padding="18dip"
+                    android:text="Does your child have one or multiple symptoms in the following list?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row1"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Cough (new or aggravated)"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row2"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Fever (rectal temperature of 38.5°C or higher"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row3"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Sudden loss of smell (without nasal congestion)"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row4"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Difficulty Breathing"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row5"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Muscle pain (generalised - not related to physical effort)"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row6"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Intense fatigue"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#FAEBF1"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row7"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Major loss of appetite"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row8"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Sore throat"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row9"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Runny nose"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row10"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="Vomiting or Diarrhea"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row11"
+                android:background="#FFF4BCD4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Does any of the household members have any of the symptoms listed above? "
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row12"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Have you given your child any medication in the last 24 hours to reduce fevers?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row13"
+                android:layout_width="fill_parent"
+                android:background="#FFF4BCD4"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Has your child received a positive COVID-19 diagnosis?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row14"
+                android:layout_width="fill_parent"
+                android:background="#FAEBF1"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Is your child waiting for the results of a COVID-19 test?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row15"
+                android:layout_width="fill_parent"
+                android:background="#FFF4BCD4"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Did the child's parent or someone living with the child receive a positive diagnosis for COVID-19 test?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row16"
+                android:layout_width="fill_parent"
+                android:background="#FAEBF1"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Are the child's parent or someone living with the child waiting for the results of a COVID-19 test?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
+                android:id="@+id/row17"
+                android:layout_width="fill_parent"
+                android:background="#FFF4BCD4"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView17"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="Did the child or a member of the family whom the child lives with travel outside of Canada in the last 14 days?"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox17"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+            <TableRow
+
+                android:id="@+id/row18"
+                android:layout_width="fill_parent"
+                android:background="#FAEBF1"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:padding="18dip"
+                    android:text="NO TO ALL OF THE ABOVE"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:text="" />
+            </TableRow>
+            <TableRow
+
+                android:id="@+id/row01"
+                android:background="#FFF4BCD4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- first element of the row-->
+
+                <Button
+                    android:id="@+id/questionnaireSubmitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SUBMIT QUESTIONNAIRE" />
+
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

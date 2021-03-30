@@ -46,7 +46,7 @@ public class UserMainPageActivity extends AppCompatActivity {
     private ChildAdapter childAdapter;
     private TextView displayName, questionnaireLastReceived, questionnaireTimestamp, corner;
     private boolean isEmployee;
-    private String userId;
+    private String userId, userName;
     String TAG = "debug_dashboard";
 
     @Override
@@ -72,6 +72,7 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         // get the user ID of the user currently logged in.
         userId = user.getUid();
+        userName = user.getDisplayName();
 
         // SetUpUI function
         setUpUI();
@@ -137,6 +138,10 @@ public class UserMainPageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO fill daily questionnaire activity , we can always get the user id we don't have to pass anything with the intent.
+                Intent intent = new Intent(getApplicationContext(), QuestionnaireActivity.class);
+                intent.putExtra("userId", userId);
+                intent.putExtra("userName", userName);
+                startActivity(intent);
             }
         });
 
