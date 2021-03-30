@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
-        <activity android:name=".PopActivity"
+        <activity android:name=".questionnaire.PopActivity"
             android:theme="@style/AppTheme.PopMe"
             ></activity>
         <activity android:name=".QuestionnaireActivity" />
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlertReceiver" />
+        <receiver android:name=".Notification.AlertReceiver" />
     </application>
 
 </manifest>

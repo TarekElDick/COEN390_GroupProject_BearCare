@@ -1,8 +1,4 @@
-package com.example.coen390_groupproject_bearcare;
-
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnSuccessListener;
+package com.example.coen390_groupproject_bearcare.questionnaire;
 
 public class QuestionnaireTermsSingleton {
 

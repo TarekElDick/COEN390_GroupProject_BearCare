@@ -1,4 +1,4 @@
-package com.example.coen390_groupproject_bearcare;
+package com.example.coen390_groupproject_bearcare.Notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,9 +22,8 @@ public class AlertReceiver extends BroadcastReceiver {
         childName = intent.getStringExtra("childName");
         title = intent.getStringExtra("notificationTitle");
         description = intent.getStringExtra("notificationDescription");
-        Log.d("debug_AlertReceiver", childName + "Title: "+ title +" Message: "+ description);
+        Log.d("debug_AlertReceiver", childName + " Title: "+ title +" Message: "+ description);
         NotificationCompat.Builder nb = notificationHelper.getChannel2Notification(childName, title, description);
         notificationHelper.getManager().notify(2, nb.build());
-
     }
 }

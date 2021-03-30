@@ -1,6 +1,4 @@
-package com.example.coen390_groupproject_bearcare;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.coen390_groupproject_bearcare.questionnaire;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +10,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.coen390_groupproject_bearcare.R;
 
 public class PopActivity extends Activity {
 

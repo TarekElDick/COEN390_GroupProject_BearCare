@@ -1,4 +1,4 @@
-package com.example.coen390_groupproject_bearcare;
+package com.example.coen390_groupproject_bearcare.Notification;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+
+import com.example.coen390_groupproject_bearcare.R;
 
 // https://www.youtube.com/watch?v=ub4_f6ksxL0
 public class NotificationHelper extends ContextWrapper {
@@ -44,6 +46,7 @@ public class NotificationHelper extends ContextWrapper {
         // add some settings
         channel2.enableLights(true);
         channel2.enableVibration(true);
+        channel2.canShowBadge();
         channel2.setLightColor(R.color.colorPrimary);
         channel2.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         // create it

@@ -9,10 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.example.coen390_groupproject_bearcare.questionnaire.PopActivity;
+import com.example.coen390_groupproject_bearcare.questionnaire.QuestionnaireTermsSingleton;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,12 +27,12 @@ import java.util.Map;
 public class QuestionnaireActivity extends AppCompatActivity {
 
 
-
+String TAG = "debug_questionnaireActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
-        Log.d("QuestionnaireActivity", "onCreate");
+        Log.d(TAG, "onCreate");
         //setUpUI();
     }
 
@@ -39,7 +40,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d("QuestionnaireActivity", "onStart");
+        Log.d(TAG, "onStart");
 
         if(true){
 
@@ -51,7 +52,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d("QuestionnaireActivity", "onResume");
+        Log.d(TAG, "onResume");
 
         // Connections
         CheckBox list1 = findViewById(R.id.questionnaireCheckBox1);
@@ -192,13 +193,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d("Questionnaire", "DocumentSnapshot successfully written!");
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w("Questionnaire", "Error writing document", e);
+                                    Log.w(TAG, "Error writing document", e);
                                 }
                             });
 
@@ -221,13 +222,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("Questionnaire", "DocumentSnapshot successfully written!");
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w("Questionnaire", "Error writing document", e);
+                                Log.w(TAG, "Error writing document", e);
                             }
                         });
 
@@ -244,7 +245,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //popup
-                Log.d("QuestionnaireActivity", "submit clicked");
+                Log.d(TAG, "submit clicked");
 
                 Intent intent = new Intent(getApplicationContext(), PopActivity.class);
                 intent.putExtra("userId", userId);
