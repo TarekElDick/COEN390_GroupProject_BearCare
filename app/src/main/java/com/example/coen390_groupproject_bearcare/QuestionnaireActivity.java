@@ -12,8 +12,8 @@ import android.widget.CheckBox;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.example.coen390_groupproject_bearcare.questionnaire.PopActivity;
-import com.example.coen390_groupproject_bearcare.questionnaire.QuestionnaireTermsSingleton;
+import com.example.coen390_groupproject_bearcare.Questionnaire.PopActivity;
+import com.example.coen390_groupproject_bearcare.Questionnaire.QuestionnaireTermsSingleton;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
