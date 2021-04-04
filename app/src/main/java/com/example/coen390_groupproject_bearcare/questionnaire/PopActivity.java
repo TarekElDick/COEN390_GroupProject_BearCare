@@ -1,4 +1,4 @@
-package com.example.coen390_groupproject_bearcare.Questionnaire;
+package com.example.coen390_groupproject_bearcare.questionnaire;
 
 import android.app.Activity;
 import android.content.Intent;

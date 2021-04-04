@@ -17,7 +17,7 @@
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
         <activity android:name=".DirectorDashboardActivity"></activity>
         <activity
-            android:name=".Questionnaire.PopActivity"
+            android:name=".questionnaire.PopActivity"
             android:theme="@style/AppTheme.PopMe" />
         <activity android:name=".QuestionnaireActivity" />
         <activity
