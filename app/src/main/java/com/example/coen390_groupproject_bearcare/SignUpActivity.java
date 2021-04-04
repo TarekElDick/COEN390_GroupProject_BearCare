@@ -71,7 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void setUpUI() {
 
-        editTextSignUpFirstName        = findViewById(R.id.editTextFirstName_signup);
+        editTextSignUpFirstName       = findViewById(R.id.editTextFirstName_signup);
         editTextSignUpLastName        = findViewById(R.id.editTextLastName_signup);
         editTextSignUpEmailAddress    = findViewById(R.id.editTextEmailAddress_signup);
         editTextSignUpPhoneNumber     = findViewById(R.id.editTextPhone_signup);
