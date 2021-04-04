@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.example.coen390_groupproject_bearcare.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Handler;
 
@@ -51,6 +53,13 @@ public class BluetoothScanner extends AppCompatActivity {
     boolean bluetoothOn;                                                                            // to fix the issue where the paired list isn't showing up if bluetooth is enabled on entering activity
     boolean locationOn;                                                                             // to fix the issue where discovery isn't notifying users
 
+    private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
+    private TextView nowdiscoveringTextView;
+
+
+
+
+
     private  static final String TAG1 = "Bluetooth Scanner";
 
     @Override
@@ -61,6 +70,16 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList = findViewById(R.id.device_list);
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
+
+        discoveryBar = findViewById(R.id.discoveryBar);
+        nowdiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
+        nowdiscoveringTextView.setText("Discovering sensor...");
+
+
+
+        discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
+        nowdiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+
         deviceList.setOnItemClickListener(messageClickedHandler);
 
         IntentFilter pairFilter =  new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);     // this filter needs to be used when pairing to a device
@@ -68,6 +87,11 @@ public class BluetoothScanner extends AppCompatActivity {
 
         IntentFilter foundFilter = new IntentFilter((BluetoothDevice.ACTION_FOUND));                // this filter needs to be created for using the discovery function
         registerReceiver(btReceiver,foundFilter);                                                   // register the receiver
+
+        IntentFilter discoveryStartedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);      //Created intent for when we start discovery of bluetooth
+        registerReceiver(btDiscoveryStarted, discoveryStartedFilter);
+
+
 
         IntentFilter discoveryDoneFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);    // this filter is used to determine if bluetooth discovery is done
         registerReceiver(btDiscoveryDone,discoveryDoneFilter);                                      // register the receiver
@@ -96,6 +120,8 @@ public class BluetoothScanner extends AppCompatActivity {
                 discoveredDevices.clear();                                                          // clear the list, otherwise we will have device doubles in the listView
 
                 bluetoothAdapter.startDiscovery();
+                //getSupportActionBar().hide();                                             //Hide the navigation bar of the phone when discovery is starting to hint the user that the device is now discovering
+                int uiOptions=View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
                 if(locationOn == true)
                     Toast.makeText(getApplicationContext(),"Bluetooth discovery started, this will take 12 seconds.",Toast.LENGTH_SHORT).show();
             }
@@ -107,6 +133,7 @@ public class BluetoothScanner extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(btReceiver);
         unregisterReceiver(pairReceiver);
+        unregisterReceiver(btDiscoveryStarted);
         unregisterReceiver(btDiscoveryDone);
         unregisterReceiver(connectReceiver);
     }
@@ -127,12 +154,29 @@ public class BluetoothScanner extends AppCompatActivity {
         }
     };
 
+    private final BroadcastReceiver btDiscoveryStarted = new BroadcastReceiver(){
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+                discoverButton.setVisibility(View.INVISIBLE);                                       // Hide discover button to show that we are trying to discover
+                discoveryBar.setVisibility(View.VISIBLE);                                           // Make the progress bar appear
+                nowdiscoveringTextView.setVisibility(View.VISIBLE);
+
+
+            }
+        }
+    };
+
     private final   BroadcastReceiver btDiscoveryDone = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
                 Toast.makeText(getApplicationContext(),"Bluetooth discovery finished.",Toast.LENGTH_SHORT).show();
                 listDiscovered();
+                getSupportActionBar().show();                                     //Have the phone's navigation bar reappear
+                discoveryBar.setVisibility(View.INVISIBLE);
+                nowdiscoveringTextView.setVisibility(View.INVISIBLE);
             }
         }
     };
