@@ -16,9 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
         <activity android:name=".DirectorDashboardActivity"></activity>
-        <activity
-            android:name=".questionnaire.PopActivity"
-            android:theme="@style/AppTheme.PopMe" />
+        <activity android:name=".Questionnaire.PopActivity"
+            android:theme="@style/AppTheme.PopMe"
+            ></activity>
         <activity android:name=".QuestionnaireActivity" />
         <activity
             android:name=".ChildProfileActivity"
