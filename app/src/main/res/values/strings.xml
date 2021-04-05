@@ -2,4 +2,8 @@
     <string name="app_name">BearCare</string>
     <string name="sign_up_text_attribute">SIGN UP</string>
     <string name="login_text_attribute">LOGIN</string>
+    <string name="create_a_new_account">Create a new account</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="email">EMAIL</string>
+    <string name="password">PASSWORD</string>
 </resources>
