@@ -39,7 +39,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="292dp"
-        android:text="Fever List"
+        android:text="@string/fever_list"
         android:textColor="@color/purple_700"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

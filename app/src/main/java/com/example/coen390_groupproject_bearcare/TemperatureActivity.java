@@ -29,10 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.core.OrderBy;
-import com.jjoe64.graphview.DefaultLabelFormatter;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -125,7 +121,7 @@ public class TemperatureActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(TemperatureActivity.this, "Temperature Recorded", Toast.LENGTH_LONG).show();
+                                Toast.makeText(TemperatureActivity.this, getString(R.string.temperature_recorded), Toast.LENGTH_LONG).show();
                                 Log.d(TAG, "Temperature added to fireStore");
                             }
                         });
