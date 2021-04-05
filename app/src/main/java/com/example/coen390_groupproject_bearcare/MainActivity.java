@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,22 +27,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.example.coen390_groupproject_bearcare.R.string.no_account_associated;
-import static com.example.coen390_groupproject_bearcare.R.string.signed_in_successfully;
-import static com.example.coen390_groupproject_bearcare.R.string.welcome_back;
-
 
 public class MainActivity extends AppCompatActivity {
 
     // Our class objects
-    private EditText editTextLoginEmailAddress;
-    private EditText editTextLoginPassword;
+    private EditText editTextLoginEmailAddress, editTextLoginPassword;
     private Button buttonLogin;
-    private TextView textViewMessage;
-    private TextView textViewCreateNewAccount;
+    private TextView textViewMessage, textViewCreateNewAccount;
     private ProgressBar progressBarLogin;
 
-    // Firebase Shared Instance of a Authentication object
+    // Firebase Shared Instances
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore fStore;
@@ -59,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Firebase Authentication.
         mAuth = FirebaseAuth.getInstance();
 
+        // Get the user currently signed in
         user = mAuth.getCurrentUser();
+
         // Initializing firestore
         fStore = FirebaseFirestore.getInstance();
 
@@ -69,15 +66,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d(TAG, " User is null check:");
-        //Check if user is already logged in or not, if they are a returning user
+        Log.d(TAG, "Start: OnStart(): Check if returning user");
+        // Check if user is already logged in or not, if they are a returning user
         if(user != null ){
 
-            Log.d(TAG, " User is not null");
-            // send them to their activity
-            user = mAuth.getCurrentUser();
-            String userId = user.getUid();
-            DocumentReference docRef = fStore.collection("Users").document(userId);
+            Log.d(TAG, "User is signed in send them to dashboard");
+            // Send them to their dashboard activity.
+
+            // We are going to the database to check of the user is a employee or not.
+            DocumentReference docRef = fStore.collection("Users").document(user.getUid());
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -85,24 +82,32 @@ public class MainActivity extends AppCompatActivity {
 
                     boolean isEmployee = user.isEmployee();
 
-                    Log.d(TAG, "User is employee: " + isEmployee);
-
-                    Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
-                    intent.putExtra("isEmployeeD", isEmployee);
-                    Log.d(TAG, "isEmployee is being sent to next activity");
-                    Toast.makeText(MainActivity.this, welcome_back, Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "user email:" + user.getEmailAddress());
+                    // We check if its the director
+                    Intent intent;
+                    if(user.getEmailAddress().equals("tarekdeek@bearcare.ca")){
+                        Log.d(TAG, "User is a director");
+                        //Add Intent for director
+                        intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
+                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.d(TAG, "isEmployee ? :" + isEmployee);
+                        intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
+                        intent.putExtra("isEmployeeD", isEmployee);
+                        Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
+                    }
                     startActivity(intent);
                 }
             });
         }else {
-            Log.d(TAG, " User is null");
+            Log.d(TAG, "End: OnStart(): User is not signed in");
         }
 
-        // end of onStart
+        // End of onStart
     }
 
     @Override
-    protected void onDestroy() {                // this will be used to close the bluetooth socket when the app is destroyed
+    protected void onDestroy() {                // This will be used to close the bluetooth socket when the app is destroyed
         super.onDestroy();
         MyBluetoothService mine = new MyBluetoothService();
         MyBluetoothService.close();
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         textViewCreateNewAccount  = findViewById(R.id.textViewCreateNewAccount_login);
         progressBarLogin          = findViewById(R.id.progressBar_login);
 
-        //onClickListeners
+        // onClickListeners
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 // Display progressbar to let the user know something is happening
                 textViewMessage.setVisibility(View.INVISIBLE);
                 textViewCreateNewAccount.setVisibility(View.INVISIBLE);
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
 
                             Log.d(TAG, " User signed in successfully");
-                            Toast.makeText(MainActivity.this, signed_in_successfully, Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
                             //redirect to user profile
                             // check if user is employee or not
                             user = mAuth.getCurrentUser();
@@ -165,15 +169,25 @@ public class MainActivity extends AppCompatActivity {
                                     boolean isEmployee = user.isEmployee();
                                     Log.d(TAG, "User is employee: " + isEmployee);
 
-                                    Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
-                                    intent.putExtra("isEmployeeD", isEmployee);
-                                    Log.d(TAG, "isEmployee is being sent to next activity");
+                                    // We check if its the director
+                                    Log.d(TAG, "user email:" + user.getEmailAddress());
+                                    Intent intent;
+                                    if(user.getEmailAddress().equals("tarekdeek@bearcare.ca")){
+                                        //Add Intent for director
+                                        Log.d(TAG, "user is a director");
+                                        intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
+                                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
+                                        intent.putExtra("isEmployeeD", isEmployee);
+                                        Log.d(TAG, "isEmployee is being sent to next activity");
+                                    }
                                     startActivity(intent);
                                 }
                             });
                         }else{
-                            Log.d(TAG, "User didn't signed in successfully");
-                            Toast.makeText(MainActivity.this, no_account_associated, Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "User didn't sign in successfully");
+                            Toast.makeText(MainActivity.this, "No account associated with this email and password", Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);
@@ -189,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "User is going to create an account");
                 startActivity(new Intent(getApplicationContext(),SignUpActivity.class ));
-
             }
 
         });

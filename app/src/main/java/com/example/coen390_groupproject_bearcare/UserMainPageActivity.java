@@ -120,14 +120,10 @@ public class UserMainPageActivity extends AppCompatActivity {
         displayName = findViewById(R.id.textViewUserName_dashboard);
         TextView accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_dashboard);
         Button buttonFillQuestionnaire = findViewById(R.id.buttonFillDailyQuestionnaire_dashboard);
-        questionnaireLastReceived = findViewById(R.id.textViewLastReceived_dashboard);
-        questionnaireTimestamp = findViewById(R.id.textViewTimestamp_dashboard);
 
         // initially make everything invisible
         accessChildDirectory.setVisibility(View.INVISIBLE);
         buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
-        questionnaireTimestamp.setVisibility(View.INVISIBLE);
-        questionnaireLastReceived.setVisibility(View.INVISIBLE);
         // onClickListeners
         accessChildDirectory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,15 +165,12 @@ public class UserMainPageActivity extends AppCompatActivity {
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.VISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
-                    questionnaireTimestamp.setVisibility(View.INVISIBLE);
-                    questionnaireLastReceived.setVisibility(View.INVISIBLE);
                 }else{
                     String cornerText = "Parent Corner";
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.INVISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.VISIBLE);
-                    questionnaireTimestamp.setVisibility(View.VISIBLE);
-                    questionnaireLastReceived.setVisibility(View.VISIBLE);
+
                     // TODO disable sensor icon, on the item probably within adapter?
                 }
             }
