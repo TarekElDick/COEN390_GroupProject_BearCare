@@ -17,4 +17,11 @@
     <string name="access_child_directory">Access Child Directory</string>
     <string name="only_employees_temp">Only employees can take temperature</string>
     <string name="logging_out">Logging out</string>
+    <string name="child_directory">Child Directory</string>
+    <string name="Logging_out">Logging out</string>
+    <string name="yes_string">Yes</string>
+    <string name="are_you_sure">Are you sure you want to delete this child?</string>
+    <string name="employee_corner">Employee Corner</string>
+    <string name="parent_corner">Parent Corner</string>
+    <string name="no_string">No</string>
 </resources>
