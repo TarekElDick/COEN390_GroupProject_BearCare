@@ -35,6 +35,7 @@ public class TemperatureActivity extends AppCompatActivity {
     private String childId;
     private String tempTimeStamp;
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+    boolean sensorConnected;                                                                        // use this to display icons to user
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
