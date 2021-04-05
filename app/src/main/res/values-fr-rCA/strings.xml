@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BearCare</string>
+    <string name="sign_up_text_attribute">ENREGISTRER</string>
+    <string name="login_text_attribute">SE CONNECTER</string>
+    <string name="create_a_new_account">Créer un nouveau compte</string>
+    <string name="don_t_have_an_account">Pas de compte?</string>
+    <string name="email">COURRIEL</string>
+    <string name="password">MOT DE PASSE</string>
+</resources>
