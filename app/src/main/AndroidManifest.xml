@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_bearcare_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.COEN390_GroupProject_BearCare">
+        <activity android:name=".TemperatureHistoryActivity" />
         <activity android:name=".DirectorDashboardActivity"></activity>
         <activity android:name=".Questionnaire.PopActivity"
             android:theme="@style/AppTheme.PopMe"

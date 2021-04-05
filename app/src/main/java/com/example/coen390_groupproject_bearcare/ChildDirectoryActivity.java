@@ -210,6 +210,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 Log.d(TAG, "Child Name of button clicked is: " + childName);
                 startActivity(intent);
             }
+
         });
         // end of setUpUI
     }
