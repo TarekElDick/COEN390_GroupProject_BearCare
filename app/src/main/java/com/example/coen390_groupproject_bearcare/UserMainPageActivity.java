@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -161,12 +160,12 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Log.d(TAG, "User id is: " + userId);
 
                 if(isEmployee){
-                    String cornerText = "Employee Corner";
+                    String cornerText = getString(R.string.employee_corner);
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.VISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
                 }else{
-                    String cornerText = "Parent Corner";
+                    String cornerText = getString(R.string.parent_corner);
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.INVISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.VISIBLE);
@@ -256,8 +255,8 @@ public class UserMainPageActivity extends AppCompatActivity {
                     Log.d(TAG, "Child Item is being swiped");
 
                     new AlertDialog.Builder(viewHolder.itemView.getContext())
-                            .setMessage("Are you sure you want to delete this child?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setMessage(R.string.are_you_sure)
+                            .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // User wants to delete the item
@@ -266,7 +265,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                                     runRecyclerView();
                                 }
                                 })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // User canceled the delete item
