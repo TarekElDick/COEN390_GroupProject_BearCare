@@ -12,4 +12,5 @@
     <string name="fill_daily_questionnaire">Remplir Questionnaire Quotidienne</string>
     <string name="yesterday">hier</string>
     <string name="notifications_string">Notifications</string>
+    <string name="welcome_back">Bienvenue</string>
 </resources>
