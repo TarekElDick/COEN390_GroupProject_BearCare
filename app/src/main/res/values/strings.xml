@@ -6,4 +6,15 @@
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="email">EMAIL</string>
     <string name="password">PASSWORD</string>
+    <string name="my_children">My Children</string>
+    <string name="signed_in_successfully">Signed in successfully</string>
+    <string name="no_account_associated">No account associated with this email and password</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="fill_daily_questionnaire">Fill Daily Questionnaire</string>
+    <string name="last_received">Last received:</string>
+    <string name="yesterday">yesterday</string>
+    <string name="notifications_string">Notifications</string>
+    <string name="access_child_directory">Access Child Directory</string>
+    <string name="only_employees_temp">Only employees can take temperature</string>
+    <string name="logging_out">Logging out</string>
 </resources>

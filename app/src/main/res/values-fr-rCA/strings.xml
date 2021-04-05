@@ -7,4 +7,10 @@
     <string name="don_t_have_an_account">Pas de compte?</string>
     <string name="email">COURRIEL</string>
     <string name="password">MOT DE PASSE</string>
+    <string name="my_children">Mes Enfants</string>
+    <string name="no_account_associated">Pas de compte associé avec ce courriel</string>
+    <string name="fill_daily_questionnaire">Remplir Questionnaire Quotidienne</string>
+    <string name="yesterday">hier</string>
+    <string name="notifications_string">Notifications</string>
+    <string name="welcome_back">Bienvenue</string>
 </resources>
