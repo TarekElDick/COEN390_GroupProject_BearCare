@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static com.example.coen390_groupproject_bearcare.R.string.logging_out;
+
 public class DirectorDashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -58,7 +60,7 @@ public class DirectorDashboardActivity extends AppCompatActivity {
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
-                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, logging_out, Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
                 mAuth.signOut();

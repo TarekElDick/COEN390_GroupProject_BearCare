@@ -89,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "User is a director");
                         //Add Intent for director
                         intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
-                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back_director), Toast.LENGTH_LONG).show();
                     } else {
                         Log.d(TAG, "isEmployee ? :" + isEmployee);
                         intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
                         intent.putExtra("isEmployeeD", isEmployee);
-                        Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back), Toast.LENGTH_LONG).show();
                     }
                     startActivity(intent);
                 }
@@ -131,12 +131,12 @@ public class MainActivity extends AppCompatActivity {
                 String password = editTextLoginPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
-                    editTextLoginEmailAddress.setError("Email is Required");
+                    editTextLoginEmailAddress.setError(getString(R.string.email_is_required));
                     editTextLoginEmailAddress.requestFocus();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    editTextLoginPassword.setError("Password is Required");
+                    editTextLoginPassword.setError(getString(R.string.password_required));
                     editTextLoginPassword.requestFocus();
                     return;
                 }
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
 
                             Log.d(TAG, " User signed in successfully");
-                            Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.signed_in_successfully), Toast.LENGTH_LONG).show();
                             //redirect to user profile
                             // check if user is employee or not
                             user = mAuth.getCurrentUser();
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                                         //Add Intent for director
                                         Log.d(TAG, "user is a director");
                                         intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
-                                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back_director), Toast.LENGTH_LONG).show();
                                     } else {
                                         intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
                                         intent.putExtra("isEmployeeD", isEmployee);
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }else{
                             Log.d(TAG, "User didn't sign in successfully");
-                            Toast.makeText(MainActivity.this, "No account associated with this email and password", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.no_account_associated), Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);

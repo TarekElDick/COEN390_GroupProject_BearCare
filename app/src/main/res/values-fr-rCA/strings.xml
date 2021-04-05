@@ -66,4 +66,27 @@
     <string name="provide_account_type">Selectionnez type de compte</string>
     <string name="registration_failed">Enregistrement échoué</string>
     <string name="signed_in_successfully">Enregistré avec succès</string>
+    <string name="director_corner">Directeur</string>
+    <string name="temperature_history">Historique Température</string>
+    <string name="questionnaire_history">Historique Questionnaire</string>
+    <string name="not_support_bluetooth">Cet appareil ne supporte pas Bluetooth</string>
+    <string name="connected_to_device">"Connecté à l'appareil: "</string>
+    <string name="first_name_required">Prénom requis</string>
+    <string name="date_of_birth_required">Date de naissance requise</string>
+    <string name="wrong_day_format">Mauvais format de jour</string>
+    <string name="wrong_month_format">Mauvais format de mois</string>
+    <string name="wrong_year_format">Mauvais format d\'annéee</string>
+    <string name="parent_not_found">Parent pas trouvé: lettres sensibles à la casse</string>
+    <string name="specify_title">S\'il vous plaît choisissez un titre</string>
+    <string name="delete_child_confirmation">Êtes-vous sure que vous voulez supprimer l\'enfant?</string>
+    <string name="welcome_back_director">Bienvenue, Directeur</string>
+    <string name="mm">mm</string>
+    <string name="yyyy">aaaa</string>
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="add_a_child">Ajouter Un Enfant</string>
+    <string name="first_name_not_all_caps">Prénom</string>
+    <string name="last_name_not_all_caps">Nom de Famille</string>
+    <string name="parent_guardian_first_name">Prénom du Parent/Tuteur</string>
+    <string name="parent_guardian_last_name">Nom de Famille du Parent/Tuteur</string>
 </resources>
