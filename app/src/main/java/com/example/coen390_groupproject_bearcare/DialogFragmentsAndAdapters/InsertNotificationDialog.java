@@ -152,7 +152,7 @@ public class InsertNotificationDialog extends DialogFragment {
                 notificationDescription = editTextDescription.getText().toString().trim();
 
                 if(notificationTitle.isEmpty()){
-                    editTextTitle.setError("Please specify a title");
+                    editTextTitle.setError(getString(R.string.specify_title));
                     editTextTitle.requestFocus();
                 } else {
                     // 4.3.2) Show progress bar.
