@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="@string/email"
+        android:text="@string/email_string"
         app:layout_constraintStart_toStartOf="@+id/editTextEmailAddress_login"
         app:layout_constraintTop_toBottomOf="@+id/imageViewPawLeft_login" />
 
