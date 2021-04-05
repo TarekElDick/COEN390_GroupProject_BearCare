@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,9 +35,7 @@ import com.example.coen390_groupproject_bearcare.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Handler;
 
 public class BluetoothScanner extends AppCompatActivity {
 
@@ -55,7 +52,7 @@ public class BluetoothScanner extends AppCompatActivity {
     boolean locationOn;                                                                             // to fix the issue where discovery isn't notifying users
 
     private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
-    private TextView nowdiscoveringTextView;
+    private TextView nowDiscoveringTextView;
 
 
 
@@ -72,13 +69,13 @@ public class BluetoothScanner extends AppCompatActivity {
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
 
         discoveryBar = findViewById(R.id.discoveryBar);
-        nowdiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
-        nowdiscoveringTextView.setText("Discovering sensor...");
+        nowDiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
+        nowDiscoveringTextView.setText("Discovering sensor...");
 
 
 
         discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
-        nowdiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+        nowDiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
 
         deviceList.setOnItemClickListener(messageClickedHandler);
             
@@ -91,8 +88,7 @@ public class BluetoothScanner extends AppCompatActivity {
         IntentFilter discoveryStartedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);      //Created intent for when we start discovery of bluetooth
         registerReceiver(btDiscoveryStarted, discoveryStartedFilter);
 
-
-
+        
         IntentFilter discoveryDoneFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);    // this filter is used to determine if bluetooth discovery is done
         registerReceiver(btDiscoveryDone,discoveryDoneFilter);                                      // register the receiver
 
@@ -158,7 +154,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 discoverButton.setVisibility(View.INVISIBLE);                                       // Hide discover button to show that we are trying to discover
                 discoveryBar.setVisibility(View.VISIBLE);                                           // Make the progress bar appear
                 getSupportActionBar().hide();                                                       // Hide the navigation bar of the phone when discovery is starting to hint the user that the device is now discovering
-                nowdiscoveringTextView.setVisibility(View.VISIBLE);
+                nowDiscoveringTextView.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -170,7 +166,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 listDiscovered();
                 getSupportActionBar().show();                                                       // Have the phone's navigation bar reappear
                 discoveryBar.setVisibility(View.INVISIBLE);
-                nowdiscoveringTextView.setVisibility(View.INVISIBLE);
+                nowDiscoveringTextView.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -411,10 +407,16 @@ public void pairOrConnect(int position) throws IOException {
     }
     else if(bdDevice.getBondState() == BluetoothDevice.BOND_BONDED)                                 // 2. The device is paired connect
     {
-        if(bdDevice.getAddress().equals(MyBluetoothService.getMacAddress()))
+        //Log.d(TAG, "pairOrConnect: Entered Else if for par " + bdDevice.getAddress());
+        if(bdDevice.getAddress().equals(MyBluetoothService.getMacAddress())) {
             return;
+            //Log.d(TAG, "pairOrConnect: Entered get device mac address if " + bdDevice.getAddress() + " Address of myBTservice " + MyBluetoothService.getMacAddress());
+
+        }
+        Log.d(TAG, "pairOrConnect: outside the get mac address if");
         Toast.makeText(getApplicationContext(), "Attempting to connect with: " + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
+            Log.d(TAG, "pairOrConnect: Now in the try block of connect");
             MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
         } catch (IOException e) {
             e.printStackTrace();
