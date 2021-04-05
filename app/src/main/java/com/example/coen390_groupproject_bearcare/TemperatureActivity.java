@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,10 @@ public class TemperatureActivity extends AppCompatActivity {
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     boolean sensorConnected;                                                                        // use this to display icons to user
 
+    private TextView sensorconnectedTextView;
+    private TextView sensornotconnectedTextView;
+    private ImageView sensconView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,14 @@ public class TemperatureActivity extends AppCompatActivity {
         textViewTempDisplay = findViewById(R.id.textView_TempDisplay);
         textViewTitleRecordTemp = findViewById(R.id.textView_RecordTemp);
 
+        sensorconnectedTextView = findViewById(R.id.sensorconnectedTextView);
+        sensornotconnectedTextView = findViewById(R.id.sensornotconnectedTextView);
+        sensconView = findViewById(R.id.sensconView);
+
+        sensorconnectedTextView.setVisibility(View.INVISIBLE);
+        sensornotconnectedTextView.setVisibility(View.INVISIBLE);
+        sensconView.setVisibility(View.INVISIBLE);
+
         TAG = "TemperatureActivity";
 
         try {
@@ -61,6 +75,15 @@ public class TemperatureActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }
+
+        sensorConnected=MyBluetoothService.checkConnected();
+            if (sensorConnected==true){
+                sensorconnectedTextView.setVisibility(View.VISIBLE);
+                sensconView.setVisibility(View.VISIBLE);
+
+            }
+            else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
+
 
         // on click listener for take temp button
         takeTemp.setOnClickListener(new View.OnClickListener() {

@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,7 +56,6 @@ public class BluetoothScanner extends AppCompatActivity {
 
     private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
     private TextView nowdiscoveringTextView;
-
 
 
 
