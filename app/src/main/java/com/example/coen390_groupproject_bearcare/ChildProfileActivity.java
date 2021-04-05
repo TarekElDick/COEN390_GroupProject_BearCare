@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ChildProfileActivity extends AppCompatActivity {
 
     private TextView textViewChildName, textViewParentName, textViewRelation, textViewParentPhoneNumber, textViewChildBirthday;
-    private Button buttonTakeTemp, buttonAddNotification;
+    private Button buttonTakeTemp, buttonAddNotification, buttonTempHistory;
 
     private String childId, childName,  parentId, birthday;
 
@@ -60,6 +60,7 @@ public class ChildProfileActivity extends AppCompatActivity {
 
         // Connections
         buttonTakeTemp = findViewById(R.id.buttonTakeTemp_childProfileActivity);
+        buttonTempHistory = findViewById(R.id.button2);
         textViewChildName = findViewById(R.id.textViewChildName_childProfile);
         textViewParentName = findViewById(R.id.textViewParentName_childProfile);
         textViewParentPhoneNumber = findViewById(R.id.textViewParentPhoneNumber_childProfile);
@@ -78,6 +79,17 @@ public class ChildProfileActivity extends AppCompatActivity {
                 Log.d(TAG, "Child Name of item clicked is: " + childName);
                 startActivity(intent);
 
+            }
+        });
+
+        buttonTempHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TemperatureHistoryActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "TempHistory clicked");
+                startActivity(intent);
             }
         });
 
