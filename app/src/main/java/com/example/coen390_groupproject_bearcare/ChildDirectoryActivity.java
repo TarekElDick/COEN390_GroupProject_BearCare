@@ -32,6 +32,8 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
+import static com.example.coen390_groupproject_bearcare.R.string.Logging_out;
+
 public class ChildDirectoryActivity extends AppCompatActivity{
 
 
@@ -142,8 +144,8 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 Log.d(TAG, "Child Item is being swiped");
 
                 new AlertDialog.Builder(viewHolder.itemView.getContext())
-                        .setMessage("Are you sure you want to delete this child?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.delete_child_confirmation)
+                        .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // User wants to delete the item
@@ -151,7 +153,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                                 adapter.deleteItem(viewHolder.getAdapterPosition());
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // User canceled the delete item
@@ -208,6 +210,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 Log.d(TAG, "Child Name of button clicked is: " + childName);
                 startActivity(intent);
             }
+
         });
         // end of setUpUI
     }
@@ -236,7 +239,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
-                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Logging_out, Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
                 FirebaseAuth.getInstance().signOut();

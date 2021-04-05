@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import static com.example.coen390_groupproject_bearcare.R.string.registration_failed;
+
 public class SignUpActivity extends AppCompatActivity {
 
     //Our class objects
@@ -103,45 +105,45 @@ public class SignUpActivity extends AppCompatActivity {
 
                 // Check inputs are correct.
                 if (firstName.isEmpty()){
-                    editTextSignUpFirstName.setError("Full name is required");
+                    editTextSignUpFirstName.setError(getString(R.string.full_name_required));
                     editTextSignUpFirstName.requestFocus();
                 } else if (lastName.isEmpty()){
-                    editTextSignUpLastName.setError("Last name is required");
+                    editTextSignUpLastName.setError(getString(R.string.last_name_required));
                     editTextSignUpLastName.requestFocus();
 
                 } else if (emailAddress.isEmpty()){
-                    editTextSignUpEmailAddress.setError("Email is required");
+                    editTextSignUpEmailAddress.setError(getString(R.string.email_is_required));
                     editTextSignUpEmailAddress.requestFocus();
 
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
-                    editTextSignUpEmailAddress.setError("Please provide valid email");
+                    editTextSignUpEmailAddress.setError(getString(R.string.provide_valid_email));
                     editTextSignUpEmailAddress.requestFocus();
 
                 } else if (phoneNumber.isEmpty()){
-                    editTextSignUpPhoneNumber.setError("Phone number is required");
+                    editTextSignUpPhoneNumber.setError(getString(R.string.phone_num_required));
                     editTextSignUpPhoneNumber.requestFocus();
 
                 }else if (!Patterns.PHONE.matcher(phoneNumber).matches()){
-                    editTextSignUpPhoneNumber.setError("Please provide valid phone number");
+                    editTextSignUpPhoneNumber.setError(getString(R.string.valid_phone_number));
                     editTextSignUpPhoneNumber.requestFocus();
 
                 }else if (password.isEmpty()){
-                    editTextSignUpPassword.setError("Setting Password is required");
+                    editTextSignUpPassword.setError(getString(R.string.password_required));
                     editTextSignUpPassword.requestFocus();
 
                 } else if(password.length() < 6){
-                    editTextSignUpPassword.setError("Password has to be more than 6 characters long");
+                    editTextSignUpPassword.setError(getString(R.string.password_character_limit));
                     editTextSignUpPassword.requestFocus();
 
                 } else if (confirmPassword.isEmpty()){
-                    editTextSignUpConfirmPassword.setError("Confirming Password is required");
+                    editTextSignUpConfirmPassword.setError(getString(R.string.confirm_password_required));
                     editTextSignUpConfirmPassword.requestFocus();
 
                 } else if (!(confirmPassword.equals(password))) {
-                    editTextSignUpConfirmPassword.setError("Password did not match");
+                    editTextSignUpConfirmPassword.setError(getString(R.string.password_not_match));
                     editTextSignUpConfirmPassword.requestFocus();
                 } else if (!(isParent || isEmployee)){
-                    radioButtonEmployee.setError("Please provide account type");
+                    radioButtonEmployee.setError(getString(R.string.provide_account_type));
                     radioButtonEmployee.requestFocus();
                 } else {
 
@@ -202,7 +204,7 @@ public class SignUpActivity extends AppCompatActivity {
                             }else{
 
                                 // Let user know that the registration failed. Bring all UI-components visible again.
-                                Toast.makeText(SignUpActivity.this, "Registration Failed", Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignUpActivity.this, registration_failed, Toast.LENGTH_LONG).show();
                                 Log.d(TAG, "Registration Failed");
                                 textViewMessage.setVisibility(View.VISIBLE);
                                 textViewClickableLogin.setVisibility(View.VISIBLE);
