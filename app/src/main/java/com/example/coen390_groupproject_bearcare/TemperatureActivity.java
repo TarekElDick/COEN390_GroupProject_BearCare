@@ -75,9 +75,11 @@ public class TemperatureActivity extends AppCompatActivity {
         sensornotconnectedTextView = findViewById(R.id.sensornotconnectedTextView);
         sensconView = findViewById(R.id.sensconView);
 
-        sensorconnectedTextView.setVisibility(View.INVISIBLE);
         sensornotconnectedTextView.setVisibility(View.INVISIBLE);
+        sensorconnectedTextView.setVisibility(View.INVISIBLE);
         sensconView.setVisibility(View.INVISIBLE);
+
+
 
         TAG = "TemperatureActivity";
 
@@ -88,6 +90,7 @@ public class TemperatureActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, e.toString());
         }
+        checkConnection();
 
         // on click listener for take temp button
         takeTemp.setOnClickListener(new View.OnClickListener() {
@@ -136,13 +139,17 @@ public class TemperatureActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        checkConnection();
+        }
 
 
-    }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkConnection();
 
     }
     public void checkConnection()
@@ -151,14 +158,18 @@ public class TemperatureActivity extends AppCompatActivity {
         if (sensorConnected==true){
             sensorconnectedTextView.setVisibility(View.VISIBLE);
             sensconView.setVisibility(View.VISIBLE);
-        }
-        else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
+            sensornotconnectedTextView.setVisibility(View.INVISIBLE);
 
-    protected void onDestroy() {
-        super.onDestroy();
-        MyBluetoothService.close();
+
+        }
+        else {
+            sensornotconnectedTextView.setVisibility(View.VISIBLE);
+            sensorconnectedTextView.setVisibility(View.INVISIBLE);
+            sensconView.setVisibility(View.INVISIBLE);
+        }
 
     }
+
 
 
 }
