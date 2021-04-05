@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,6 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import static com.example.coen390_groupproject_bearcare.R.string.no_account_associated;
+import static com.example.coen390_groupproject_bearcare.R.string.signed_in_successfully;
+import static com.example.coen390_groupproject_bearcare.R.string.welcome_back;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
                     intent.putExtra("isEmployeeD", isEmployee);
                     Log.d(TAG, "isEmployee is being sent to next activity");
-                    Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, welcome_back, Toast.LENGTH_LONG).show();
                     startActivity(intent);
                 }
             });
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
 
                             Log.d(TAG, " User signed in successfully");
-                            Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, signed_in_successfully, Toast.LENGTH_LONG).show();
                             //redirect to user profile
                             // check if user is employee or not
                             user = mAuth.getCurrentUser();
@@ -170,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }else{
                             Log.d(TAG, "User didn't signed in successfully");
-                            Toast.makeText(MainActivity.this, "No account associated with this email and password", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, no_account_associated, Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);

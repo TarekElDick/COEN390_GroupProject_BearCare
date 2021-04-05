@@ -36,6 +36,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import static com.example.coen390_groupproject_bearcare.R.string.logging_out;
+import static com.example.coen390_groupproject_bearcare.R.string.only_employees_temp;
+
 public class UserMainPageActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -96,7 +99,7 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         } else {
             Log.d(TAG, "User is signed out");
-            startActivity(new Intent(getApplicationContext(),MainActivity.class ));
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
 
         // end of on start
@@ -331,7 +334,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else{
                     Log.d(TAG, "Not Employee");
-                    Toast.makeText(UserMainPageActivity.this, "Only employees can take temperature", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserMainPageActivity.this, only_employees_temp, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -354,13 +357,12 @@ public class UserMainPageActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menuItem_settings:
 
-                // TODO settings activity for language and preferences.
                 return true;
 
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
-                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, logging_out, Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
                 mAuth.signOut();
