@@ -106,7 +106,15 @@ public class MyBluetoothService {
 
     }
 
-    public static String getMacAddress() {
+    public static Boolean checkConnected()                                                          // this will be used to determine if a device is connected to the user's phone
+    {
+        if(btSocket.isConnected())
+            return true;                                                                            // return true if socket is connected
+        else return false;                                                                          // return false if socket is not connected
+
+    }
+
+    public static String getMacAddress() {                                                          // return mac address of device
         return macAddress;
     }
 }

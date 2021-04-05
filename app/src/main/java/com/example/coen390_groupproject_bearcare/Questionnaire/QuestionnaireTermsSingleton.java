@@ -1,4 +1,4 @@
-package com.example.coen390_groupproject_bearcare.questionnaire;
+package com.example.coen390_groupproject_bearcare.Questionnaire;
 
 public class QuestionnaireTermsSingleton {
 

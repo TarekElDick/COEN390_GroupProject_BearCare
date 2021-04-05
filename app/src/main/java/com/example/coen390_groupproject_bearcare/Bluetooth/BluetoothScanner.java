@@ -26,7 +26,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import com.example.coen390_groupproject_bearcare.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Handler;
 
@@ -51,6 +54,12 @@ public class BluetoothScanner extends AppCompatActivity {
     boolean bluetoothOn;                                                                            // to fix the issue where the paired list isn't showing up if bluetooth is enabled on entering activity
     boolean locationOn;                                                                             // to fix the issue where discovery isn't notifying users
 
+    private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
+    private TextView nowdiscoveringTextView;
+
+
+
+
     private  static final String TAG1 = "Bluetooth Scanner";
 
     @Override
@@ -61,13 +70,28 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList = findViewById(R.id.device_list);
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
-        deviceList.setOnItemClickListener(messageClickedHandler);
 
+        discoveryBar = findViewById(R.id.discoveryBar);
+        nowdiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
+        nowdiscoveringTextView.setText("Discovering sensor...");
+
+
+
+        discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
+        nowdiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+
+        deviceList.setOnItemClickListener(messageClickedHandler);
+            
         IntentFilter pairFilter =  new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);     // this filter needs to be used when pairing to a device
         registerReceiver(pairReceiver,pairFilter);                                                  // register the receiver
 
         IntentFilter foundFilter = new IntentFilter((BluetoothDevice.ACTION_FOUND));                // this filter needs to be created for using the discovery function
         registerReceiver(btReceiver,foundFilter);                                                   // register the receiver
+
+        IntentFilter discoveryStartedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);      //Created intent for when we start discovery of bluetooth
+        registerReceiver(btDiscoveryStarted, discoveryStartedFilter);
+
+
 
         IntentFilter discoveryDoneFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);    // this filter is used to determine if bluetooth discovery is done
         registerReceiver(btDiscoveryDone,discoveryDoneFilter);                                      // register the receiver
@@ -96,8 +120,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 discoveredDevices.clear();                                                          // clear the list, otherwise we will have device doubles in the listView
 
                 bluetoothAdapter.startDiscovery();
-                if(locationOn == true)
-                    Toast.makeText(getApplicationContext(),"Bluetooth discovery started, this will take 12 seconds.",Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -107,10 +130,10 @@ public class BluetoothScanner extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(btReceiver);
         unregisterReceiver(pairReceiver);
+        unregisterReceiver(btDiscoveryStarted);
         unregisterReceiver(btDiscoveryDone);
         unregisterReceiver(connectReceiver);
     }
-
 
     private final BroadcastReceiver connectReceiver = new BroadcastReceiver() {                     // this is to check connection status of bluetooth device
         public void onReceive(Context context, Intent intent) {
@@ -127,12 +150,27 @@ public class BluetoothScanner extends AppCompatActivity {
         }
     };
 
+    private final BroadcastReceiver btDiscoveryStarted = new BroadcastReceiver(){
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+                discoverButton.setVisibility(View.INVISIBLE);                                       // Hide discover button to show that we are trying to discover
+                discoveryBar.setVisibility(View.VISIBLE);                                           // Make the progress bar appear
+                getSupportActionBar().hide();                                                       // Hide the navigation bar of the phone when discovery is starting to hint the user that the device is now discovering
+                nowdiscoveringTextView.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
     private final   BroadcastReceiver btDiscoveryDone = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-                Toast.makeText(getApplicationContext(),"Bluetooth discovery finished.",Toast.LENGTH_SHORT).show();
                 listDiscovered();
+                getSupportActionBar().show();                                                       // Have the phone's navigation bar reappear
+                discoveryBar.setVisibility(View.INVISIBLE);
+                nowdiscoveringTextView.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -157,27 +195,26 @@ public class BluetoothScanner extends AppCompatActivity {
     
     BroadcastReceiver pairReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {             // this used to pair objects from the discovered list
+        public void onReceive(Context context, Intent intent) {                                     // this used to pair objects from the discovered list
             final String action = intent.getAction();
             if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))
             {   // will use 3 if statements now
                 BluetoothDevice localBluetoothObject = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDED)      // 1: device is already paired
+                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDED)              // 1: device is already paired
                 {
                     Log.d(TAG1, "onReceive: BOND_BONDED");
                     Toast.makeText(getApplicationContext(),"Paired to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
                 }
-                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDING)     // 2: create a pair
+                if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDING)             // 2: create a pair
                 {
                     Log.d(TAG1, "onReceive: BOND_PAIRING");
                     Toast.makeText(getApplicationContext(),"Pairing to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
 
                 }
-                if (localBluetoothObject.getBondState() == BluetoothDevice.BOND_NONE)      // 3: pair is broken
+                if (localBluetoothObject.getBondState() == BluetoothDevice.BOND_NONE)               // 3: pair is broken
                 {
                     Log.d(TAG1, "onReceive: BOND_BROKEN");
                     Toast.makeText(getApplicationContext(),"Pair broken with: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
-
                 }
 
             }
@@ -192,13 +229,12 @@ public class BluetoothScanner extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please turn on Bluetooth.",Toast.LENGTH_LONG).show();
         }
         else {
-            Toast.makeText(getApplicationContext(), "Bluetooth services are enabled.", Toast.LENGTH_LONG).show();
             bluetoothOn = true;                                                                     // set the boolean to true - bluetooth is enabled
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {           // this is called when StartActivityForResult is done - calls the list function so its not empty on activity
-                                                                                                        // entry
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {       // this is called when StartActivityForResult is done - calls the list function so its not empty on activity
+                                                                                                    // entry
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
@@ -223,7 +259,7 @@ public class BluetoothScanner extends AppCompatActivity {
     public void checkLocationPermission(View v){            // check if location services are on and request permission for access
         if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
-            Toast.makeText(this,"You have granted BearCare permission to access your location.", Toast.LENGTH_SHORT).show();
+            return;
         }else{
             requestLocationPermission();
         }
@@ -288,7 +324,7 @@ public class BluetoothScanner extends AppCompatActivity {
         Context context = getApplicationContext();                                                  // local context
         LocationManager x = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);   // location manager object x declared
         locationStatus = x.isLocationEnabled();                                                     // returns true or false depending on if location services are enabled
-        buildAlertMessageLocation(locationStatus);                                                  // call the function buildAlertMessageLocation with the  boolean locationStatus
+        buildAlertMessageLocation(locationStatus);                                                  // call the function buildAlertMessageLocation with the boolean locationStatus
     }
 
 
@@ -379,7 +415,7 @@ public void pairOrConnect(int position) throws IOException {
             return;
         Toast.makeText(getApplicationContext(), "Attempting to connect with: " + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
-            MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                   // connect to device using overloaded connect function
+            MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
         } catch (IOException e) {
             e.printStackTrace();
         }

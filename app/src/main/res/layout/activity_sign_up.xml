@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Create Account"
+        android:text="@string/create_account"
         android:textColor="@color/purple_700"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="FIRST NAME"
+        android:text="@string/first_name"
         app:layout_constraintStart_toStartOf="@+id/editTextFirstName_signup"
         app:layout_constraintTop_toBottomOf="@+id/textViewCreateAccount_signup" />
 
@@ -64,7 +64,7 @@
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
         android:ems="10"
-        android:hint="John"
+        android:hint="@string/first_name_hint"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="EMAIL"
+        android:text="@string/email_string"
         app:layout_constraintStart_toStartOf="@+id/editTextEmailAddress_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextLastName_signup" />
 
@@ -88,7 +88,7 @@
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
         android:ems="10"
-        android:hint="johnsmith@gmail.com"
+        android:hint="@string/johnsmith_gmail_com"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="PHONE"
+        android:text="@string/phone_allcaps_string"
         app:layout_constraintStart_toStartOf="@+id/editTextPhone_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddress_signup" />
 
@@ -112,7 +112,7 @@
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
         android:ems="10"
-        android:hint="+1 (514) 123-5678"
+        android:hint="@string/phone_example_string"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="PASSWORD"
+        android:text="@string/password_string"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone_signup" />
 
@@ -146,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="CONFIRM PASSWORD"
+        android:text="@string/confirm_password"
         app:layout_constraintStart_toStartOf="@+id/editTextConfirmPassword_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword_signup" />
 
@@ -181,19 +181,19 @@
             android:id="@+id/radioButtonParent_signup"
             android:layout_width="162dp"
             android:layout_height="wrap_content"
-            android:text="Parent/Guardian" />
+            android:text="@string/parent_guardian" />
 
         <RadioButton
             android:id="@+id/radioButtonEmployee_signup"
             android:layout_width="172dp"
             android:layout_height="wrap_content"
-            android:text="Employee" />
+            android:text="@string/employee_string" />
 
         <RadioButton
             android:id="@+id/radioButtonDirector_signup"
             android:layout_width="107dp"
             android:layout_height="match_parent"
-            android:text="Director"
+            android:text="@string/director_string"
             android:visibility="invisible" />
     </RadioGroup>
 
@@ -206,7 +206,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="124dp"
         android:layout_marginRight="124dp"
-        android:text="CREATE ACCOUNT"
+        android:text="@string/create_account_allcaps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup_signup" />
@@ -219,7 +219,7 @@
         android:layout_marginLeft="107dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Already have an account?"
+        android:text="@string/already_have_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreateAccount_signup"
@@ -232,7 +232,7 @@
         android:layout_marginStart="7dp"
         android:layout_marginLeft="7dp"
         android:clickable="true"
-        android:text="Login"
+        android:text="@string/log_in"
         android:textColor="@color/purple_700"
         app:layout_constraintStart_toEndOf="@+id/textViewaMessage_signup"
         app:layout_constraintTop_toTopOf="@+id/textViewaMessage_signup" />
@@ -242,7 +242,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Type"
+        android:text="@string/type_string"
         app:layout_constraintStart_toStartOf="@+id/radioGroup_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword_signup" />
 
@@ -261,7 +261,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="LAST NAME"
+        android:text="@string/last_name"
         app:layout_constraintStart_toStartOf="@+id/editTextLastName_signup"
         app:layout_constraintTop_toBottomOf="@+id/editTextFirstName_signup" />
 
@@ -274,7 +274,7 @@
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
         android:ems="10"
-        android:hint="Smith"
+        android:hint="@string/last_name_hint"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +34,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import static com.example.coen390_groupproject_bearcare.R.string.logging_out;
+import static com.example.coen390_groupproject_bearcare.R.string.only_employees_temp;
 
 public class UserMainPageActivity extends AppCompatActivity {
 
@@ -96,7 +98,7 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         } else {
             Log.d(TAG, "User is signed out");
-            startActivity(new Intent(getApplicationContext(),MainActivity.class ));
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
 
         // end of on start
@@ -117,14 +119,10 @@ public class UserMainPageActivity extends AppCompatActivity {
         displayName = findViewById(R.id.textViewUserName_dashboard);
         TextView accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_dashboard);
         Button buttonFillQuestionnaire = findViewById(R.id.buttonFillDailyQuestionnaire_dashboard);
-        questionnaireLastReceived = findViewById(R.id.textViewLastReceived_dashboard);
-        questionnaireTimestamp = findViewById(R.id.textViewTimestamp_dashboard);
 
         // initially make everything invisible
         accessChildDirectory.setVisibility(View.INVISIBLE);
         buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
-        questionnaireTimestamp.setVisibility(View.INVISIBLE);
-        questionnaireLastReceived.setVisibility(View.INVISIBLE);
         // onClickListeners
         accessChildDirectory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,19 +160,16 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Log.d(TAG, "User id is: " + userId);
 
                 if(isEmployee){
-                    String cornerText = "Employee Corner";
+                    String cornerText = getString(R.string.employee_corner);
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.VISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.INVISIBLE);
-                    questionnaireTimestamp.setVisibility(View.INVISIBLE);
-                    questionnaireLastReceived.setVisibility(View.INVISIBLE);
                 }else{
-                    String cornerText = "Parent Corner";
+                    String cornerText = getString(R.string.parent_corner);
                     corner.setText(cornerText);
                     accessChildDirectory.setVisibility(View.INVISIBLE);
                     buttonFillQuestionnaire.setVisibility(View.VISIBLE);
-                    questionnaireTimestamp.setVisibility(View.VISIBLE);
-                    questionnaireLastReceived.setVisibility(View.VISIBLE);
+
                     // TODO disable sensor icon, on the item probably within adapter?
                 }
             }
@@ -260,8 +255,8 @@ public class UserMainPageActivity extends AppCompatActivity {
                     Log.d(TAG, "Child Item is being swiped");
 
                     new AlertDialog.Builder(viewHolder.itemView.getContext())
-                            .setMessage("Are you sure you want to delete this child?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setMessage(R.string.are_you_sure)
+                            .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // User wants to delete the item
@@ -270,7 +265,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                                     runRecyclerView();
                                 }
                                 })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // User canceled the delete item
@@ -331,7 +326,7 @@ public class UserMainPageActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else{
                     Log.d(TAG, "Not Employee");
-                    Toast.makeText(UserMainPageActivity.this, "Only employees can take temperature", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserMainPageActivity.this, only_employees_temp, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -354,13 +349,12 @@ public class UserMainPageActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menuItem_settings:
 
-                // TODO settings activity for language and preferences.
                 return true;
 
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
-                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, logging_out, Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
                 mAuth.signOut();

@@ -32,6 +32,8 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
+import static com.example.coen390_groupproject_bearcare.R.string.Logging_out;
+
 public class ChildDirectoryActivity extends AppCompatActivity{
 
 
@@ -237,7 +239,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
-                Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Logging_out, Toast.LENGTH_SHORT).show();
 
                 // We sign out the firebase user and they are sent to the login activity (MainActivity.java)
                 FirebaseAuth.getInstance().signOut();

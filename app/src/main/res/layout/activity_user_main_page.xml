@@ -25,8 +25,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="My Children"
-        android:textColor="@color/purple_700"
+        android:text="@string/my_children"
+        android:textColor="@color/purple_200"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewNotification_dashboard" />
@@ -47,32 +47,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="285dp"
-        android:text="Fill Daily Questionaire"
+        android:text="@string/fill_daily_questionnaire"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/recyclerViewChildren_dashboard" />
-
-    <TextView
-        android:id="@+id/textViewLastReceived_dashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="109dp"
-        android:layout_marginLeft="109dp"
-        android:layout_marginTop="16dp"
-        android:text="Last received:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonFillDailyQuestionnaire_dashboard" />
-
-    <TextView
-        android:id="@+id/textViewTimestamp_dashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="yesterday"
-        android:textColor="@color/purple_700"
-        app:layout_constraintStart_toEndOf="@+id/textViewLastReceived_dashboard"
-        app:layout_constraintTop_toTopOf="@+id/textViewLastReceived_dashboard" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChildren_dashboard"
@@ -90,16 +68,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
-        android:text="Notifcations"
-        android:textColor="@color/purple_700"
+        android:text="@string/notifications_string"
+        android:textColor="@color/purple_200"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewNotification_dashboard"
-        android:layout_width="388dp"
-        android:layout_height="136dp"
+        android:layout_width="404dp"
+        android:layout_height="135dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +91,7 @@
         android:layout_marginLeft="41dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        android:text="Access Child Directory"
+        android:text="@string/access_child_directory"
         android:textColor="@color/purple_700"
         android:textStyle="normal"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
