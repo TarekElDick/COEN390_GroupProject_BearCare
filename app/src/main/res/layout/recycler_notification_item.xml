@@ -12,7 +12,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="Child Name"
+        android:text="@string/child_name_not_all_caps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
-        android:hint="Title"
+        android:hint="@string/title_string"
         android:textColor="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="@+id/textViewChildName_recyclerNotificationItem"
         app:layout_constraintStart_toEndOf="@+id/textViewChildName_recyclerNotificationItem"
@@ -34,7 +34,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:hint="Date"
+        android:hint="@string/date_string"
         app:layout_constraintBottom_toBottomOf="@+id/textViewChildName_recyclerNotificationItem"
         app:layout_constraintEnd_toStartOf="@+id/textViewTime_recyclerNotificationItem"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +46,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:hint="Time"
+        android:hint="@string/time_string"
         app:layout_constraintBottom_toBottomOf="@+id/textViewChildName_recyclerNotificationItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
