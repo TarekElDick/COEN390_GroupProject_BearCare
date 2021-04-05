@@ -89,15 +89,6 @@ public class TemperatureActivity extends AppCompatActivity {
             Log.e(TAG, e.toString());
         }
 
-        sensorConnected=MyBluetoothService.checkConnected();
-            if (sensorConnected==true){
-                sensorconnectedTextView.setVisibility(View.VISIBLE);
-                sensconView.setVisibility(View.VISIBLE);
-
-            }
-            else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
-
-
         // on click listener for take temp button
         takeTemp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,8 +134,31 @@ public class TemperatureActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+    public void checkConnection()
+    {
+        sensorConnected=MyBluetoothService.checkConnected();
+        if (sensorConnected==true){
+            sensorconnectedTextView.setVisibility(View.VISIBLE);
+            sensconView.setVisibility(View.VISIBLE);
+        }
+        else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
+
     protected void onDestroy() {
         super.onDestroy();
         MyBluetoothService.close();
+
     }
+
+
 }
