@@ -97,7 +97,7 @@ public class BluetoothScanner extends AppCompatActivity {
 
         if(bluetoothAdapter == null)                                                                // the device does not support bluetooth if this statement is true
         {
-            Toast.makeText(this,"This device does not support Bluetooth.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.not_support_bluetooth),Toast.LENGTH_SHORT).show();
         }
         checkBluetoothOn(null);                                                                  // check if BT is enabled
 
@@ -111,7 +111,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 checkLocationPermission(null);
                 checkLocationStatus();
 
-                titleText.setText("Discovered Bluetooth Devices");
+                titleText.setText(R.string.discovered_bluetooth_devices);
 
                 discoveredDevices.clear();                                                          // clear the list, otherwise we will have device doubles in the listView
 
@@ -138,10 +138,10 @@ public class BluetoothScanner extends AppCompatActivity {
             if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action) ){
 
                 if(device.getBondState() == BluetoothDevice.BOND_BONDED)                            // make sure that this message only displays if the device is paired to the phone
-                    Toast.makeText(getApplicationContext(), "Connected to device: " + device.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.connected_to_device) + device.getName(), Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(),"Connection to " + device.getName() + " failed or cancelled.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.connection_to) + device.getName() + getString(R.string.failed_or_cancelled),Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -199,18 +199,18 @@ public class BluetoothScanner extends AppCompatActivity {
                 if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDED)              // 1: device is already paired
                 {
                     Log.d(TAG1, "onReceive: BOND_BONDED");
-                    Toast.makeText(getApplicationContext(),"Paired to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.paired_to) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
                 }
                 if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDING)             // 2: create a pair
                 {
                     Log.d(TAG1, "onReceive: BOND_PAIRING");
-                    Toast.makeText(getApplicationContext(),"Pairing to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.pairing_to) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
 
                 }
                 if (localBluetoothObject.getBondState() == BluetoothDevice.BOND_NONE)               // 3: pair is broken
                 {
                     Log.d(TAG1, "onReceive: BOND_BROKEN");
-                    Toast.makeText(getApplicationContext(),"Pair broken with: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.pair_broken_with) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -222,7 +222,7 @@ public class BluetoothScanner extends AppCompatActivity {
             bluetoothOn = false;                                                                    // bt is not on set to false
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);                     // this constant is used to request to turn on BS services
             startActivityForResult(turnOn, 1);                                          // this is used to check if turning on bluetooth was successful
-            Toast.makeText(getApplicationContext(), "Please turn on Bluetooth.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.turn_on_bluetooth),Toast.LENGTH_LONG).show();
         }
         else {
             bluetoothOn = true;                                                                     // set the boolean to true - bluetooth is enabled
@@ -234,20 +234,20 @@ public class BluetoothScanner extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Bluetooth enabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.bluetooth_enabled), Toast.LENGTH_LONG).show();
                 list(null);
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.user_canceled), Toast.LENGTH_LONG).show();
             }
         }
         else if(requestCode ==2)
         {
             if(REQUEST_CODE_CHECK_SETTINGS == requestCode){
                 Log.d(TAG, "onActivityResult: REACHED REQUEST CODE 2");
-                Toast.makeText(this,"Location services enabled. Click on discover to find BearCare Hardware.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.location_services_enabled),Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "onActivityResult: REACH REQUEST CODE 2 CANCELLED");
-                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.user_canceled), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -266,16 +266,16 @@ public class BluetoothScanner extends AppCompatActivity {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             new AlertDialog.Builder(this)
-                    .setTitle("Permission Needed")
-                    .setMessage("To discover BearCare Sensors, location service permission must be granted")
-                    .setPositiveButton("Grant Permission", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.permission_needed)
+                    .setMessage(R.string.to_discover)
+                    .setPositiveButton(R.string.grant_permission, new DialogInterface.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.P)
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     })
-                    .setNegativeButton("Deny Permission", new DialogInterface.OnClickListener() {       // if the user does not want to give permission dismiss
+                    .setNegativeButton(R.string.deny_permission, new DialogInterface.OnClickListener() {       // if the user does not want to give permission dismiss
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -296,16 +296,16 @@ public class BluetoothScanner extends AppCompatActivity {
         }
         else{
             new AlertDialog.Builder(this)                                                   // creates a new alert dialog
-                    .setTitle("Enable Location Services")
-                    .setMessage("To discover BearCare Sensors, location services must be turned on")
-                    .setPositiveButton("Turn on Location Services", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.enable_location_services)
+                    .setMessage(R.string.to_discover_location)
+                    .setPositiveButton(R.string.turn_on_location, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent enableLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivityForResult(enableLocation, 2);
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel_not_all_caps, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -330,10 +330,10 @@ public class BluetoothScanner extends AppCompatActivity {
         {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show();
             } else
             {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -414,7 +414,7 @@ public void pairOrConnect(int position) throws IOException {
 
         }
         Log.d(TAG, "pairOrConnect: outside the get mac address if");
-        Toast.makeText(getApplicationContext(), "Attempting to connect with: " + bdDevice.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.attempting_to_connect) + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
             Log.d(TAG, "pairOrConnect: Now in the try block of connect");
             MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
