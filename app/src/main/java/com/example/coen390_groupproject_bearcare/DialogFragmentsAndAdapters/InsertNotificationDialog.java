@@ -79,7 +79,7 @@ public class InsertNotificationDialog extends DialogFragment {
         // 3.1) Get the values from the activity.
         childId = this.getArguments().getString("childId");
         childName = this.getArguments().getString("childName");
-        Log.d(TAG, "ChildID: "+ childId+" ChildName: "+childName);
+        Log.d(TAG, "ChildID: "+ childId+ " ChildName: "+ childName);
 
         // 3.2) Show the child's names
         textViewChildName.setText(childName);
@@ -150,6 +150,7 @@ public class InsertNotificationDialog extends DialogFragment {
                 // 4.3.1) Get user inputs and check acceptability
                 notificationTitle = editTextTitle.getText().toString().trim();
                 notificationDescription = editTextDescription.getText().toString().trim();
+                Log.d(TAG, "Title: " + notificationTitle + " Description: " + notificationDescription);
 
                 if(notificationTitle.isEmpty()){
                     editTextTitle.setError(getString(R.string.specify_title));

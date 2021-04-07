@@ -38,7 +38,7 @@ import java.util.Calendar;
 
 public class TemperatureActivity extends AppCompatActivity {
 
-    private TextView textViewTitleRecordTemp, textViewConfirm,textViewTempDisplay;
+    private TextView textViewTitleRecordTemp, textViewConfirm, textViewTempDisplay;
     private Button takeTemp, configureSensorsButton;
     private FloatingActionButton confirmButton;
     private String TAG;
@@ -57,7 +57,7 @@ public class TemperatureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
 
-        Intent intent =  getIntent();
+        Intent intent = getIntent();
         childName = intent.getStringExtra("childName");
         childId = intent.getStringExtra("childId");
 
@@ -99,7 +99,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
                 Calendar calendar = Calendar.getInstance();
                 tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());
-                Log.d(TAG, "onClick: "+tempTimeStamp);
+                Log.d(TAG, "onClick: " + tempTimeStamp);
 
                 Temperature temp = new Temperature(tempReading, tempTimeStamp);
 
@@ -145,20 +145,22 @@ public class TemperatureActivity extends AppCompatActivity {
         super.onResume();
 
     }
-    public void checkConnection()
-    {
-        sensorConnected=MyBluetoothService.checkConnected();
-        if (sensorConnected==true){
+
+    public void checkConnection() {
+        sensorConnected = MyBluetoothService.checkConnected();
+        if (sensorConnected == true) {
             sensorconnectedTextView.setVisibility(View.VISIBLE);
             sensconView.setVisibility(View.VISIBLE);
+        } else {
+            sensornotconnectedTextView.setVisibility(View.VISIBLE);
         }
-        else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
+    }
 
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         MyBluetoothService.close();
 
     }
-
 
 }
