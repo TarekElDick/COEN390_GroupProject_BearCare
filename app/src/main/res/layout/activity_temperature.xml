@@ -6,25 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".TemperatureActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
     <Button
         android:id="@+id/buttonTakeTemp"
         android:layout_width="194dp"
         android:layout_height="78dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="96dp"
         android:text="@string/record_temperature"
-        app:layout_constraintBottom_toTopOf="@+id/confirmButton"
+        app:layout_constraintBottom_toTopOf="@+id/buttonConfigureSensor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
@@ -99,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/sensconView"
+        android:id="@+id/sensorconnectedView"
         android:layout_width="37dp"
         android:layout_height="33dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -118,14 +106,14 @@
         android:text="@string/sensor_connected"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sensconView" />
+        app:layout_constraintTop_toBottomOf="@+id/sensorconnectedView" />
 
     <TextView
         android:id="@+id/sensornotconnectedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="240dp"
-        android:text="@string/sensor_not_connected"
+        android:text="Not connected to a sensor - Press Select Sensor to connect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
