@@ -53,6 +53,7 @@ public class BluetoothScanner extends AppCompatActivity {
 
     private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
     private TextView nowDiscoveringTextView;
+    private TextView pairedDevicesTextView;
 
 
 
@@ -67,7 +68,7 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList = findViewById(R.id.device_list);
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
-
+        pairedDevicesTextView = findViewById(R.id.pairedListTextView);
         discoveryBar = findViewById(R.id.discoveryBar);
         nowDiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
         nowDiscoveringTextView.setText("Discovering sensor...");
@@ -76,6 +77,7 @@ public class BluetoothScanner extends AppCompatActivity {
 
         discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
         nowDiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+        pairedDevicesTextView.setVisibility(View.INVISIBLE);
 
         deviceList.setOnItemClickListener(messageClickedHandler);
             
@@ -108,6 +110,7 @@ public class BluetoothScanner extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.P)                                               // needed for the checking of location status minimum API must be maintained for use
             @Override
             public void onClick(View v) {
+                pairedDevicesTextView.setVisibility(View.INVISIBLE);                                // dont repeat overlapping messages
                 checkLocationPermission(null);
                 checkLocationStatus();
 
@@ -367,10 +370,15 @@ public class BluetoothScanner extends AppCompatActivity {
                     pairedDevicesStrings.add(devices.getName() + "\n" + "Device Address: " + devices.getAddress());
                     addedBluetoothDevices.add(devices);
                 }
-
             }
-
         }
+
+        if(!pairedDevicesStrings.isEmpty()){
+
+                pairedDevicesTextView.setVisibility(View.INVISIBLE);
+        }
+        else
+            pairedDevicesTextView.setVisibility(View.VISIBLE);
 
         final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1,pairedDevicesStrings);
 
@@ -386,7 +394,6 @@ public class BluetoothScanner extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     };
 
@@ -407,21 +414,26 @@ public void pairOrConnect(int position) throws IOException {
     }
     else if(bdDevice.getBondState() == BluetoothDevice.BOND_BONDED)                                 // 2. The device is paired connect
     {
-        //Log.d(TAG, "pairOrConnect: Entered Else if for par " + bdDevice.getAddress());
-        if(bdDevice.getAddress().equals(MyBluetoothService.getMacAddress())) {
-            return;
-            //Log.d(TAG, "pairOrConnect: Entered get device mac address if " + bdDevice.getAddress() + " Address of myBTservice " + MyBluetoothService.getMacAddress());
 
-        }
-        Log.d(TAG, "pairOrConnect: outside the get mac address if");
         Toast.makeText(getApplicationContext(), getString(R.string.attempting_to_connect) + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
-            Log.d(TAG, "pairOrConnect: Now in the try block of connect");
             MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        list(null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        list(null);
+    }
 
 }

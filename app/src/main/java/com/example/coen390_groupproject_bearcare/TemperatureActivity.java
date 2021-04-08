@@ -1,6 +1,5 @@
 package com.example.coen390_groupproject_bearcare;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,30 +8,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.Bluetooth.BluetoothScanner;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
-import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.Model.Temperature;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.core.OrderBy;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -48,9 +35,9 @@ public class TemperatureActivity extends AppCompatActivity {
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     boolean sensorConnected;                                                                        // use this to display icons to user
 
-    private TextView sensorconnectedTextView;
-    private TextView sensornotconnectedTextView;
-    private ImageView sensconView;
+    private TextView sensorConnectedTextView;
+    private TextView sensorNotConnectedTextView;
+    private ImageView sensConView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +53,17 @@ public class TemperatureActivity extends AppCompatActivity {
         anotherIntent.putExtra("childName", childName);
 
         takeTemp = findViewById(R.id.buttonTakeTemp);
-        confirmButton = findViewById(R.id.confirmButton);
         configureSensorsButton = findViewById(R.id.buttonConfigureSensor);
         textViewTempDisplay = findViewById(R.id.textView_TempDisplay);
         textViewTitleRecordTemp = findViewById(R.id.textView_RecordTemp);
 
-        sensorconnectedTextView = findViewById(R.id.sensorconnectedTextView);
-        sensornotconnectedTextView = findViewById(R.id.sensornotconnectedTextView);
-        sensconView = findViewById(R.id.sensconView);
+        sensorConnectedTextView = findViewById(R.id.sensorconnectedTextView);
+        sensorNotConnectedTextView = findViewById(R.id.sensornotconnectedTextView);
+        sensConView = findViewById(R.id.sensorconnectedView);
 
-        sensorconnectedTextView.setVisibility(View.INVISIBLE);
-        sensornotconnectedTextView.setVisibility(View.INVISIBLE);
-        sensconView.setVisibility(View.INVISIBLE);
+        sensorConnectedTextView.setVisibility(View.INVISIBLE);
+        sensorNotConnectedTextView.setVisibility(View.INVISIBLE);
+        sensConView.setVisibility(View.INVISIBLE);
 
         TAG = "TemperatureActivity";
 
@@ -89,13 +75,15 @@ public class TemperatureActivity extends AppCompatActivity {
             Log.e(TAG, e.toString());
         }
 
+        checkConnection();
+
         // on click listener for take temp button
         takeTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //double tempReading = MyBluetoothService.getReading(); TODO
-                double tempReading = 26.7;
+                double tempReading = MyBluetoothService.getReading();
+                //double tempReading = 0.0;
 
                 Calendar calendar = Calendar.getInstance();
                 tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());
@@ -129,30 +117,30 @@ public class TemperatureActivity extends AppCompatActivity {
             }
         });
 
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
+        checkConnection();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        checkConnection();
     }
 
     public void checkConnection() {
         sensorConnected = MyBluetoothService.checkConnected();
         if (sensorConnected == true) {
-            sensorconnectedTextView.setVisibility(View.VISIBLE);
-            sensconView.setVisibility(View.VISIBLE);
+            sensorNotConnectedTextView.setVisibility(View.INVISIBLE);
+            sensorConnectedTextView.setVisibility(View.VISIBLE);
+            sensConView.setVisibility(View.VISIBLE);
         } else {
-            sensornotconnectedTextView.setVisibility(View.VISIBLE);
+            sensorConnectedTextView.setVisibility(View.INVISIBLE);
+            sensConView.setVisibility(View.INVISIBLE);
+            sensorNotConnectedTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -160,7 +148,6 @@ public class TemperatureActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         MyBluetoothService.close();
-
     }
 
 }
