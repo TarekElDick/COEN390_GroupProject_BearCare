@@ -34,8 +34,7 @@ public class TemperatureActivity extends AppCompatActivity {
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     boolean sensorConnected;                                                                        // use this to display icons to user
 
-    private TextView sensorConnectedTextView;
-    private TextView sensorNotConnectedTextView;
+    private TextView sensorConnectedTextView, sensorNotConnectedTextView, childNameTextView;
     private ImageView sensConView, sensNotConView;
 
     @Override
@@ -60,6 +59,8 @@ public class TemperatureActivity extends AppCompatActivity {
 
         sensorConnectedTextView = findViewById(R.id.sensorconnectedTextView);
         sensorNotConnectedTextView = findViewById(R.id.sensornotconnectedTextView);
+        childNameTextView = findViewById(R.id.childNameTextView);
+        childNameTextView.setText(childName);
         sensConView = findViewById(R.id.sensorconnectedView);
         sensNotConView = findViewById(R.id.sensorNotconnectedView);
 
