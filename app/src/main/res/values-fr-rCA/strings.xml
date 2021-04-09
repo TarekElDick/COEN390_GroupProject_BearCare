@@ -132,4 +132,5 @@
     <string name="record_temperature">Prends Température</string>
     <string name="click_record_temperature">Cliquez Prends Température</string>
     <string name="temperature_recorded">Température Enregistré</string>
+    <string name="temperature_history_of_child">" Historique Température"</string>
 </resources>
