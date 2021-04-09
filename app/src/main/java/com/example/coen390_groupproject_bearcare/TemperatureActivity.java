@@ -26,11 +26,11 @@ import java.util.Calendar;
 public class TemperatureActivity extends AppCompatActivity {
 
     private TextView textViewTitleRecordTemp, textViewConfirm, textViewTempDisplay;
-    private Button takeTemp, configureSensorsButton;
-    private FloatingActionButton confirmButton;
+    private Button takeTemp, configureSensorsButton, confirmTemp;
     private String TAG;
     private String childName;
     private String childId;
+    private double tempReading;
     private String tempTimeStamp;
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     boolean sensorConnected;                                                                        // use this to display icons to user
@@ -53,6 +53,8 @@ public class TemperatureActivity extends AppCompatActivity {
         anotherIntent.putExtra("childName", childName);
 
         takeTemp = findViewById(R.id.buttonTakeTemp);
+        confirmTemp = findViewById(R.id.buttonConfirmTemp);
+
         configureSensorsButton = findViewById(R.id.buttonConfigureSensor);
         textViewTempDisplay = findViewById(R.id.textView_TempDisplay);
         textViewTitleRecordTemp = findViewById(R.id.textView_RecordTemp);
@@ -82,9 +84,18 @@ public class TemperatureActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                double tempReading = MyBluetoothService.getReading();
+                tempReading = MyBluetoothService.getReading();
                 //double tempReading = 0.0;
 
+                textViewTempDisplay.setText(tempReading + " °C");
+
+                confirmTemp.setVisibility(View.VISIBLE);
+            }
+        });
+
+        confirmTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());
                 Log.d(TAG, "onClick: " + tempTimeStamp);
@@ -104,8 +115,6 @@ public class TemperatureActivity extends AppCompatActivity {
                                 Log.d(TAG, "Temperature added to fireStore");
                             }
                         });
-
-                textViewTempDisplay.setText(tempReading + " °C");
             }
         });
 
@@ -129,6 +138,7 @@ public class TemperatureActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkConnection();
+        confirmTemp.setVisibility(View.INVISIBLE);
     }
 
     public void checkConnection() {
