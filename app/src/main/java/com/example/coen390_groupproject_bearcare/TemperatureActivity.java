@@ -69,14 +69,6 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TAG = "TemperatureActivity";
 
-        try {
-            if (MyBluetoothService.getMacAddress() == null) {
-                MyBluetoothService.connectAutomatically();
-            }
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
-        }
-
         checkConnection();
 
         // on click listener for take temp button
@@ -147,10 +139,17 @@ public class TemperatureActivity extends AppCompatActivity {
             sensorNotConnectedTextView.setVisibility(View.INVISIBLE);
             sensorConnectedTextView.setVisibility(View.VISIBLE);
             sensConView.setVisibility(View.VISIBLE);
+            takeTemp.setEnabled(true);
         } else {
             sensorConnectedTextView.setVisibility(View.INVISIBLE);
             sensConView.setVisibility(View.INVISIBLE);
             sensorNotConnectedTextView.setVisibility(View.VISIBLE);
+            takeTemp.setEnabled(false);
+            try {
+                MyBluetoothService.connectAutomatically();
+            } catch (IOException e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
