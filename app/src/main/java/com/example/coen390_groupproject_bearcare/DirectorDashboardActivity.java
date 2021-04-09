@@ -52,11 +52,6 @@ public class DirectorDashboardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menuItem_settings:
-
-                // TODO settings activity for language and preferences.
-                return true;
-
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
