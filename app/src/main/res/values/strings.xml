@@ -127,7 +127,7 @@
     <string name="discover_string">DISCOVER</string>
     <string name="temperature_recorded">Temperature Recorded</string>
     <string name="record_temperature">Take Temperature</string>
-    <string name="click_record_temperature">Click Take Temperature</string>
+    <string name="click_record_temperature">" "</string>
     <string name="select_sensor">Select Sensor</string>
     <string name="sensor_connected">Sensor Connected</string>
     <string name="sensor_not_connected">Sensor Not Connected</string>
