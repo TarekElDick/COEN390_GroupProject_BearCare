@@ -55,9 +55,6 @@ public class BluetoothScanner extends AppCompatActivity {
     private TextView nowDiscoveringTextView;
     private TextView pairedDevicesTextView;
 
-
-
-
     private  static final String TAG1 = "Bluetooth Scanner";
 
     @Override
@@ -72,8 +69,6 @@ public class BluetoothScanner extends AppCompatActivity {
         discoveryBar = findViewById(R.id.discoveryBar);
         nowDiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
         nowDiscoveringTextView.setText("Discovering sensor...");
-
-
 
         discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
         nowDiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
@@ -133,7 +128,6 @@ public class BluetoothScanner extends AppCompatActivity {
         unregisterReceiver(btDiscoveryDone);
         unregisterReceiver(connectReceiver);
     }
-
     private final BroadcastReceiver connectReceiver = new BroadcastReceiver() {                     // this is to check connection status of bluetooth device
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -266,6 +260,8 @@ public class BluetoothScanner extends AppCompatActivity {
 
     public void requestLocationPermission()                                                         // this function will be used to request permission from the user to access location
     {
+        pairedDevicesTextView.setVisibility(View.INVISIBLE);
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             new AlertDialog.Builder(this)
@@ -427,13 +423,13 @@ public void pairOrConnect(int position) throws IOException {
     @Override
     protected void onResume() {
         super.onResume();
-        list(null);
+        //list(null);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        list(null);
+        //list(null);
     }
 
 }
