@@ -15,7 +15,6 @@ import com.example.coen390_groupproject_bearcare.Bluetooth.BluetoothScanner;
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.example.coen390_groupproject_bearcare.Model.Temperature;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
     private TextView sensorConnectedTextView;
     private TextView sensorNotConnectedTextView;
-    private ImageView sensConView;
+    private ImageView sensConView, sensNotConView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +61,7 @@ public class TemperatureActivity extends AppCompatActivity {
         sensorConnectedTextView = findViewById(R.id.sensorconnectedTextView);
         sensorNotConnectedTextView = findViewById(R.id.sensornotconnectedTextView);
         sensConView = findViewById(R.id.sensorconnectedView);
+        sensNotConView = findViewById(R.id.sensorNotconnectedView);
 
         sensorConnectedTextView.setVisibility(View.INVISIBLE);
         sensorNotConnectedTextView.setVisibility(View.INVISIBLE);
@@ -138,11 +138,13 @@ public class TemperatureActivity extends AppCompatActivity {
         if (sensorConnected == true) {
             sensorNotConnectedTextView.setVisibility(View.INVISIBLE);
             sensorConnectedTextView.setVisibility(View.VISIBLE);
+            sensNotConView.setVisibility(View.INVISIBLE);
             sensConView.setVisibility(View.VISIBLE);
             takeTemp.setEnabled(true);
         } else {
             sensorConnectedTextView.setVisibility(View.INVISIBLE);
             sensConView.setVisibility(View.INVISIBLE);
+            sensNotConView.setVisibility(View.VISIBLE);
             sensorNotConnectedTextView.setVisibility(View.VISIBLE);
             takeTemp.setEnabled(false);
             try {
