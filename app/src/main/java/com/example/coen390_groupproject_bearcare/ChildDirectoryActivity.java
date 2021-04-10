@@ -144,8 +144,8 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 Log.d(TAG, "Child Item is being swiped");
 
                 new AlertDialog.Builder(viewHolder.itemView.getContext())
-                        .setMessage("Are you sure you want to delete this child?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(R.string.delete_child_confirmation)
+                        .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // User wants to delete the item
@@ -153,7 +153,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                                 adapter.deleteItem(viewHolder.getAdapterPosition());
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // User canceled the delete item
@@ -229,14 +229,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menuItem_settings:
-
-                Log.d(TAG, "User settings clicked");
-                // TODO settings activity for language and preferences.
-
-                return true;
-
-            case R.id.menuItem_logout:
+                case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
                 Toast.makeText(this, Logging_out, Toast.LENGTH_SHORT).show();

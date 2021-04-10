@@ -4,14 +4,14 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.coen390_groupproject_bearcare.MainActivity;
 import com.example.coen390_groupproject_bearcare.R;
 
 // https://www.youtube.com/watch?v=ub4_f6ksxL0
@@ -72,11 +72,19 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public NotificationCompat.Builder getChannel2Notification(String childName, String title, String description){
+
+        // Activity intent onNotification click
+        Intent activityIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+        // Pending intent which is a wrapper around our intent
+        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,activityIntent, 0);
+
         return new NotificationCompat.Builder(getApplicationContext(), channel2ID)
                 .setContentTitle(childName)
                 .setContentText(title)
                 .setSmallIcon(R.drawable.bearcarelogonobackground)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(description));
+                        .bigText(description))
+                .setContentIntent(contentIntent);
     }
 }

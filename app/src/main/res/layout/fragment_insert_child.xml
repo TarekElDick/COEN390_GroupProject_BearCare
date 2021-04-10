@@ -12,7 +12,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:ems="10"
-        android:hint="dd"
+        android:hint="@string/day_hint"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="67dp"
         android:layout_marginRight="67dp"
-        android:text="Add A Child"
+        android:text="@string/add_a_child"
         android:textColor="@color/purple_700"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="First Name"
+        android:text="@string/first_name_not_all_caps"
         app:layout_constraintStart_toStartOf="@+id/editTextChildFirstName_addChildFragment"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Last Name"
+        android:text="@string/last_name_not_all_caps"
         app:layout_constraintStart_toStartOf="@+id/editTextChildLastName_addChildFragment"
         app:layout_constraintTop_toBottomOf="@+id/editTextChildFirstName_addChildFragment" />
 
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Birthday"
+        android:text="@string/birthday_string"
         app:layout_constraintStart_toStartOf="@+id/editTextChildBirthdayDay_addAChildFragment"
         app:layout_constraintTop_toBottomOf="@+id/editTextChildLastName_addChildFragment" />
 
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Parent/Guardian First Name"
+        android:text="@string/parent_guardian_first_name"
         app:layout_constraintStart_toStartOf="@+id/editTextParentFirstName_addChildFragment"
         app:layout_constraintTop_toBottomOf="@+id/editTextChildBirthdayMonth_addAChildFragment" />
 
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Parent/Guardian Last Name"
+        android:text="@string/parent_guardian_last_name"
         app:layout_constraintStart_toStartOf="@+id/editTextParentLastName_addChildFragment"
         app:layout_constraintTop_toBottomOf="@+id/editTextParentFirstName_addChildFragment" />
 
@@ -145,7 +145,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="16dp"
-        android:text="SAVE"
+        android:text="@string/save_string"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonCancel_addChildFragment"
@@ -159,7 +159,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="CANCEL"
+        android:text="@string/cancel_string"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextParentLastName_addChildFragment" />
@@ -171,7 +171,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:ems="10"
-        android:hint="yyyy"
+        android:hint="@string/year_hint"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextChildBirthdayMonth_addAChildFragment" />
@@ -185,7 +185,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:ems="10"
-        android:hint="mm"
+        android:hint="@string/month_hint"
         android:inputType="number"
         app:layout_constraintEnd_toStartOf="@+id/editTextChildBirthdayYear_addAChildFragment"
         app:layout_constraintStart_toEndOf="@+id/editTextChildBirthdayDay_addAChildFragment"

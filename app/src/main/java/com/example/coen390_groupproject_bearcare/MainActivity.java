@@ -3,7 +3,12 @@ package com.example.coen390_groupproject_bearcare;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,11 +16,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
 import com.example.coen390_groupproject_bearcare.Model.User;
+import com.example.coen390_groupproject_bearcare.Network.NetworkService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,14 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore fStore;
-
+    private boolean checkConnect;
 
     String TAG = "debug_login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // A function setUpUI to connect our class objects to our layout widgets, and onClickListeners
         setUpUI();
 
@@ -59,12 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing firestore
         fStore = FirebaseFirestore.getInstance();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        checkConnect = NetworkService.checkNetwork(this);
+        if(!checkConnect)
+            Toast.makeText(this, "BearCare App Requires an Internet Connection Please Connect", Toast.LENGTH_LONG).show();
 
         Log.d(TAG, "Start: OnStart(): Check if returning user");
         // Check if user is already logged in or not, if they are a returning user
@@ -89,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "User is a director");
                         //Add Intent for director
                         intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
-                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back_director), Toast.LENGTH_LONG).show();
                     } else {
                         Log.d(TAG, "isEmployee ? :" + isEmployee);
                         intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
                         intent.putExtra("isEmployeeD", isEmployee);
-                        Toast.makeText(MainActivity.this, "Welcome Back", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back), Toast.LENGTH_LONG).show();
                     }
                     startActivity(intent);
                 }
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         // End of onStart
     }
+
 
     @Override
     protected void onDestroy() {                // This will be used to close the bluetooth socket when the app is destroyed
@@ -131,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
                 String password = editTextLoginPassword.getText().toString().trim();
 
                 if(TextUtils.isEmpty(email)){
-                    editTextLoginEmailAddress.setError("Email is Required");
+                    editTextLoginEmailAddress.setError(getString(R.string.email_is_required));
                     editTextLoginEmailAddress.requestFocus();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    editTextLoginPassword.setError("Password is Required");
+                    editTextLoginPassword.setError(getString(R.string.password_required));
                     editTextLoginPassword.requestFocus();
                     return;
                 }
@@ -155,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
 
                             Log.d(TAG, " User signed in successfully");
-                            Toast.makeText(MainActivity.this, "Signed in successfully ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.signed_in_successfully), Toast.LENGTH_LONG).show();
                             //redirect to user profile
                             // check if user is employee or not
                             user = mAuth.getCurrentUser();
@@ -176,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                                         //Add Intent for director
                                         Log.d(TAG, "user is a director");
                                         intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
-                                        Toast.makeText(MainActivity.this, "Welcome Back, Director", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, getString(R.string.welcome_back_director), Toast.LENGTH_LONG).show();
                                     } else {
                                         intent = new Intent(getApplicationContext(), UserMainPageActivity.class);
                                         intent.putExtra("isEmployeeD", isEmployee);
@@ -187,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }else{
                             Log.d(TAG, "User didn't sign in successfully");
-                            Toast.makeText(MainActivity.this, "No account associated with this email and password", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.no_account_associated), Toast.LENGTH_LONG).show();
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);
@@ -208,7 +218,5 @@ public class MainActivity extends AppCompatActivity {
         });
         // end of setUpUI function
     }
-
-
 
 }

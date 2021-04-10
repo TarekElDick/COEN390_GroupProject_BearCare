@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,9 +35,7 @@ import com.example.coen390_groupproject_bearcare.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Handler;
 
 public class BluetoothScanner extends AppCompatActivity {
 
@@ -55,10 +52,8 @@ public class BluetoothScanner extends AppCompatActivity {
     boolean locationOn;                                                                             // to fix the issue where discovery isn't notifying users
 
     private ProgressBar discoveryBar;                                                               //Creating the object of progress bar class
-    private TextView nowdiscoveringTextView;
-
-
-
+    private TextView nowDiscoveringTextView;
+    private TextView pairedDevicesTextView;
 
     private  static final String TAG1 = "Bluetooth Scanner";
 
@@ -70,15 +65,14 @@ public class BluetoothScanner extends AppCompatActivity {
         deviceList = findViewById(R.id.device_list);
         discoverButton = findViewById(R.id.button_Discover);
         TextView titleText = (TextView) findViewById(R.id.textViewPairedDevices);
-
+        pairedDevicesTextView = findViewById(R.id.pairedListTextView);
         discoveryBar = findViewById(R.id.discoveryBar);
-        nowdiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
-        nowdiscoveringTextView.setText("Discovering sensor...");
-
-
+        nowDiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
+        nowDiscoveringTextView.setText("Discovering sensor...");
 
         discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
-        nowdiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+        nowDiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
+        pairedDevicesTextView.setVisibility(View.INVISIBLE);
 
         deviceList.setOnItemClickListener(messageClickedHandler);
             
@@ -91,8 +85,7 @@ public class BluetoothScanner extends AppCompatActivity {
         IntentFilter discoveryStartedFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED);      //Created intent for when we start discovery of bluetooth
         registerReceiver(btDiscoveryStarted, discoveryStartedFilter);
 
-
-
+        
         IntentFilter discoveryDoneFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);    // this filter is used to determine if bluetooth discovery is done
         registerReceiver(btDiscoveryDone,discoveryDoneFilter);                                      // register the receiver
 
@@ -101,7 +94,7 @@ public class BluetoothScanner extends AppCompatActivity {
 
         if(bluetoothAdapter == null)                                                                // the device does not support bluetooth if this statement is true
         {
-            Toast.makeText(this,"This device does not support Bluetooth.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.not_support_bluetooth),Toast.LENGTH_SHORT).show();
         }
         checkBluetoothOn(null);                                                                  // check if BT is enabled
 
@@ -112,10 +105,11 @@ public class BluetoothScanner extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.P)                                               // needed for the checking of location status minimum API must be maintained for use
             @Override
             public void onClick(View v) {
+                pairedDevicesTextView.setVisibility(View.INVISIBLE);                                // dont repeat overlapping messages
                 checkLocationPermission(null);
                 checkLocationStatus();
 
-                titleText.setText("Discovered Bluetooth Devices");
+                titleText.setText(R.string.discovered_bluetooth_devices);
 
                 discoveredDevices.clear();                                                          // clear the list, otherwise we will have device doubles in the listView
 
@@ -134,7 +128,6 @@ public class BluetoothScanner extends AppCompatActivity {
         unregisterReceiver(btDiscoveryDone);
         unregisterReceiver(connectReceiver);
     }
-
     private final BroadcastReceiver connectReceiver = new BroadcastReceiver() {                     // this is to check connection status of bluetooth device
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -142,10 +135,10 @@ public class BluetoothScanner extends AppCompatActivity {
             if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action) ){
 
                 if(device.getBondState() == BluetoothDevice.BOND_BONDED)                            // make sure that this message only displays if the device is paired to the phone
-                    Toast.makeText(getApplicationContext(), "Connected to device: " + device.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.connected_to_device) + device.getName(), Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(),"Connection to " + device.getName() + " failed or cancelled.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.connection_to) + device.getName() + getString(R.string.failed_or_cancelled),Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -158,7 +151,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 discoverButton.setVisibility(View.INVISIBLE);                                       // Hide discover button to show that we are trying to discover
                 discoveryBar.setVisibility(View.VISIBLE);                                           // Make the progress bar appear
                 getSupportActionBar().hide();                                                       // Hide the navigation bar of the phone when discovery is starting to hint the user that the device is now discovering
-                nowdiscoveringTextView.setVisibility(View.VISIBLE);
+                nowDiscoveringTextView.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -170,7 +163,7 @@ public class BluetoothScanner extends AppCompatActivity {
                 listDiscovered();
                 getSupportActionBar().show();                                                       // Have the phone's navigation bar reappear
                 discoveryBar.setVisibility(View.INVISIBLE);
-                nowdiscoveringTextView.setVisibility(View.INVISIBLE);
+                nowDiscoveringTextView.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -203,18 +196,18 @@ public class BluetoothScanner extends AppCompatActivity {
                 if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDED)              // 1: device is already paired
                 {
                     Log.d(TAG1, "onReceive: BOND_BONDED");
-                    Toast.makeText(getApplicationContext(),"Paired to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.paired_to) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
                 }
                 if(localBluetoothObject.getBondState() == BluetoothDevice.BOND_BONDING)             // 2: create a pair
                 {
                     Log.d(TAG1, "onReceive: BOND_PAIRING");
-                    Toast.makeText(getApplicationContext(),"Pairing to: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.pairing_to) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
 
                 }
                 if (localBluetoothObject.getBondState() == BluetoothDevice.BOND_NONE)               // 3: pair is broken
                 {
                     Log.d(TAG1, "onReceive: BOND_BROKEN");
-                    Toast.makeText(getApplicationContext(),"Pair broken with: " + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.pair_broken_with) + localBluetoothObject.getName(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -226,7 +219,7 @@ public class BluetoothScanner extends AppCompatActivity {
             bluetoothOn = false;                                                                    // bt is not on set to false
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);                     // this constant is used to request to turn on BS services
             startActivityForResult(turnOn, 1);                                          // this is used to check if turning on bluetooth was successful
-            Toast.makeText(getApplicationContext(), "Please turn on Bluetooth.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.turn_on_bluetooth),Toast.LENGTH_LONG).show();
         }
         else {
             bluetoothOn = true;                                                                     // set the boolean to true - bluetooth is enabled
@@ -238,20 +231,20 @@ public class BluetoothScanner extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Bluetooth enabled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.bluetooth_enabled), Toast.LENGTH_LONG).show();
                 list(null);
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.user_canceled), Toast.LENGTH_LONG).show();
             }
         }
         else if(requestCode ==2)
         {
             if(REQUEST_CODE_CHECK_SETTINGS == requestCode){
                 Log.d(TAG, "onActivityResult: REACHED REQUEST CODE 2");
-                Toast.makeText(this,"Location services enabled. Click on discover to find BearCare Hardware.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.location_services_enabled),Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "onActivityResult: REACH REQUEST CODE 2 CANCELLED");
-                Toast.makeText(this, "User canceled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.user_canceled), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -267,19 +260,21 @@ public class BluetoothScanner extends AppCompatActivity {
 
     public void requestLocationPermission()                                                         // this function will be used to request permission from the user to access location
     {
+        pairedDevicesTextView.setVisibility(View.INVISIBLE);
+
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             new AlertDialog.Builder(this)
-                    .setTitle("Permission Needed")
-                    .setMessage("To discover BearCare Sensors, location service permission must be granted")
-                    .setPositiveButton("Grant Permission", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.permission_needed)
+                    .setMessage(R.string.to_discover)
+                    .setPositiveButton(R.string.grant_permission, new DialogInterface.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.P)
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
                     })
-                    .setNegativeButton("Deny Permission", new DialogInterface.OnClickListener() {       // if the user does not want to give permission dismiss
+                    .setNegativeButton(R.string.deny_permission, new DialogInterface.OnClickListener() {       // if the user does not want to give permission dismiss
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -300,16 +295,16 @@ public class BluetoothScanner extends AppCompatActivity {
         }
         else{
             new AlertDialog.Builder(this)                                                   // creates a new alert dialog
-                    .setTitle("Enable Location Services")
-                    .setMessage("To discover BearCare Sensors, location services must be turned on")
-                    .setPositiveButton("Turn on Location Services", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.enable_location_services)
+                    .setMessage(R.string.to_discover_location)
+                    .setPositiveButton(R.string.turn_on_location, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent enableLocation = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivityForResult(enableLocation, 2);
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel_not_all_caps, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -334,10 +329,10 @@ public class BluetoothScanner extends AppCompatActivity {
         {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show();
             } else
             {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -371,10 +366,15 @@ public class BluetoothScanner extends AppCompatActivity {
                     pairedDevicesStrings.add(devices.getName() + "\n" + "Device Address: " + devices.getAddress());
                     addedBluetoothDevices.add(devices);
                 }
-
             }
-
         }
+
+        if(!pairedDevicesStrings.isEmpty()){
+
+                pairedDevicesTextView.setVisibility(View.INVISIBLE);
+        }
+        else
+            pairedDevicesTextView.setVisibility(View.VISIBLE);
 
         final ArrayAdapter<String> adapter = new  ArrayAdapter(this,android.R.layout.simple_list_item_1,pairedDevicesStrings);
 
@@ -390,7 +390,6 @@ public class BluetoothScanner extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     };
 
@@ -411,9 +410,8 @@ public void pairOrConnect(int position) throws IOException {
     }
     else if(bdDevice.getBondState() == BluetoothDevice.BOND_BONDED)                                 // 2. The device is paired connect
     {
-        if(bdDevice.getAddress().equals(MyBluetoothService.getMacAddress()))
-            return;
-        Toast.makeText(getApplicationContext(), "Attempting to connect with: " + bdDevice.getName(), Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(getApplicationContext(), getString(R.string.attempting_to_connect) + bdDevice.getName(), Toast.LENGTH_SHORT).show();
         try {
             MyBluetoothService.connectBluetoothDevice(bdDevice.getAddress());                       // connect to device using overloaded connect function
         } catch (IOException e) {
@@ -421,5 +419,17 @@ public void pairOrConnect(int position) throws IOException {
         }
     }
 }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //list(null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //list(null);
+    }
 
 }

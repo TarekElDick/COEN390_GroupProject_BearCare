@@ -56,7 +56,7 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
         String childId = intent.getStringExtra("childId");
         Log.d("tempHistory", "onCreate: ");
         graphView = (GraphView) findViewById((R.id.tempHistoryGraph));
-        graphView.setTitle(childName + "'s Temperature History");
+        graphView.setTitle(childName + getString(R.string.temperature_history_of_child));
         graphView.getViewport().setScrollable(true); // enables horizontal scrolling
         graphView.getViewport().setScrollableY(true); // enables vertical scrolling
         graphView.getViewport().setScalable(true); // enables horizontal zooming and scrolling

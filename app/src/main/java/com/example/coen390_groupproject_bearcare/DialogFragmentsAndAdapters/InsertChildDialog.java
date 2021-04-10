@@ -128,49 +128,49 @@ public class InsertChildDialog extends DialogFragment {
                 Log.d(TAG, "User inputs received");
                 if(childFirstName.isEmpty()){
                     Log.d(TAG, "First name check");
-                    childFirstNameEditText.setError("Child first name is Required");
+                    childFirstNameEditText.setError(getString(R.string.first_name_required));
                     childFirstNameEditText.requestFocus();
                     return;
                 }
                 if(childLastName.isEmpty()){
                     Log.d(TAG, "Last name check");
-                    childLastNameEditText.setError("Child first name is Required");
+                    childLastNameEditText.setError(getString(R.string.last_name_required));
                     childLastNameEditText.requestFocus();
                     return;
                 }
                 if( (childBirthdayDay.isEmpty()) || (childBirthdayMonth.isEmpty()) || (childBirthdayYear.isEmpty()) ){
                     Log.d(TAG, "Birthday check");
-                    childBirthdayYearEditText.setError("Child date of birth is required");
+                    childBirthdayYearEditText.setError(getString(R.string.date_of_birth_required));
                     childBirthdayYearEditText.requestFocus();
                     return;
                 }
                 if( (Integer.parseInt(childBirthdayDay) < 1) || Integer.parseInt(childBirthdayDay) > 31 ){
                     Log.d(TAG, "Birthday day check");
-                    childBirthdayDayEditText.setError("Wrong day format");
+                    childBirthdayDayEditText.setError(getString(R.string.wrong_day_format));
                     childBirthdayDayEditText.requestFocus();
                     return;
                 }
                 if( (Integer.parseInt(childBirthdayMonth) < 1) || Integer.parseInt(childBirthdayMonth) > 12 ){
                     Log.d(TAG, "Birthday month check");
-                    childBirthdayMonthEditText.setError("Wrong month format");
+                    childBirthdayMonthEditText.setError(getString(R.string.wrong_month_format));
                     childBirthdayMonthEditText.requestFocus();
                     return;
                 }
                 if( ( Integer.parseInt(childBirthdayYear) < 1980 ) || Integer.parseInt(childBirthdayYear) > 2500 ){
                     Log.d(TAG, "Birthday year check");
-                    childBirthdayYearEditText.setError("Wrong year format");
+                    childBirthdayYearEditText.setError(getString(R.string.wrong_year_format));
                     childBirthdayYearEditText.requestFocus();
                     return;
                 }
                 if(parentFirstName.isEmpty()){
                     Log.d(TAG, "parent first name  check");
-                    parentFirstNameEditText.setError("Parent first name is required");
+                    parentFirstNameEditText.setError(getString(R.string.first_name_required));
                     parentFirstNameEditText.requestFocus();
                     return;
                 }
                 if(parentLastName.isEmpty()){
                     Log.d(TAG, "parent last name  check");
-                    parentLastNameEditText.setError("Parent first name is required");
+                    parentLastNameEditText.setError(getString(R.string.last_name_required));
                     parentLastNameEditText.requestFocus();
                     return;
                 }
@@ -232,7 +232,7 @@ public class InsertChildDialog extends DialogFragment {
                         }
                         if (parentId == null){
                             Log.d(TAG, "Parent's Child could not be found");
-                            parentFirstNameEditText.setError("Parent not found: Case is sensitive");
+                            parentFirstNameEditText.setError(getString(R.string.parent_not_found));
                             parentFirstNameEditText.requestFocus();
                         }
                     }

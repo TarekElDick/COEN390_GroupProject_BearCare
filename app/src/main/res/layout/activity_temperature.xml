@@ -6,54 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".TemperatureActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-    <Button
-        android:id="@+id/buttonTakeTemp"
-        android:layout_width="194dp"
-        android:layout_height="78dp"
-        android:layout_marginBottom="20dp"
-        android:text="Record Temperature"
-        app:layout_constraintBottom_toTopOf="@+id/confirmButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/textView_TempDisplay"
         android:layout_width="171dp"
         android:layout_height="79dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="144dp"
         android:gravity="center"
-        android:text='Click "Record Temperature"'
+        android:text="@string/click_record_temperature"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="81dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:rotation="69"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.029"
-        app:srcCompat="@drawable/paws" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -66,6 +31,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/paws" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="81dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:rotation="69"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.026"
+        app:srcCompat="@drawable/paws" />
+
     <TextView
         android:id="@+id/textView_RecordTemp"
         android:layout_width="319dp"
@@ -73,16 +51,16 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="522dp"
         android:capitalize="none"
-        android:text="Record Temperature"
+        android:gravity="center"
+        android:text="@string/record_temperature"
         android:textColor="@color/purple_700"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/buttonConfigureSensor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.63"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.02" />
 
     <Button
         android:id="@+id/buttonConfigureSensor"
@@ -93,42 +71,87 @@
         android:layout_marginEnd="112dp"
         android:layout_marginRight="112dp"
         android:layout_marginBottom="64dp"
-        android:text="Select Sensor"
+        android:text="@string/select_sensor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/sensconView"
+        android:id="@+id/sensorNotconnectedView"
         android:layout_width="37dp"
         android:layout_height="33dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.322"
+        app:layout_constraintTop_toBottomOf="@+id/textView_TempDisplay"
+        app:srcCompat="@android:drawable/stat_sys_warning"
+        app:tint="#CDDC39" />
+
+    <ImageView
+        android:id="@+id/sensorconnectedView"
+        android:layout_width="37dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_TempDisplay"
         app:srcCompat="@drawable/fui_ic_check_circle_black_128dp" />
 
     <TextView
         android:id="@+id/sensorconnectedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Sensor Connected"
+        android:layout_marginTop="10dp"
+        android:text="@string/sensor_connected"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sensconView" />
+        app:layout_constraintTop_toBottomOf="@+id/sensorconnectedView" />
 
     <TextView
         android:id="@+id/sensornotconnectedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
-        android:text="Sensor Not Connected"
+        android:layout_marginTop="8dp"
+        android:text="Not connected to a sensor - Press Select Sensor to connect"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sensorconnectedView" />
+
+    <Button
+        android:id="@+id/buttonConfirmTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Confirm Temperature"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTakeTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonTakeTemp"
+        android:layout_width="157dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="80dp"
+        android:text="@string/record_temperature"
+        app:layout_constraintBottom_toTopOf="@+id/buttonConfigureSensor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/childNameTextView"
+        android:layout_width="136dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/purple_200"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_RecordTemp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

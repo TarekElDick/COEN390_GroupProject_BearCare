@@ -16,6 +16,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         // Show our notification.
         NotificationHelper notificationHelper = new NotificationHelper(context);
 
@@ -25,5 +26,6 @@ public class AlertReceiver extends BroadcastReceiver {
         Log.d("debug_AlertReceiver", childName + " Title: "+ title +" Message: "+ description);
         NotificationCompat.Builder nb = notificationHelper.getChannel2Notification(childName, title, description);
         notificationHelper.getManager().notify(2, nb.build());
+
     }
 }
