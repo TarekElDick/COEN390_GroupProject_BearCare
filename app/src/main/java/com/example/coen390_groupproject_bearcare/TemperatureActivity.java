@@ -50,7 +50,7 @@ public class TemperatureActivity extends AppCompatActivity {
     private String childId;
     private String tempTimeStamp;
     private final FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-    boolean sensorConnected;                                                                        // use this to display icons to user
+    //boolean sensorConnected;                                                                        // use this to display icons to user
 
     private TextView sensorconnectedTextView;
     private TextView sensornotconnectedTextView;
@@ -93,13 +93,13 @@ public class TemperatureActivity extends AppCompatActivity {
             Log.e(TAG, e.toString());
         }
 
-        sensorConnected=MyBluetoothService.checkConnected();
-            if (sensorConnected==true){
-                sensorconnectedTextView.setVisibility(View.VISIBLE);
-                sensconView.setVisibility(View.VISIBLE);
-
-            }
-            else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
+//        sensorConnected=MyBluetoothService.checkConnected();
+//            if (sensorConnected==true){
+//                sensorconnectedTextView.setVisibility(View.VISIBLE);
+//                sensconView.setVisibility(View.VISIBLE);
+//
+//            }
+//            else {sensornotconnectedTextView.setVisibility(View.VISIBLE);}
 
 
         // on click listener for take temp button
@@ -108,7 +108,7 @@ public class TemperatureActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //double tempReading = MyBluetoothService.getReading(); TODO
-                double tempReading = 26.7;
+                double tempReading = 35.7;
 
                 Calendar calendar = Calendar.getInstance();
                 tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());
