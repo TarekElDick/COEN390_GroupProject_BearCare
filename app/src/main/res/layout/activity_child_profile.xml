@@ -116,7 +116,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonMedicalRecord"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="109dp"
@@ -141,7 +141,7 @@
         android:text="@string/take_temperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonMedicalRecord" />
 
     <TextView
         android:id="@+id/textViewParentName_childProfile"

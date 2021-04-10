@@ -22,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ChildProfileActivity extends AppCompatActivity {
 
     private TextView textViewChildName, textViewParentName, textViewRelation, textViewParentPhoneNumber, textViewChildBirthday;
-    private Button buttonTakeTemp, buttonAddNotification, buttonTempHistory;
+    private Button buttonTakeTemp, buttonAddNotification, buttonTempHistory, buttonMedRecord;
 
     private String childId, childName,  parentId, birthday;
 
@@ -61,6 +61,7 @@ public class ChildProfileActivity extends AppCompatActivity {
         // Connections
         buttonTakeTemp = findViewById(R.id.buttonTakeTemp_childProfileActivity);
         buttonTempHistory = findViewById(R.id.button2);
+        buttonMedRecord = findViewById(R.id.buttonMedicalRecord);
         textViewChildName = findViewById(R.id.textViewChildName_childProfile);
         textViewParentName = findViewById(R.id.textViewParentName_childProfile);
         textViewParentPhoneNumber = findViewById(R.id.textViewParentPhoneNumber_childProfile);
@@ -116,6 +117,16 @@ public class ChildProfileActivity extends AppCompatActivity {
 
             }
         });
+
+
+        buttonMedRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MedicalRecordsActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         // Search for the document with the parentsID and get the parents info
         DocumentReference userRef = fStore.collection("Users").document(parentId);
