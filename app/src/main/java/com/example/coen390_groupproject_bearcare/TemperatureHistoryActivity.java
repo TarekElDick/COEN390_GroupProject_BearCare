@@ -31,6 +31,7 @@ import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.text.SimpleDateFormat;
 
@@ -40,7 +41,8 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
     GraphView graphView;
     LineGraphSeries series;
     LineGraphSeries series2;
-    //LineGraphSeries series3;
+    //PointsGraphSeries series4;
+
     private FeverAdapter adapter;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -80,6 +82,9 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
         series2 = new LineGraphSeries();
         series2.setColor(Color.GREEN);
         graphView.addSeries(series2);
+
+//        series4 = new PointsGraphSeries();
+//        series4.setColor(Color.RED);
 
         // custom label formatter to show temperature "°C"
         graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -161,6 +166,39 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
                            }
                        }
                 });
+
+        //code to highlight fever readings, not working yet
+
+//        db.collection("Children").document(childId).collection("Temperatures")
+//                .whereGreaterThanOrEqualTo("temp",37)
+//                .orderBy("day", Query.Direction.valueOf("ASCENDING"))
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("tempHistory", "3.1");
+//                            //DataPoint[] tempGraph = new DataPoint[task.getResult().size()];
+//                            Log.d(TAG, "size of collection: "+task.getResult().size());
+//                            DataPoint[] criticalPoints = new DataPoint[task.getResult().size()];
+//                            int index = 0;
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                Temperature pointValue = document.toObject(Temperature.class);
+//                                //Log.d("tempHistory", "iteration #" + index);
+//                                //pointValue.print();
+//                                //tempGraph[index]= new DataPoint(pointValue.getDay(), pointValue.getTemp());
+//                                criticalPoints[index]= new DataPoint(pointValue.getDay(), pointValue.getTemp());
+//                                //Log.d("tempHistory", "array data: " + tempGraph[index]);
+//                                index++;
+//                            }
+//                            series4.resetData(criticalPoints);
+//                        } else {
+//                            Log.w(TAG, "Error getting documents.", task.getException());
+//                        }
+//                    }
+//                });
+
 
         Log.d("tempHistory", "2");
     }

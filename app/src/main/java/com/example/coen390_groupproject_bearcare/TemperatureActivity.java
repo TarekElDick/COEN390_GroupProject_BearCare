@@ -70,6 +70,7 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TAG = "TemperatureActivity";
 
+
         checkConnection();
 
         // on click listener for take temp button
@@ -77,11 +78,11 @@ public class TemperatureActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 tempReading = MyBluetoothService.getReading();
-                //double tempReading = 0.0;
+                //double tempReading = 35.0;
 
                 textViewTempDisplay.setText(tempReading + " °C");
-
                 confirmTemp.setVisibility(View.VISIBLE);
             }
         });

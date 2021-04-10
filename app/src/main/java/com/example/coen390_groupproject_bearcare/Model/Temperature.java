@@ -8,6 +8,7 @@ public class Temperature {
 
     private double temp;
     private long day;
+    private long month;
     private String date;
 
     public Temperature(){}
@@ -17,6 +18,7 @@ public class Temperature {
         this.date = date;
         this.temp = temp;
         this.day =  new Date().getDate();
+        this.month = new Date().getMonth()+1;
 
     }
 
@@ -26,6 +28,7 @@ public class Temperature {
                 ", temperature=" + temp +
                 ", date='" + date +
                 ", day='" + day +
+                ", day='" + month +
                 '}';
     }
 
@@ -44,6 +47,10 @@ public class Temperature {
 
     public long getDay() {
         return day;
+    }
+
+    public long getMonth() {
+        return month;
     }
 
 
