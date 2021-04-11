@@ -2,11 +2,16 @@ package com.example.coen390_groupproject_bearcare.Director;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,14 +24,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.coen390_groupproject_bearcare.ChildDirectoryActivity;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ExportQuestRecordsDialog;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ExportTempRecordsDialog;
+import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.NotificationAdapter;
 import com.example.coen390_groupproject_bearcare.MainActivity;
+import com.example.coen390_groupproject_bearcare.Model.Notification;
 import com.example.coen390_groupproject_bearcare.Model.Questionnaire;
 import com.example.coen390_groupproject_bearcare.Model.Temperature;
 import com.example.coen390_groupproject_bearcare.R;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,9 +76,23 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     Random r = new Random();
     String TAG="debug_directoryDashboard";
+
+    private NotificationAdapter notificationAdapter;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        notificationAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        notificationAdapter.stopListening();
+    }
 
     @Override
     public void sendParentId(String parentId, String fullName) {
@@ -153,24 +177,24 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
                                     addNewItemWithLeftandRight(doc,fullName,temp.getDate());
                                     addLineSeparator(doc);
                                     addNewItem(doc,"Does your child have one or multiple symptoms in the following list?",Element.ALIGN_LEFT);
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(0),temp.getZero());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(1),temp.getOne());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(2),temp.getTwo());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(3),temp.getThree());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(4),temp.getFour());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(5),temp.getFive());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(6),temp.getSix());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(7),temp.getSeven());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(8),temp.getEight());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(9),temp.getNine());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(0),temp.getZero());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(1),temp.getOne());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(2),temp.getTwo());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(3),temp.getThree());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(4),temp.getFour());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(5),temp.getFive());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(6),temp.getSix());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(7),temp.getSeven());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(8),temp.getEight());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(9),temp.getNine());
                                     addLineSeparator(doc);
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(10),temp.getTen());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(11),temp.getEleven());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(12),temp.getTwelve());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(13),temp.getThirteen());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(14),temp.getFourteen());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(15),temp.getFifteen());
-                                    addNewItemWithLeftandRight(doc,temp.getQuestion(16),temp.getSixteen());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(10),temp.getTen());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(11),temp.getEleven());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(12),temp.getTwelve());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(13),temp.getThirteen());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(14),temp.getFourteen());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(15),temp.getFifteen());
+                                    addNewItemWithLeftandRight(doc, Questionnaire.getQuestion(16),temp.getSixteen());
                                     addLineSeparator(doc);
                                     addNewItem(doc, "I, " + fullName + ", agree that the information provided is true and that any misinformation could lead to legal complications.",Element.ALIGN_JUSTIFIED);
                                     addLineSeparator(doc);
@@ -178,8 +202,8 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
                                         doc.newPage();
                                 }
 
-                                doc.close();;
-                                Toast.makeText(DirectorDashboardActivity.this, "Record Created",Toast.LENGTH_LONG).show();
+                                doc.close();
+                                    Toast.makeText(DirectorDashboardActivity.this, "Record Created",Toast.LENGTH_LONG).show();
                                 printPDF(true);
 
                                 } catch (FileNotFoundException e) {
@@ -300,6 +324,78 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
         });
 
 
+
+        // Tarek's Work: Implementing notification, childDirectory
+        TextView accessChildDirectory = findViewById(R.id.textViewAccessChildDirectory_directorDashboard);
+        // onClickListeners
+        accessChildDirectory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "User accessing child directory");
+                startActivity(new Intent(getApplicationContext(), ChildDirectoryActivity.class ));
+            }
+        });
+
+        runRecyclerView();
+
+    }
+
+    private void runRecyclerView() {
+        Log.d(TAG, "Recycler View is initializing");
+
+        // Query
+        Query notificationQuery;
+        notificationQuery = db.collection("Notifications");
+
+        FirestoreRecyclerOptions<Notification> options = new FirestoreRecyclerOptions.Builder<Notification>()
+                .setQuery(notificationQuery, Notification.class)
+                .build();
+
+
+        notificationAdapter = new NotificationAdapter(options);
+
+        // Connecting our class object of recycler view to the layout recycler view
+        RecyclerView firestoreNotificationRecyclerView = findViewById(R.id.recyclerViewNotifications_directorDashboard);
+
+        firestoreNotificationRecyclerView.setHasFixedSize(true);
+        firestoreNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        firestoreNotificationRecyclerView.setAdapter(notificationAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // Here is where we implement swipe to delete
+                Log.d(TAG, "Notification Item is being swiped");
+
+                new AlertDialog.Builder(viewHolder.itemView.getContext())
+                        .setMessage(R.string.notification_delete)
+                        .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User wants to delete the item
+                                Log.d(TAG, "Notification item is deleted");
+                                notificationAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                runRecyclerView();
+                            }
+                        })
+                        .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // User canceled the delete item
+                                Log.d(TAG, "Notification item is not deleted");
+                                // Refresh the adapter to prevent the item from UI.
+                                notificationAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }).attachToRecyclerView(firestoreNotificationRecyclerView);
     }
 
     // Created our menu layout file in the resource directory (res/menu/menu_DASHBOARD), and we connected it to this activity.
@@ -415,7 +511,7 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
 
                                     //addNewItemWithLeftandRight(doc, temp.getDate(), String.valueOf(temp.getTemp())+"°C");
                                     Chunk chunkTextLeft = new Chunk(temp.getDate());
-                                    Chunk chunkTextRight= new Chunk(String.valueOf(temp.getTemp())+"°C");
+                                    Chunk chunkTextRight= new Chunk(temp.getTemp() +"°C");
                                     if(temp.getTemp()>=37) {
                                         chunkTextLeft.setBackground(new BaseColor(239,0,0, 68));
                                         chunkTextRight.setBackground(new BaseColor(239,0,0,68));
@@ -432,7 +528,7 @@ public class DirectorDashboardActivity extends AppCompatActivity implements Expo
 
                                 }
 
-                                doc.close();;
+                                doc.close();
                                 Toast.makeText(DirectorDashboardActivity.this, "Record Created",Toast.LENGTH_LONG).show();
                                 printPDF(false);
 
