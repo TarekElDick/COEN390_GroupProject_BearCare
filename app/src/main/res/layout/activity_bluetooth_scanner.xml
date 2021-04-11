@@ -28,7 +28,6 @@
         android:id="@+id/textViewPairedDevices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="33dp"
         android:text="@string/paired_bluetooth_devices"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -64,7 +63,19 @@
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/device_list"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewPairedDevices" />
+        app:layout_constraintTop_toTopOf="@+id/textViewPairedDevices"
+        app:layout_constraintVertical_bias="0.464" />
+
+    <TextView
+        android:id="@+id/pairedListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Not paired to a sensor - Press Discover to find sensors"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPairedDevices" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -126,8 +126,8 @@
     <string name="paired_bluetooth_devices">Paired Bluetooth Devices</string>
     <string name="discover_string">DISCOVER</string>
     <string name="temperature_recorded">Temperature Recorded</string>
-    <string name="record_temperature">Record Temperature</string>
-    <string name="click_record_temperature">Click Record Temperature</string>
+    <string name="record_temperature">Take Temperature</string>
+    <string name="click_record_temperature">" "</string>
     <string name="select_sensor">Select Sensor</string>
     <string name="sensor_connected">Sensor Connected</string>
     <string name="sensor_not_connected">Sensor Not Connected</string>
@@ -136,4 +136,7 @@
     <string name="notification_delete">Are you sure you want to delete this notification</string>
     <string name="absent_attendance">Absent</string>
     <string name="present_attendance">Present</string>
+    <string name="temperature_history_of_child">\'s Temperature History</string>
+    <string name="export_string">Export</string>
+    <string name="questionnaire_records">Questionnaire Records</string>
 </resources>

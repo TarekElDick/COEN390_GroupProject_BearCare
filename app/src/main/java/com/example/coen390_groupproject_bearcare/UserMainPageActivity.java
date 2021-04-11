@@ -517,10 +517,6 @@ public class UserMainPageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menuItem_settings:
-
-                return true;
-
             case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");

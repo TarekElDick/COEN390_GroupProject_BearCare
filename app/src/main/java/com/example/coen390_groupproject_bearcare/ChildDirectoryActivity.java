@@ -334,14 +334,7 @@ public class ChildDirectoryActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menuItem_settings:
-
-                Log.d(TAG, "User settings clicked");
-                // TODO settings activity for language and preferences.
-
-                return true;
-
-            case R.id.menuItem_logout:
+                case R.id.menuItem_logout:
 
                 Log.d(TAG, "User is logging out");
                 Toast.makeText(this, Logging_out, Toast.LENGTH_SHORT).show();

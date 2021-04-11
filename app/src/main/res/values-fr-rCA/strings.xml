@@ -129,12 +129,15 @@
     <string name="sensor_connected">Appareil Connecté</string>
     <string name="sensor_not_connected">Appareil Pas Connecté</string>
     <string name="select_sensor">Choisir Appareil</string>
-    <string name="record_temperature">Enregistre Température</string>
-    <string name="click_record_temperature">Cliquez Enregistre Température</string>
+    <string name="record_temperature">Prends Température</string>
+    <string name="click_record_temperature">" "</string>
     <string name="temperature_recorded">Température Enregistré</string>
     <string name="please_enter_date">Veuillez ajouter une date</string>
     <string name="please_enter_time">Veuillez entrer une heure</string>
     <string name="notification_delete">Êtes-vous sûr de vouloir supprimer cette notification</string>
     <string name="absent_attendance">Absent</string>
     <string name="present_attendance">Présent</string>
+    <string name="temperature_history_of_child">" Historique Température"</string>
+    <string name="export_string">Exporter</string>
+    <string name="questionnaire_records">Enregistrements de Questionnaire</string>
 </resources>

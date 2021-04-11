@@ -19,8 +19,10 @@ public class MyBluetoothService {
     @SuppressLint("HardwareIds")
     public static void connectBluetoothDevice() throws IOException
     {
-        if (btSocket!=null)
+        if (btSocket!=null) {
+            Log.d(TAG, "connectBluetoothDevice: in the if statement for not null btSocket");
             close();
+        }
 
         BluetoothAdapter myBluetooth = BluetoothAdapter.getDefaultAdapter(); // get the mobile bluetooth device
         String name = "a";

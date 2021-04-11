@@ -15,9 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.Bluetooth.MyBluetoothService;
+import com.example.coen390_groupproject_bearcare.Director.DirectorDashboardActivity;
 import com.example.coen390_groupproject_bearcare.Model.User;
+import com.example.coen390_groupproject_bearcare.Network.NetworkService;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -40,14 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore fStore;
-
+    private boolean checkConnect;
 
     String TAG = "debug_login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // A function setUpUI to connect our class objects to our layout widgets, and onClickListeners
         setUpUI();
 
@@ -59,12 +59,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing firestore
         fStore = FirebaseFirestore.getInstance();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        checkConnect = NetworkService.checkNetwork(this);
+        if(!checkConnect)
+            Toast.makeText(this, "BearCare App Requires an Internet Connection Please Connect", Toast.LENGTH_LONG).show();
 
         Log.d(TAG, "Start: OnStart(): Check if returning user");
         // Check if user is already logged in or not, if they are a returning user
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         // End of onStart
     }
+
 
     @Override
     protected void onDestroy() {                // This will be used to close the bluetooth socket when the app is destroyed
@@ -208,7 +212,5 @@ public class MainActivity extends AppCompatActivity {
         });
         // end of setUpUI function
     }
-
-
 
 }
