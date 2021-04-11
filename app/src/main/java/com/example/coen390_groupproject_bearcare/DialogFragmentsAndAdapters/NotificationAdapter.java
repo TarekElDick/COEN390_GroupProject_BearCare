@@ -26,7 +26,6 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
         holder.notificationTitle.setText(model.getNotificationTitle());
         holder.date.setText(model.getDate().toString());
         holder.time.setText(model.getTime().toString());
-
     }
 
     @NonNull
@@ -56,7 +55,6 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
             notificationTitle = itemView.findViewById(R.id.textViewTitle_recyclerNotificationItem);
             date = itemView.findViewById(R.id.textViewDate_recyclerNotificationItem);
             time = itemView.findViewById(R.id.textViewTime_recyclerNotificationItem);
-
         }
     }
 }
