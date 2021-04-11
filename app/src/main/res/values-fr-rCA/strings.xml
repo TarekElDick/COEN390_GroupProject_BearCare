@@ -133,4 +133,6 @@
     <string name="click_record_temperature">" "</string>
     <string name="temperature_recorded">Température Enregistré</string>
     <string name="temperature_history_of_child">" Historique Température"</string>
+    <string name="export_string">Exporter</string>
+    <string name="questionnaire_records">Enregistrements de Questionnaire</string>
 </resources>

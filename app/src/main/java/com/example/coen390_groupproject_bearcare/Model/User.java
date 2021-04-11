@@ -54,4 +54,6 @@ public class User {
     public void setEmployee(boolean employee) {
         isEmployee = employee;
     }
+
+    public String getFullName(){ return lastName + ", " + firstName ; }
 }

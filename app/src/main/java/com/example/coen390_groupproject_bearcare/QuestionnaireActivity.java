@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,6 +69,7 @@ String TAG = "debug_questionnaireActivity";
         CheckBox list8 = findViewById(R.id.questionnaireCheckBox8);
         CheckBox list9 = findViewById(R.id.questionnaireCheckBox9);
         CheckBox list10 = findViewById(R.id.questionnaireCheckBox10);
+        CheckBox noToList = findViewById(R.id.questionnaireCheckBox10plus1);
         CheckBox question1 = findViewById(R.id.questionnaireCheckBox11);
         CheckBox question2 = findViewById(R.id.questionnaireCheckBox12);
         CheckBox question3 = findViewById(R.id.questionnaireCheckBox13);
@@ -76,103 +81,107 @@ String TAG = "debug_questionnaireActivity";
         Button submitQuestionnaire =  findViewById(R.id.questionnaireSubmitButton);
         TableRow lastRow = findViewById(R.id.row18);
         boolean notifyDirector = false;
-        Map<String, String> allCheck = new HashMap<>();
+        Map<String, Object> allCheck = new HashMap<>();
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
         Intent intent =  getIntent();
         String userName = intent.getStringExtra("userName");
         String userId = intent.getStringExtra("userId");
         Calendar calendar = Calendar.getInstance();
         String tempTimeStamp = DateFormat.getDateInstance().format(calendar.getTime());
+        int day = new Date().getDate();
+        ScrollView sv = findViewById(R.id.scrollView2);
 
 
         if (QuestionnaireTermsSingleton.get().getStatus()==true){
 
             allCheck.put("Date", tempTimeStamp);
+            allCheck.put("day", day);
+
 
             if (list1.isChecked()) {
-                allCheck.put("Cough (new or aggravated)", "YES");
+                allCheck.put("zero", "YES");
             } else {
-                allCheck.put("Cough (new or aggravated)", "NO");
+                allCheck.put("zero", "NO");
             }
             if (list2.isChecked()) {
-                allCheck.put("Fever (rectal temperature of 38.5°C or higher", "YES");
+                allCheck.put("one", "YES");
             } else {
-                allCheck.put("Fever (rectal temperature of 38.5°C or higher", "NO");
+                allCheck.put("one", "NO");
             }
             if (list3.isChecked()) {
-                allCheck.put("Sudden loss of smell (without nasal congestion", "YES");
+                allCheck.put("two", "YES");
             } else {
-                allCheck.put("Sudden loss of smell (without nasal congestion", "NO");
+                allCheck.put("two", "NO");
             }
             if (list4.isChecked()) {
-                allCheck.put("Difficulty Breathing", "YES");
+                allCheck.put("three", "YES");
             } else {
-                allCheck.put("Difficulty Breathing", "NO");
+                allCheck.put("three", "NO");
             }
             if (list5.isChecked()) {
-                allCheck.put("Muscle pain (generalised - not related to physical effort)", "YES");
+                allCheck.put("four", "YES");
             } else {
-                allCheck.put("Muscle pain (generalised - not related to physical effort)", "NO");
+                allCheck.put("four", "NO");
             }
             if (list6.isChecked()) {
-                allCheck.put("Intense fatigue", "YES");
+                allCheck.put("five", "YES");
             } else {
-                allCheck.put("Intense fatigue", "NO");
+                allCheck.put("five", "NO");
             }
             if (list7.isChecked()) {
-                allCheck.put("Major loss of appetite", "YES");
+                allCheck.put("six", "YES");
             } else {
-                allCheck.put("Major loss of appetite", "NO");
+                allCheck.put("six", "NO");
             }
             if (list8.isChecked()) {
-                allCheck.put("Sore throat", "YES");
+                allCheck.put("seven", "YES");
             } else {
-                allCheck.put("Sore throat", "NO");
+                allCheck.put("seven", "NO");
             }
             if (list9.isChecked()) {
-                allCheck.put("Runny nose", "YES");
+                allCheck.put("eight", "YES");
             } else {
-                allCheck.put("Runny nose", "NO");
+                allCheck.put("eight", "NO");
             }
             if (list10.isChecked()) {
-                allCheck.put("Vomiting or Diarrhea", "YES");
+                allCheck.put("nine", "YES");
             } else {
-                allCheck.put("Vomiting or Diarrhea", "NO");
+                allCheck.put("nine", "NO");
             }
             if (question1.isChecked()) {
-                allCheck.put("Does any of the household members have any of the symptoms listed above?", "YES");
+                allCheck.put("ten", "YES");
             } else {
-                allCheck.put("Does any of the household members have any of the symptoms listed above?", "NO");
+                allCheck.put("ten", "NO");
             }
             if (question2.isChecked()) {
-                allCheck.put("Have you given your child any medication in the last 24 hours to reduce fevers?", "YES");
+                allCheck.put("eleven", "YES");
             } else {
-                allCheck.put("Have you given your child any medication in the last 24 hours to reduce fevers?", "NO");
+                allCheck.put("eleven", "NO");
             }
             if (question3.isChecked()) {
-                allCheck.put("Has your child received a positive COVID-19 diagnosis?", "YES");
+                allCheck.put("twelve", "YES");
             } else {
-                allCheck.put("Has your child received a positive COVID-19 diagnosis?", "NO");
+                allCheck.put("twelve", "NO");
             }
             if (question4.isChecked()) {
-                allCheck.put("Is your child waiting for the results of a COVID-19 test?", "YES");
+                allCheck.put("thirteen", "YES");
             } else {
-                allCheck.put("Is your child waiting for the results of a COVID-19 test?", "NO");
+                allCheck.put("thirteen", "NO");
             }
             if (question5.isChecked()) {
-                allCheck.put("Did the child's parent or someone living with the child receive a positive diagnosis for COVID-19 test?", "YES");
+                allCheck.put("fourteen", "YES");
             } else {
-                allCheck.put("Did the child's parent or someone living with the child receive a positive diagnosis for COVID-19 test?", "NO");
+                allCheck.put("fourteen", "NO");
             }
             if (question6.isChecked()) {
-                allCheck.put("Are the child's parent or someone living with the child waiting for the results of a COVID-19 test?", "YES");
+                allCheck.put("fifteen", "YES");
             } else {
-                allCheck.put("Are the child's parent or someone living with the child waiting for the results of a COVID-19 test?", "NO");
+                allCheck.put("fifteen", "NO");
             }
             if (question7.isChecked()) {
-                allCheck.put("Did the child or a member of the family whom the child lives with travel outside of Canada in the last 14 days?", "YES");
+                allCheck.put("sixteen", "YES");
             } else {
-                allCheck.put("Did the child or a member of the family whom the child lives with travel outside of Canada in the last 14 days?", "NO");
+                allCheck.put("sixteen", "NO");
             }
 
             if(question1.isChecked() || question2.isChecked() || question3.isChecked() || question4.isChecked()
@@ -183,6 +192,7 @@ String TAG = "debug_questionnaireActivity";
 
                 if (noToAll.isChecked() == true){
                     //TODO FIX ERROR MESSAGE
+                    Log.d(TAG, "onResume: some errors are checked");
                     noToAll.setError("some symptoms are checked");
                     noToAll.requestFocus();
                 }
@@ -210,10 +220,20 @@ String TAG = "debug_questionnaireActivity";
 
             }
 
-            else if(noToAll.isChecked() == false){
+            else if(noToAll.isChecked() == false || noToList.isChecked() == false){
                 //TODO FIX ERROR MESSAGE
-                noToAll.setError("check box if the answer is NO TO ALL");
-                noToAll.requestFocus();
+                if (noToAll.isChecked() == false){
+                    Log.d(TAG, "onResume: no to all");
+                    noToAll.requestFocus();
+                    noToAll.setError("check box if the answer is NO TO ALL");
+                    return;
+                    }
+                if (noToList.isChecked() == false){
+                    Log.d(TAG, "onResume: no to list");
+                    scrollToView(sv, noToList);
+                    noToList.setError("check box if the answer is NO TO LIST");
+                    return;
+                    }
             }
             else {
 
@@ -237,7 +257,10 @@ String TAG = "debug_questionnaireActivity";
                 startActivity(new Intent(getApplicationContext(), UserMainPageActivity.class));
             }
 
+
         }
+
+
 
         // onClickListeners
         submitQuestionnaire.setOnClickListener(new View.OnClickListener() {
@@ -258,4 +281,22 @@ String TAG = "debug_questionnaireActivity";
 
     }
 
+    public static void scrollToView(final View scrollView, final View view) {
+        view.requestFocus();
+        final Rect scrollBounds = new Rect();
+        scrollView.getHitRect(scrollBounds);
+        if (!view.getLocalVisibleRect(scrollBounds)) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    int toScroll = getRelativeTop(view) - getRelativeTop(scrollView);
+                    ((ScrollView) scrollView).smoothScrollTo(0, toScroll-120);
+                }
+            });
+        }
+    }
+    public static int getRelativeTop(View myView) {
+        if (myView.getParent() == myView.getRootView()) return myView.getTop();
+        else return myView.getTop() + getRelativeTop((View) myView.getParent());
+    }
 }

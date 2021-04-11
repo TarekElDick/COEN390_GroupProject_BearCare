@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DirectorDashboardActivity">
+    tools:context=".Director.DirectorDashboardActivity">
 
     <TextView
         android:id="@+id/textView5"
@@ -45,17 +45,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonExportTempRecords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
         android:text="@string/temperature_history"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
+        app:layout_constraintBottom_toTopOf="@+id/buttonExportQuestRecords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/buttonExportQuestRecords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="89dp"
