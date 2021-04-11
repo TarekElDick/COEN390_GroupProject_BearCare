@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     implementation 'com.android.volley:volley:1.2.0'
     implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 }

@@ -1,5 +1,7 @@
 package com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,13 +9,31 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.coen390_groupproject_bearcare.Model.Attendance;
 import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.ChildHolder> {
 
@@ -29,6 +49,61 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
         // What information do we want to show
         holder.child_name.setText(model.getFullName());
 
+        // Check if the attendance exists for the day.
+        int attendanceDay, attendanceMonth, attendanceYear;
+        Calendar cal = Calendar.getInstance();
+        // 4.4.2) Set our requested time
+        attendanceYear = cal.get(Calendar.YEAR);
+        attendanceMonth = cal.get(Calendar.MONTH);
+        attendanceDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        Date date = new Date(attendanceDay, attendanceMonth, attendanceYear);
+        Attendance attendance = new Attendance(date, false);
+
+        String TAG = "debug_childAdapter";
+
+        FirebaseFirestore.getInstance()
+                .collection("Children").document(getSnapshots().getSnapshot(position).getId())
+                .collection("Attendance").whereEqualTo("date", date).limit(1).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                       if (task.isSuccessful()) {
+                           Log.d(TAG, "Task Successful");
+                           for (QueryDocumentSnapshot document : task.getResult()) {
+                                   Log.d(TAG, document.getId() + " => " + document.getData());
+                                   Attendance attendanceCheck = document.toObject(Attendance.class);
+                                   boolean check = attendanceCheck.isCurrentAttendance();
+                                   Log.d(TAG, model.getFullName() + " Attendance " + check);
+
+                                   if (!check) {
+                                       // set absent
+                                       holder.attendance.setTextColor(Color.RED);
+                                       holder.attendance.setText(R.string.absent_attendance);
+                                       Log.d(TAG, "Set to Absent");
+                                   } else {
+                                       // set present
+                                       holder.attendance.setTextColor(Color.GREEN);
+                                       holder.attendance.setText(R.string.present_attendance);
+                                       Log.d(TAG, "Set to Present");
+                                   }
+                           }
+                       } else {
+                           Log.d(TAG, "Error while getting documents");
+                       }
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Log.d(TAG, "Document doesn't exist");
+                            // set absent
+                            holder.attendance.setTextColor(Color.RED);
+                            holder.attendance.setText("Absent");
+                            Log.d(TAG, "Set to Absent");
+                        }
+                    }
+                });
     }
 
     @NonNull
@@ -46,12 +121,13 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
+
     // View Holder
     class ChildHolder extends RecyclerView.ViewHolder{
 
         // Our View Objects
-        private final TextView child_name;
-        private final Button takeTemp;
+        private final TextView child_name, attendance;
+        private final Button takeTemp, tempHistory;
 
         // Child View Holder Constructor, where we connect layout objects to view objects
         public ChildHolder(@NonNull View itemView) {
@@ -59,15 +135,17 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
             child_name = itemView.findViewById(R.id.textViewChildName_recyclerChildItem);
             takeTemp = itemView.findViewById(R.id.buttonTakeTemp_recyclerItem);
+            tempHistory = itemView.findViewById(R.id.buttonTempHistory_recyclerItem);
+            attendance = itemView.findViewById(R.id.textViewAttendance_recyclerItem);
 
-            // OnclickListener for ChildHolder
+            // OnclickListener for ChildHolder, not the buttons !
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
 
-                    // can implement intent here but for re-usability we will put it in the class it called from.
-                    if(position != RecyclerView.NO_POSITION && listener!=null){
+                    // can implement intent here but for re-usability we will put it in the class its called from.
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
                 }
@@ -80,15 +158,39 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
                     int position = getAdapterPosition();
 
                     // can implement intent here but for re-usability we will put it in the class it called from.
-                    if(position != RecyclerView.NO_POSITION && listener!=null){
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onTakeTempButtonClick(getSnapshots().getSnapshot(position), position);
                     }
                 }
             });
 
-            // end of constructor
-        }
+            tempHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
 
+                    // can implement intent here but for re-usability we will put it in the class it called from.
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onTempHistoryButtonClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
+
+            attendance.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    // can implement intent here but for re-usability we will put it in the class it called from.
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onAttendanceClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
+            // end of constructor
+
+
+        }
         // end of Child View Holder
     }
 
@@ -102,6 +204,11 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
         // Take temp button
         void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position);
+
+        // Temp History button
+        void onTempHistoryButtonClick(DocumentSnapshot documentSnapshot, int position);
+
+        void onAttendanceClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){

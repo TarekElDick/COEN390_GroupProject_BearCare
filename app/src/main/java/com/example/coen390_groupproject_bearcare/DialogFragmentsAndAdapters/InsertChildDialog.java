@@ -38,13 +38,10 @@ public class InsertChildDialog extends DialogFragment {
     // Firebase Shared Instance of a Authentication object
     private FirebaseAuth mAuth;
 
-
     // Firebase Shared Instance of a Cloud FireStore object.
     private FirebaseFirestore fStore;
-
     //
     private FirebaseUser fUser;
-
     //
     private String parentId;
 
@@ -223,7 +220,7 @@ public class InsertChildDialog extends DialogFragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "child written with ID: ");
+                                                Log.d(TAG, "Child written with ID: ");
                                             }
                                         });
                             }
