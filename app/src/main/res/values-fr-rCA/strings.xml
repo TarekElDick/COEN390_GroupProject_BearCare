@@ -140,4 +140,5 @@
     <string name="temperature_history_of_child">" Historique Température"</string>
     <string name="export_string">Exporter</string>
     <string name="questionnaire_records">Enregistrements de Questionnaire</string>
+    <string name="only_employees_attendance">Seuls les employés peuvent prendre en charge les enfants</string>
 </resources>

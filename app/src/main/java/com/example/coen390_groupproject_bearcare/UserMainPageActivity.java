@@ -310,8 +310,6 @@ public class UserMainPageActivity extends AppCompatActivity {
 
         }
 
-
-
         //On click for the item itself
         childAdapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
             @Override
@@ -379,11 +377,10 @@ public class UserMainPageActivity extends AppCompatActivity {
                 Log.d(TAG, "TempHistory clicked");
                 startActivity(intent);
             }
-
             @Override
             public void onAttendanceClick(DocumentSnapshot documentSnapshot, int position) {
                 Log.d(TAG, "Attendance Clicked");
-
+                if(isEmployee) {
                 // Check if the attendance exists for the day.
                 int attendanceDay, attendanceMonth, attendanceYear;
                 Calendar cal = Calendar.getInstance();
@@ -456,10 +453,12 @@ public class UserMainPageActivity extends AppCompatActivity {
                         childAdapter.notifyItemChanged(position);
                     }
                 });
+            } else{
+                Log.d(TAG, "Not Employee");
+                Toast.makeText(UserMainPageActivity.this, R.string.only_employees_attendance, Toast.LENGTH_LONG).show();
+            }
             }
         });
-
-
 
         // Notifications !
         // ItemTouchHelper to implement delete functionality, only employee's can delete.
@@ -502,7 +501,6 @@ public class UserMainPageActivity extends AppCompatActivity {
         }
 
     }
-
 
     // Created our menu layout file in the resource directory (res/menu/menu_DASHBOARD), and we connected it to this activity.
     @Override

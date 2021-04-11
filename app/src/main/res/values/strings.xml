@@ -139,4 +139,5 @@
     <string name="temperature_history_of_child">\'s Temperature History</string>
     <string name="export_string">Export</string>
     <string name="questionnaire_records">Questionnaire Records</string>
+    <string name="only_employees_attendance">Only employees can take attendance</string>
 </resources>

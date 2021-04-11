@@ -219,6 +219,7 @@ public class InsertChildDialog extends DialogFragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "Child written with ID: ");
+                                                getDialog().dismiss();
                                             }
                                         });
                             }
