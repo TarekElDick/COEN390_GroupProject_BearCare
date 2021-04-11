@@ -171,7 +171,6 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
 
 //        db.collection("Children").document(childId).collection("Temperatures")
 //                .whereGreaterThanOrEqualTo("temp",37)
-//                .orderBy("day", Query.Direction.valueOf("ASCENDING"))
 //                .get()
 //                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //                    @Override
@@ -192,6 +191,7 @@ public class TemperatureHistoryActivity extends AppCompatActivity {
 //                                //Log.d("tempHistory", "array data: " + tempGraph[index]);
 //                                index++;
 //                            }
+//                            Arrays.sort(criticalPoints.);
 //                            series4.resetData(criticalPoints);
 //                        } else {
 //                            Log.w(TAG, "Error getting documents.", task.getException());

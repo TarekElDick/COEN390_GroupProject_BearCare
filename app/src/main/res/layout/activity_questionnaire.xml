@@ -325,6 +325,34 @@
 
             <TableRow
 
+                android:id="@+id/row10plus1"
+                android:background="#FAEBF1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:id="@+id/questionnaireTextView10plus1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.87"
+                    android:background="#FAEBF1"
+                    android:padding="18dip"
+                    android:text="My child shows no symptoms from the list above"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+
+                <CheckBox
+                    android:id="@+id/questionnaireCheckBox10plus1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.13"
+                    android:background="#FAEBF1"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+
                 android:id="@+id/row11"
                 android:background="#FFF4BCD4"
                 android:layout_width="fill_parent"
