@@ -131,6 +131,11 @@
     <string name="select_sensor">Select Sensor</string>
     <string name="sensor_connected">Sensor Connected</string>
     <string name="sensor_not_connected">Sensor Not Connected</string>
+    <string name="please_enter_date">Please enter a date</string>
+    <string name="please_enter_time">Please enter a time</string>
+    <string name="notification_delete">Are you sure you want to delete this notification</string>
+    <string name="absent_attendance">Absent</string>
+    <string name="present_attendance">Present</string>
     <string name="temperature_history_of_child">\'s Temperature History</string>
     <string name="export_string">Export</string>
     <string name="questionnaire_records">Questionnaire Records</string>

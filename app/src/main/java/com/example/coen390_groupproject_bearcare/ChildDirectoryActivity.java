@@ -19,20 +19,30 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
+import com.example.coen390_groupproject_bearcare.Model.Attendance;
 import com.example.coen390_groupproject_bearcare.Model.Child;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.InsertChildDialog;
 import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import static com.example.coen390_groupproject_bearcare.R.string.Logging_out;
+import static com.example.coen390_groupproject_bearcare.R.string.only_employees_temp;
 
 public class ChildDirectoryActivity extends AppCompatActivity{
 
@@ -211,6 +221,101 @@ public class ChildDirectoryActivity extends AppCompatActivity{
                 startActivity(intent);
             }
 
+            @Override
+            public void onTempHistoryButtonClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Temp History Button Clicked");
+                // Code for when take temp button is clicked
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String childName = firstName + " " + lastName;
+
+                Intent intent = new Intent(getApplicationContext(), TemperatureHistoryActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "TempHistory clicked");
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAttendanceClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Attendance Clicked");
+
+                // Check if the attendance exists for the day.
+                int attendanceDay, attendanceMonth, attendanceYear;
+                Calendar cal = Calendar.getInstance();
+                // 4.4.2) Set our requested time
+                attendanceYear = cal.get(Calendar.YEAR);
+                attendanceMonth = cal.get(Calendar.MONTH);
+                attendanceDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                Date date = new Date(attendanceDay, attendanceMonth, attendanceYear);
+
+                childrenRef.document(documentSnapshot.getId()).collection("Attendance").whereEqualTo("date", date).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Attendance attendanceCheck =  document.toObject(Attendance.class);
+                                boolean check = attendanceCheck.isCurrentAttendance();
+                                Log.d(TAG, "what is check " + check);
+                                if (!check){
+                                    //set true
+                                    childrenRef.document(documentSnapshot.getId()).collection("Attendance").document(document.getId()).update("currentAttendance", true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated! to true");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                                } else {
+                                    // set false
+                                    childrenRef.document(documentSnapshot.getId()).collection("Attendance").document(document.getId()).update("currentAttendance", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated! to false");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Attendance attendance = new Attendance(date, true);
+                            childrenRef.document(documentSnapshot.getId()).collection("Attendance").add(attendance)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Error adding document", e);
+                                }
+                            });
+                        }
+                        // Update child adapter
+                        adapter.notifyItemChanged(position);
+                    }
+                });
+            }
         });
         // end of setUpUI
     }

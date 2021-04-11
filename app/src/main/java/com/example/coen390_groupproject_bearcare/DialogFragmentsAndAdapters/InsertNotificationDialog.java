@@ -152,14 +152,23 @@ public class InsertNotificationDialog extends DialogFragment {
                 notificationDescription = editTextDescription.getText().toString().trim();
                 Log.d(TAG, "Title: " + notificationTitle + " Description: " + notificationDescription);
 
-                if(notificationTitle.isEmpty()){
+                if(notificationTitle.isEmpty()) {
                     editTextTitle.setError(getString(R.string.specify_title));
                     editTextTitle.requestFocus();
+                } else if (textViewDate.getText().toString().contentEquals("Select A Date")){
+                    // TODO add french language for date and time
+                    textViewDate.setError(getString(R.string.please_enter_date));
+                    textViewDate.requestFocus();
+                } else if (textViewTime.getText().toString().contentEquals("Select A Time")){
+                    textViewTime.setError(getString(R.string.please_enter_time));
+                    textViewTime.requestFocus();
                 } else {
                     // 4.3.2) Show progress bar.
                     progressBar.setVisibility(View.VISIBLE);
                     buttonCancel.setVisibility(View.INVISIBLE);
                     buttonSave.setVisibility(View.INVISIBLE);
+
+                    Log.d(TAG, textViewDate.getText().toString() +" " + textViewTime.getText().toString());
 
                     // 4.3.3) Save notification with attributes.
                     // 4.3.2) Get the child's parents ID and employee ID.
@@ -290,7 +299,7 @@ public class InsertNotificationDialog extends DialogFragment {
         intent.putExtra("childName", childName);
         intent.putExtra("notificationTitle",notificationTitle );
         intent.putExtra("notificationDescription", notificationDescription);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Initialize our alarm
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),pendingIntent);

@@ -18,9 +18,9 @@ import com.example.coen390_groupproject_bearcare.R;
 public class NotificationHelper extends ContextWrapper {
 
     public static final String channel1ID = "channel1ID";
-    public static final String channel1Name = "Channel 1";
+    public static final String channel1Name = "Warnings";
     public static final String channel2ID = "channel2ID";
-    public static final String channel2Name = "Channel 2";
+    public static final String channel2Name = "Reminders";
 
     private NotificationManager mManager;
 

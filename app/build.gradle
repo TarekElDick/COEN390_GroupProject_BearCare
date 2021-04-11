@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     implementation 'com.android.volley:volley:1.2.0'
     implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

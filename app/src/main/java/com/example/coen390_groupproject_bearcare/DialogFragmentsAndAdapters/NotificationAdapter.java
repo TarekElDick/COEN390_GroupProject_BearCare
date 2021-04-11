@@ -37,6 +37,11 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
         return new NotificationHolder(view);
     }
 
+    // To delete a notification item
+    public void deleteItem(int position){
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
     // View Holder
     class NotificationHolder extends RecyclerView.ViewHolder{
 

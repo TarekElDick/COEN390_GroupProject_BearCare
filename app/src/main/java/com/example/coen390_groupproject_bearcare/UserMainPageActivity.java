@@ -3,6 +3,7 @@ package com.example.coen390_groupproject_bearcare;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,11 +26,16 @@ import android.widget.Toast;
 
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.ChildAdapter;
 import com.example.coen390_groupproject_bearcare.DialogFragmentsAndAdapters.NotificationAdapter;
+import com.example.coen390_groupproject_bearcare.Model.Attendance;
 import com.example.coen390_groupproject_bearcare.Model.Child;
+import com.example.coen390_groupproject_bearcare.Model.Date;
 import com.example.coen390_groupproject_bearcare.Model.Notification;
 import com.example.coen390_groupproject_bearcare.Model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -34,6 +43,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Calendar;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 import static com.example.coen390_groupproject_bearcare.R.string.logging_out;
 import static com.example.coen390_groupproject_bearcare.R.string.only_employees_temp;
@@ -241,7 +256,7 @@ public class UserMainPageActivity extends AppCompatActivity {
         firestoreNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firestoreNotificationRecyclerView.setAdapter(notificationAdapter);
 
-        // ItemTouchHelper to implement delete functionality, only employee's can delete.
+        // ItemTouchHelper to implement delete functionality, only employee's can delete and take its attendance
         if(isEmployee) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 @Override
@@ -251,34 +266,51 @@ public class UserMainPageActivity extends AppCompatActivity {
 
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    // Here is where we implement swipe to delete
-                    Log.d(TAG, "Child Item is being swiped");
+                            // Here is where we implement swipe to delete
+                            Log.d(TAG, "Child Item is being swiped");
+                            new AlertDialog.Builder(viewHolder.itemView.getContext())
+                                    .setMessage(R.string.are_you_sure)
+                                    .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // User wants to delete the item
+                                            Log.d(TAG, "Child item is deleted");
+                                            // Refresh the adapter to prevent the item staying on the UI.
+                                            childAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                            runRecyclerView();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // User canceled the delete item
+                                            Log.d(TAG, "Child item is not deleted");
+                                            // Refresh the adapter to prevent the item from UI to update.
+                                            childAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                }
 
-                    new AlertDialog.Builder(viewHolder.itemView.getContext())
-                            .setMessage(R.string.are_you_sure)
-                            .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // User wants to delete the item
-                                    Log.d(TAG, "Child item is deleted");
-                                    childAdapter.deleteItem(viewHolder.getAdapterPosition());
-                                    runRecyclerView();
-                                }
-                                })
-                            .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // User canceled the delete item
-                                    Log.d(TAG, "Child item is not deleted");
-                                    // Refresh the adapter to prevent the item from UI.
-                                    childAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                                }
-                            })
+                // This method allows us to add a onSwipe drawing things
+                @Override
+                public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                            .addSwipeLeftBackgroundColor(ContextCompat.getColor(UserMainPageActivity.this, R.color.red))
+                            .addSwipeLeftActionIcon(R.drawable.ic_delete)
                             .create()
-                            .show();
+                            .decorate();
+
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
             }).attachToRecyclerView(firestoreChildrenRecyclerView);
+
+
         }
+
+
 
         //On click for the item itself
         childAdapter.setOnItemClickListener(new ChildAdapter.OnItemClickListener() {
@@ -309,6 +341,7 @@ public class UserMainPageActivity extends AppCompatActivity {
             // OnClick for the take temperature button
             @Override
             public void onTakeTempButtonClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Take Temp Button Clicked");
                 if(isEmployee) {
                     // Code for when take temp button is clicked
                     // Get the document ID.
@@ -321,15 +354,152 @@ public class UserMainPageActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), TemperatureActivity.class);
                     intent.putExtra("childId", childId);
                     intent.putExtra("childName", childName);
-                    Log.d(TAG, "Child ID of button clicked is: " + childId);
-                    Log.d(TAG, "Child Name of button clicked is: " + childName);
                     startActivity(intent);
                 } else{
                     Log.d(TAG, "Not Employee");
                     Toast.makeText(UserMainPageActivity.this, only_employees_temp, Toast.LENGTH_LONG).show();
                 }
             }
+
+            // Onclick for the temp history
+            @Override
+            public void onTempHistoryButtonClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Temp History Button Clicked");
+                // Code for when take temp button is clicked
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                //get child name
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String childName = firstName + " " + lastName;
+
+                Intent intent = new Intent(getApplicationContext(), TemperatureHistoryActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "TempHistory clicked");
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAttendanceClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Attendance Clicked");
+
+                // Check if the attendance exists for the day.
+                int attendanceDay, attendanceMonth, attendanceYear;
+                Calendar cal = Calendar.getInstance();
+                // 4.4.2) Set our requested time
+                attendanceYear = cal.get(Calendar.YEAR);
+                attendanceMonth = cal.get(Calendar.MONTH);
+                attendanceDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                Date date = new Date(attendanceDay, attendanceMonth, attendanceYear);
+
+                childrenRef.document(documentSnapshot.getId()).collection("Attendance").whereEqualTo("date", date).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Attendance attendanceCheck =  document.toObject(Attendance.class);
+                                boolean check = attendanceCheck.isCurrentAttendance();
+                                Log.d(TAG, "what is check " + check);
+                                if (!check){
+                                    //set true
+                                    childrenRef.document(documentSnapshot.getId()).collection("Attendance").document(document.getId()).update("currentAttendance", true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated! to true");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                                } else {
+                                    // set false
+                                    childrenRef.document(documentSnapshot.getId()).collection("Attendance").document(document.getId()).update("currentAttendance", false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated! to false");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Attendance attendance = new Attendance(date, true);
+                            childrenRef.document(documentSnapshot.getId()).collection("Attendance").add(attendance)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Error adding document", e);
+                                }
+                            });
+                        }
+                        // Update child adapter
+                        childAdapter.notifyItemChanged(position);
+                    }
+                });
+            }
         });
+
+
+
+        // Notifications !
+        // ItemTouchHelper to implement delete functionality, only employee's can delete.
+        if(isEmployee) {
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    // Here is where we implement swipe to delete
+                    Log.d(TAG, "Notification Item is being swiped");
+
+                    new AlertDialog.Builder(viewHolder.itemView.getContext())
+                            .setMessage(R.string.notification_delete)
+                            .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User wants to delete the item
+                                    Log.d(TAG, "Notification item is deleted");
+                                    notificationAdapter.deleteItem(viewHolder.getAdapterPosition());
+                                    runRecyclerView();
+                                }
+                            })
+                            .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User canceled the delete item
+                                    Log.d(TAG, "Notification item is not deleted");
+                                    // Refresh the adapter to prevent the item from UI.
+                                    notificationAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                                }
+                            })
+                            .create()
+                            .show();
+                }
+            }).attachToRecyclerView(firestoreNotificationRecyclerView);
+        }
 
     }
 
