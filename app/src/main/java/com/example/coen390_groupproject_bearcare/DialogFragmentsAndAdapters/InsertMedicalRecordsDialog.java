@@ -80,7 +80,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
         childId = this.getArguments().getString("ChildId");
         childName = this.getArguments().getString("childName");
 
-        storageRef = FirebaseStorage.getInstance().getReference("uploadPDF/" + childName);
+        storageRef = FirebaseStorage.getInstance().getReference();
         databaseRef = FirebaseDatabase.getInstance().getReference("uploadPDF/" + childName);  //uploadPDF\ChildName
 
         Log.d(TAG, "ChildID: "+ childId+ " ChildName: "+ childName);
@@ -115,6 +115,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
             fileName.setText(data.getDataString().substring(data.getDataString().indexOf("/") + 1));
             fileUri = data.getData();
 
+
             if(nameFile.getText() != null)                                                          // make the user name the file
                 uploadButton.setEnabled(true);                                                      // let them upload
 
@@ -147,7 +148,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
 
-                        UploadFile putPDF = new UploadFile(nameFile.getText().toString().trim(), taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                        UploadFile putPDF = new UploadFile(nameFile.getText().toString().trim(),taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
                         String uploadID = databaseRef.push().getKey();                              // use to create a unique id in database
                         databaseRef.child(uploadID).setValue(putPDF);                               // now put the object into the database with the unique key will show up in realtime database
                         Toast.makeText(getActivity(), "File Uploaded", Toast.LENGTH_SHORT).show();
