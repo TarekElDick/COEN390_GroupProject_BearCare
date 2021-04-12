@@ -68,7 +68,7 @@ public class BluetoothScanner extends AppCompatActivity {
         pairedDevicesTextView = findViewById(R.id.pairedListTextView);
         discoveryBar = findViewById(R.id.discoveryBar);
         nowDiscoveringTextView = findViewById(R.id.nowdiscoveringTextView);
-        nowDiscoveringTextView.setText("Discovering sensor...");
+        nowDiscoveringTextView.setText(R.string.discovering_sensor);
 
         discoveryBar.setVisibility(View.INVISIBLE);                                                 //Setting discovery progress bar to invisible
         nowDiscoveringTextView.setVisibility(View.INVISIBLE);                                       //Setting Discovery Text View to invisible until discovery
