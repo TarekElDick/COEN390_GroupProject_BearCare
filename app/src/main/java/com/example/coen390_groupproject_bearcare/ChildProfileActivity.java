@@ -123,6 +123,9 @@ public class ChildProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MedicalRecordsActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "MedicalRecords clicked");
                 startActivity(intent);
             }
         });

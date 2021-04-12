@@ -44,7 +44,6 @@ public class PDFDocumentAdapter extends PrintDocumentAdapter {
                     .build();
             callback.onLayoutFinished(builder.build(),!newAttributes.equals(oldAttributes));
         }
-
     }
 
     @Override
