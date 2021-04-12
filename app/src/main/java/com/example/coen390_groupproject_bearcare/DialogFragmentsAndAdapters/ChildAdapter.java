@@ -127,7 +127,7 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
         // Our View Objects
         private final TextView child_name, attendance;
-        private final Button takeTemp, tempHistory;
+        private final Button takeTemp, tempHistory, medicalRecord;
 
         // Child View Holder Constructor, where we connect layout objects to view objects
         public ChildHolder(@NonNull View itemView) {
@@ -137,6 +137,7 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
             takeTemp = itemView.findViewById(R.id.buttonDownloadFile);
             tempHistory = itemView.findViewById(R.id.buttonTempHistory_recyclerItem);
             attendance = itemView.findViewById(R.id.textViewAttendance_recyclerItem);
+            medicalRecord = itemView.findViewById(R.id.buttonMedicalRecords_recyclerItem);
 
             // OnclickListener for ChildHolder, not the buttons !
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +177,20 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
                 }
             });
 
-            attendance.setOnClickListener(new View.OnClickListener() {
+            medicalRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    // can implement intent here but for re-usability we will put it in the class it called from.
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.medicalRecords(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+                });
+
+
+                attendance.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -207,6 +221,8 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
 
         // Temp History button
         void onTempHistoryButtonClick(DocumentSnapshot documentSnapshot, int position);
+
+        void medicalRecords(DocumentSnapshot documentSnapshot, int position);
 
         void onAttendanceClick(DocumentSnapshot documentSnapshot, int position);
     }

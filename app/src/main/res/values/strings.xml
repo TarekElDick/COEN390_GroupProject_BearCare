@@ -141,4 +141,9 @@
     <string name="questionnaire_records">Questionnaire Records</string>
     <string name="only_employees_attendance">Only employees can take attendance</string>
     <string name="choose_application">Choose an application to open with:</string>
+    <string name="internet_connection">BearCare App Requires an Internet Connection Please Connect</string>
+    <string name="upload_in_progress">Upload in Progress</string>
+    <string name="file_uploaded">File Uploaded</string>
+    <string name="upload_failed">Upload Failed</string>
+    <string name="error">Error</string>
 </resources>

@@ -61,7 +61,7 @@ public class MedicalRecordsActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private DatabaseReference databaseRef;                                                          // firebase data object
-    private ArrayList<UploadFile> uploadedFilesArray = new ArrayList<>();                                               // array list of UploadFile objects
+    private final ArrayList<UploadFile> uploadedFilesArray = new ArrayList<>();                                               // array list of UploadFile objects
     private TextView child;                                                                         // set child's name
 
 // gs://bearcare-9915a.appspot.com/uploadPDF/Fred Smith/Fred Smith Medical.pdf
@@ -74,8 +74,6 @@ public class MedicalRecordsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         childId = intent.getStringExtra("childId");
         childName = intent.getStringExtra("childName");
-
-        Toast.makeText(getApplicationContext(),childName,Toast.LENGTH_LONG).show();
 
         goToFragment = findViewById(R.id.buttonUploadRecord);
         child = findViewById(R.id.textViewChildNameMed);
@@ -158,7 +156,6 @@ public class MedicalRecordsActivity extends AppCompatActivity {
                 for (DataSnapshot ds : snapshot.getChildren()){
                     UploadFile uploadedFiles = ds.getValue(UploadFile.class);
                     uploadedFilesArray.add(uploadedFiles);
-
                 }
 
                 for(int i =0; i < uploadedFilesArray.size(); i++)
@@ -177,7 +174,7 @@ public class MedicalRecordsActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-                Toast.makeText(getApplicationContext(),"Error" + " " + error.getMessage(), Toast.LENGTH_LONG).show();       // didnt work show the error
+                Toast.makeText(getApplicationContext(),getString(R.string.error) + " " + error.getMessage(), Toast.LENGTH_LONG).show();       // didnt work show the error
 
             }
         });

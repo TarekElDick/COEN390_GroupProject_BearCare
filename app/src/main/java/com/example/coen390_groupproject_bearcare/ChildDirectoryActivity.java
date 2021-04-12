@@ -240,6 +240,23 @@ public class ChildDirectoryActivity extends AppCompatActivity{
             }
 
             @Override
+            public void medicalRecords(DocumentSnapshot documentSnapshot, int position) {
+                Log.d(TAG, "Medical Record Button Clicked");
+                // Get the document ID.
+                String childId = documentSnapshot.getId();
+                //get child name.
+                String firstName = documentSnapshot.getString("firstName");
+                String lastName = documentSnapshot.getString("lastName");
+                String childName = firstName + " " + lastName;
+
+                Intent intent = new Intent(getApplicationContext(), MedicalRecordsActivity.class);
+                intent.putExtra("childId", childId);
+                intent.putExtra("childName", childName);
+                Log.d(TAG, "Medical Records clicked");
+                startActivity(intent);
+            }
+
+            @Override
             public void onAttendanceClick(DocumentSnapshot documentSnapshot, int position) {
                 Log.d(TAG, "Attendance Clicked");
 

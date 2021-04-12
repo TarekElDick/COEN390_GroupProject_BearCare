@@ -10,47 +10,39 @@
         android:id="@+id/buttonUploadRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="81dp"
+        android:layout_marginLeft="81dp"
         android:layout_marginBottom="32dp"
         android:text="upload medical record"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDeleteMedicalRecord"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/buttonDeleteMedicalRecord"
-        android:layout_width="193dp"
-        android:layout_height="62dp"
-        android:layout_marginBottom="36dp"
-        android:text="delete medical record"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewMedicalRecords" />
 
     <TextView
         android:id="@+id/textViewChildNameMed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp"
         android:text="TextView"
         android:textColor="@color/purple_700"
-        android:textSize="30sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/listViewMedicalRecords"
-        android:layout_width="349dp"
-        android:layout_height="263dp"
-        android:layout_marginBottom="84dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonUploadRecord"
+        android:layout_width="379dp"
+        android:layout_height="330dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewChildNameMed" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

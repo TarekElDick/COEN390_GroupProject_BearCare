@@ -141,4 +141,10 @@
     <string name="export_string">Exporter</string>
     <string name="questionnaire_records">Enregistrements de Questionnaire</string>
     <string name="only_employees_attendance">Seuls les employés peuvent prendre en charge les enfants</string>
+    <string name="choose_application">Choisissez une application à ouvrir avec:</string>
+    <string name="internet_connection">L\'application BearCare nécessite une connexion Internet Veuillez vous connecter</string>
+    <string name="upload_in_progress">Téléchargement en cours</string>
+    <string name="file_uploaded">File Uploaded</string>
+    <string name="upload_failed">Fichier téléchargé</string>
+    <string name="error">Erreur</string>
 </resources>

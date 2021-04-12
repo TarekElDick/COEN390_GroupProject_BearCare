@@ -38,11 +38,11 @@
         android:layout_marginBottom="13dp"
         android:background="@drawable/ic_history"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMedicalRecords_recyclerItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/buttonMedicalRecords_recyclerItem"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="16dp"

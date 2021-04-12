@@ -123,7 +123,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if(uploadTask != null && uploadTask.isInProgress()){
-                        Toast.makeText(getActivity(),"Upload in Progress",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.upload_in_progress,Toast.LENGTH_SHORT).show();
                     }else {
                         uploadPDF(fileUri);
                     }
@@ -151,7 +151,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
                         UploadFile putPDF = new UploadFile(nameFile.getText().toString().trim(),taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
                         String uploadID = databaseRef.push().getKey();                              // use to create a unique id in database
                         databaseRef.child(uploadID).setValue(putPDF);                               // now put the object into the database with the unique key will show up in realtime database
-                        Toast.makeText(getActivity(), "File Uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.file_uploaded, Toast.LENGTH_SHORT).show();
                         progress.dismiss();
                         dismiss();
                     }
@@ -160,13 +160,13 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                 double progressValue = (100.0 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-                progress.setMessage("File Uploaded  " + (int) progressValue + "%");
+                progress.setMessage( R.string.file_uploaded + (int) progressValue + "%");
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(),"Upload Failed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.upload_failed,Toast.LENGTH_LONG).show();
             }
         });
 

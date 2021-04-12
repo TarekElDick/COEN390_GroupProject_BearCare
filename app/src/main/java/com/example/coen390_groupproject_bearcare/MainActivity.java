@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkConnect = NetworkService.checkNetwork(this);
         if(!checkConnect)
-            Toast.makeText(this, "BearCare App Requires an Internet Connection Please Connect", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.internet_connection, Toast.LENGTH_LONG).show();
 
         Log.d(TAG, "Start: OnStart(): Check if returning user");
         // Check if user is already logged in or not, if they are a returning user
@@ -191,7 +191,11 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }else{
                             Log.d(TAG, "User didn't sign in successfully");
-                            Toast.makeText(MainActivity.this, getString(R.string.no_account_associated), Toast.LENGTH_LONG).show();
+                            if(!checkConnect) {
+                                Toast.makeText(MainActivity.this, R.string.internet_connection, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, getString(R.string.no_account_associated), Toast.LENGTH_LONG).show();
+                            }
                             textViewMessage.setVisibility(View.VISIBLE);
                             textViewCreateNewAccount.setVisibility(View.VISIBLE);
                             buttonLogin.setVisibility(View.VISIBLE);
