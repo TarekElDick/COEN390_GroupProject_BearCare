@@ -54,7 +54,7 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
     private String childName, childId;
 
     private static final int PICK_FILE_REQUEST = 1;
-
+    private final String TAG1 = "debug_insertMedicalRecordDialog";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -148,7 +148,8 @@ public class InsertMedicalRecordsDialog extends DialogFragment {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
 
-                        UploadFile putPDF = new UploadFile(nameFile.getText().toString().trim(),taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                        UploadFile putPDF = new UploadFile(nameFile.getText().toString().trim(),fileUri.toString());
+                        Log.d(TAG1, "File URL " + fileUri.toString());
                         String uploadID = databaseRef.push().getKey();                              // use to create a unique id in database
                         databaseRef.child(uploadID).setValue(putPDF);                               // now put the object into the database with the unique key will show up in realtime database
                         Toast.makeText(getActivity(), R.string.file_uploaded, Toast.LENGTH_SHORT).show();
