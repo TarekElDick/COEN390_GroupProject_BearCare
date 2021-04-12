@@ -134,7 +134,7 @@ public class ChildAdapter extends FirestoreRecyclerAdapter<Child, ChildAdapter.C
             super(itemView);
 
             child_name = itemView.findViewById(R.id.textViewChildName_recyclerChildItem);
-            takeTemp = itemView.findViewById(R.id.buttonTakeTemp_recyclerItem);
+            takeTemp = itemView.findViewById(R.id.buttonDownloadFile);
             tempHistory = itemView.findViewById(R.id.buttonTempHistory_recyclerItem);
             attendance = itemView.findViewById(R.id.textViewAttendance_recyclerItem);
 
