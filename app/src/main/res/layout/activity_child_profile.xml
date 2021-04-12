@@ -72,22 +72,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:text="@string/phone_string"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView20" />
-
-    <TextView
-        android:id="@+id/textView22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/employee_contact"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <TextView
         android:id="@+id/textView23"
@@ -106,14 +93,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="88dp"
         android:layout_marginLeft="88dp"
-        android:layout_marginTop="212dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="87dp"
         android:layout_marginRight="87dp"
         android:text="@string/temperature_records"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddANotification_childProfile" />
 
     <Button
         android:id="@+id/button3"
@@ -185,10 +172,10 @@
         android:id="@+id/buttonAddANotification_childProfile"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="150dp"
         android:text="@string/add_a_notification"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
