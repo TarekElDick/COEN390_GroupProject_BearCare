@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "user email:" + user.getEmailAddress());
                     // We check if its the director
                     Intent intent;
-                    if(user.getEmailAddress().equals("tarekdeek@bearcare.ca")){
+                    if(user.getEmailAddress().equals("tarekdick@bearcare.ca")){
                         Log.d(TAG, "User is a director");
                         //Add Intent for director
                         intent = new Intent(getApplicationContext(), DirectorDashboardActivity.class);
