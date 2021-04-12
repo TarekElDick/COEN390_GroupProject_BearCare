@@ -13,7 +13,7 @@
         android:layout_marginStart="81dp"
         android:layout_marginLeft="81dp"
         android:layout_marginBottom="32dp"
-        android:text="upload medical record"
+        android:text="@string/upload_medical_record"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listViewMedicalRecords" />
