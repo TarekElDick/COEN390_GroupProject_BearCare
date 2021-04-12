@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="67dp"
         android:layout_marginRight="67dp"
-        android:text="Upload Medical Record"
+        android:text="@string/upload_medical_record"
         android:textColor="@color/purple_700"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -33,7 +33,7 @@
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Select File from Storage"
+        android:hint="@string/select_file_from_storage"
         app:layout_constraintTop_toBottomOf="@+id/textViewMedicalTitle" />
 
     <EditText
@@ -47,7 +47,7 @@
         android:ems="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Name the File"
+        android:hint="@string/name_the_file"
         app:layout_constraintTop_toBottomOf="@+id/editTextFileName" />
 
     <Button
@@ -58,7 +58,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:text="Upload file"
+        android:text="@string/upload_file"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNameFile" />

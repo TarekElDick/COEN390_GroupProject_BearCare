@@ -146,4 +146,8 @@
     <string name="file_uploaded">File Uploaded</string>
     <string name="upload_failed">Upload Failed</string>
     <string name="error">Error</string>
+    <string name="upload_medical_record">Upload Medical Record</string>
+    <string name="select_file_from_storage">Select File from Storage</string>
+    <string name="name_the_file">Name the File</string>
+    <string name="upload_file">Upload file</string>
 </resources>

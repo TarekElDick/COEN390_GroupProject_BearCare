@@ -141,7 +141,7 @@ public class MedicalRecordsActivity extends AppCompatActivity {
 
     }
 
-    private void retrieveFilesList() {                                                              // retrieve the files to the recyle view
+    private void retrieveFilesList() {                                                              // retrieve the files to the recycle view
         uploadedFilesArray.clear();
 
         databaseRef = FirebaseDatabase.getInstance().getReference("uploadPDF/" + childName);  // go to storage and get the PDFs associated with the childname
